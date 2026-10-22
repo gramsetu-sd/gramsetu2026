@@ -156,7 +156,7 @@ test('Probability Engine - Continuous PDF', () => {
   assert.ok(continuous.points.length > 20);
   // Interval probability: normal CDF from (25-5) to (25+5) is roughly 68.27% (1 sigma)
   assert.ok(continuous.queryInterval);
-  assert.ok(continuous.queryInterval.intervalProbability >= 0.68 && continuous.queryInterval.intervalProbability <= 0.69);
+  assert.ok(continuous.queryInterval!.intervalProbability >= 0.68 && continuous.queryInterval!.intervalProbability <= 0.69);
   assert.ok(continuous.noteOnDensityVsProbability.includes('MATHEMATICAL DISTINCTION'));
 });
 
