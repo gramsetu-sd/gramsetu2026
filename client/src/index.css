@@ -3,28 +3,171 @@
 @tailwind utilities;
 
 @layer base {
+  html {
+    scroll-behavior: smooth;
+  }
+
   body {
-    @apply bg-slate-50 text-slate-900 font-sans antialiased;
+    @apply bg-stone-50 text-stone-900 font-sans antialiased min-h-screen selection:bg-emerald-100 selection:text-emerald-900;
+    background-image: 
+      radial-gradient(ellipse at 15% 0%, rgba(26, 163, 115, 0.07) 0%, transparent 60%),
+      radial-gradient(ellipse at 85% 10%, rgba(201, 162, 75, 0.04) 0%, transparent 50%);
+    background-attachment: fixed;
+  }
+
+  h1, h2, h3, h4, h5, h6 {
+    @apply font-heading tracking-tight text-stone-900;
+  }
+
+  /* Accessible focus indicators */
+  :focus-visible {
+    @apply outline-none ring-2 ring-emerald-500 ring-offset-2 ring-offset-stone-50;
   }
 }
 
-/* Custom subtle scrollbar */
+@layer components {
+  /* Surface Cards */
+  .surface {
+    @apply bg-white rounded-card border border-emerald-900/[0.08] shadow-card transition-all duration-200 relative;
+    box-shadow: 0 1px 3px rgba(4, 20, 14, 0.03), 0 8px 24px -4px rgba(4, 20, 14, 0.05), inset 0 1px 0 rgba(255, 255, 255, 0.8);
+  }
+
+  .surface:hover {
+    @apply border-emerald-900/[0.14];
+  }
+
+  .surface-hover-lift {
+    @apply surface hover:-translate-y-0.5 hover:shadow-lift transition-transform duration-200;
+  }
+
+  .surface-glass {
+    @apply backdrop-blur-xl bg-white/80 rounded-card border border-emerald-900/[0.08] shadow-card;
+    box-shadow: 0 1px 3px rgba(4, 20, 14, 0.03), 0 8px 24px -4px rgba(4, 20, 14, 0.05), inset 0 1px 0 rgba(255, 255, 255, 0.7);
+  }
+
+  .surface-dark {
+    @apply bg-gradient-to-br from-emerald-ink-950 via-emerald-ink-900 to-emerald-ink-950 text-white rounded-card border border-white/10 shadow-float relative overflow-hidden;
+    box-shadow: 0 24px 48px -12px rgba(4, 20, 14, 0.28), inset 0 1px 0 rgba(255, 255, 255, 0.12);
+  }
+
+  .surface-panel {
+    @apply bg-stone-50/80 rounded-panel border border-stone-200/80;
+  }
+
+  /* 3D Tilt container */
+  .tilt-3d {
+    perspective: 1000px;
+    transform-style: preserve-3d;
+  }
+
+  /* Bento Layouts */
+  .bento {
+    @apply grid gap-4 sm:gap-5;
+  }
+
+  /* Badges & Pills */
+  .pill-success {
+    @apply inline-flex items-center gap-1.5 px-2.5 py-0.5 rounded-full text-xs font-semibold bg-emerald-50 text-emerald-800 border border-emerald-200/80;
+  }
+
+  .pill-warning {
+    @apply inline-flex items-center gap-1.5 px-2.5 py-0.5 rounded-full text-xs font-semibold bg-amber-50 text-amber-900 border border-amber-200;
+  }
+
+  .pill-critical {
+    @apply inline-flex items-center gap-1.5 px-2.5 py-0.5 rounded-full text-xs font-semibold bg-rose-50 text-rose-700 border border-rose-200;
+  }
+
+  .pill-info {
+    @apply inline-flex items-center gap-1.5 px-2.5 py-0.5 rounded-full text-xs font-semibold bg-sky-50 text-sky-800 border border-sky-200;
+  }
+
+  .pill-neutral {
+    @apply inline-flex items-center gap-1.5 px-2.5 py-0.5 rounded-full text-xs font-semibold bg-stone-100 text-stone-700 border border-stone-200;
+  }
+
+  .pill-gold {
+    @apply inline-flex items-center gap-1.5 px-2.5 py-0.5 rounded-full text-xs font-semibold bg-gold/10 text-gold-dark border border-gold/30 font-mono tracking-wider;
+  }
+
+  /* Buttons */
+  .btn-primary {
+    @apply inline-flex items-center justify-center gap-2 px-4 py-2.5 rounded-control font-semibold text-xs text-white transition-all duration-150 active:scale-[0.98] disabled:opacity-50 disabled:pointer-events-none;
+    background: linear-gradient(180deg, #1AA373 0%, #12805A 100%);
+    box-shadow: 0 1px 2px rgba(4, 20, 14, 0.15), 0 8px 16px -4px rgba(26, 163, 115, 0.35), inset 0 1px 0 rgba(255, 255, 255, 0.25);
+  }
+
+  .btn-primary:hover {
+    background: linear-gradient(180deg, #22B581 0%, #159267 100%);
+    box-shadow: 0 1px 2px rgba(4, 20, 14, 0.2), 0 12px 20px -4px rgba(26, 163, 115, 0.45), inset 0 1px 0 rgba(255, 255, 255, 0.35);
+  }
+
+  .btn-secondary {
+    @apply inline-flex items-center justify-center gap-2 px-4 py-2.5 rounded-control font-semibold text-xs text-stone-700 bg-white border border-stone-200 shadow-sm hover:bg-stone-50 hover:text-stone-900 transition-all active:scale-[0.98];
+  }
+
+  .btn-ghost {
+    @apply inline-flex items-center justify-center gap-2 px-3 py-2 rounded-control font-medium text-xs text-stone-600 hover:text-stone-900 hover:bg-stone-100/80 transition-colors;
+  }
+
+  /* Inputs */
+  .input {
+    @apply w-full px-3 py-2 text-xs bg-white border border-stone-200 rounded-control text-stone-800 placeholder-stone-400 focus:outline-none focus:border-emerald-500 focus:ring-2 focus:ring-emerald-500/20 transition-all;
+  }
+
+  /* Science Canvas / Formula styling */
+  .formula-card {
+    @apply p-4 rounded-panel font-mono text-xs bg-emerald-ink-950 text-emerald-200 border border-emerald-500/20 shadow-inner relative overflow-hidden;
+    background-image: radial-gradient(rgba(26, 163, 115, 0.15) 1px, transparent 1px);
+    background-size: 16px 16px;
+  }
+
+  .stat-number {
+    @apply font-mono font-bold tracking-tight text-stone-900 tabular-nums;
+  }
+
+  .kbd {
+    @apply inline-flex items-center justify-center px-1.5 py-0.5 rounded text-[10px] font-mono font-semibold bg-stone-100 text-stone-600 border border-stone-200 shadow-sm;
+  }
+
+  /* Skeleton Shimmer */
+  .skeleton {
+    @apply bg-stone-200/70 rounded-panel relative overflow-hidden;
+  }
+
+  .skeleton::after {
+    content: '';
+    @apply absolute inset-0 -translate-x-full bg-gradient-to-r from-transparent via-white/50 to-transparent animate-shimmer;
+  }
+}
+
+/* Custom sage scrollbar */
 ::-webkit-scrollbar {
   width: 6px;
   height: 6px;
 }
 
 ::-webkit-scrollbar-track {
-  background: #f1f5f9;
+  background: #F4F8F5;
 }
 
 ::-webkit-scrollbar-thumb {
-  background: #cbd5e1;
+  background: #AFC9B6;
   border-radius: 4px;
 }
 
 ::-webkit-scrollbar-thumb:hover {
-  background: #94a3b8;
+  background: #7C9C86;
+}
+
+/* Reduced motion preference */
+@media (prefers-reduced-motion: reduce) {
+  *, ::before, ::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
+  }
 }
 
 /* Print styles for Clean PDF/Printable Village Reports */

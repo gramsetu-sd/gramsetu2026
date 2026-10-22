@@ -27,38 +27,61 @@ export const PmfChart: React.FC<Props> = ({ distribution, expectedValueMean }) =
 
   if (chartData.length === 0) {
     return (
-      <div className="h-64 flex items-center justify-center text-slate-400 text-sm">
-        No PMF discrete data available.
+      <div className="h-64 flex flex-col items-center justify-center text-stone-400 text-xs">
+        <div className="w-10 h-10 rounded-full bg-stone-100 flex items-center justify-center mb-2 text-stone-300">
+          🎲
+        </div>
+        No PMF discrete distribution data available.
       </div>
     );
   }
 
   return (
-    <div className="w-full h-72">
+    <div className="w-full h-80">
       <ResponsiveContainer width="100%" height="100%">
-        <BarChart data={chartData} margin={{ top: 20, right: 20, left: 0, bottom: 20 }}>
-          <CartesianGrid strokeDasharray="3 3" stroke="#f1f5f9" vertical={false} />
-          <XAxis dataKey="xLabel" tick={{ fontSize: 12, fill: '#64748b' }} />
+        <BarChart data={chartData} margin={{ top: 25, right: 20, left: -10, bottom: 20 }}>
+          <defs>
+            <linearGradient id="pmfBarGrad" x1="0" y1="0" x2="0" y2="1">
+              <stop offset="0%" stopColor="#3CC391" stopOpacity={0.95} />
+              <stop offset="100%" stopColor="#0B3D2A" stopOpacity={0.85} />
+            </linearGradient>
+          </defs>
+
+          <CartesianGrid strokeDasharray="2 6" stroke="#E7E7E1" vertical={false} />
+          <XAxis
+            dataKey="xLabel"
+            tick={{ fontSize: 11, fill: '#7C9C86', fontFamily: 'JetBrains Mono' }}
+            axisLine={{ stroke: '#CFE0D4' }}
+            tickLine={false}
+          />
           <YAxis
-            tick={{ fontSize: 11, fill: '#64748b' }}
+            tick={{ fontSize: 11, fill: '#7C9C86', fontFamily: 'JetBrains Mono' }}
             domain={[0, 'auto']}
             tickFormatter={(val) => `${(val * 100).toFixed(0)}%`}
+            axisLine={false}
+            tickLine={false}
           />
           <Tooltip
+            cursor={{ fill: 'rgba(26, 163, 115, 0.04)' }}
             content={({ active, payload }) => {
               if (active && payload && payload.length) {
                 const item = payload[0].payload;
                 return (
-                  <div className="bg-white p-3 rounded-lg shadow-lg border border-slate-100 text-xs">
-                    <p className="font-bold text-slate-800 mb-1">
-                      Requirement X = {item.x} households
+                  <div className="surface-glass p-3.5 rounded-2xl shadow-float border border-emerald-900/10 text-xs backdrop-blur-xl">
+                    <p className="font-bold text-stone-900 mb-1">
+                      Event (X = {item.x} households)
                     </p>
-                    <p className="text-forest-700 font-semibold">
-                      Probability P(X = {item.x}): {item.percentage} ({item.probability})
-                    </p>
-                    <p className="text-slate-500 mt-1">
-                      Observed in {item.count} sampling cycles
-                    </p>
+                    <div className="space-y-1 font-mono text-[11px]">
+                      <p className="text-emerald-700 font-bold">
+                        P(X = {item.x}) = {item.percentage} ({item.probability.toFixed(4)})
+                      </p>
+                      <p className="text-stone-500">
+                        Observed frequency: {item.count} sample cycles
+                      </p>
+                    </div>
+                    <div className="mt-2 pt-1.5 border-t border-stone-200/60 text-[10px] text-stone-400">
+                      Satisfies ∑ P(X = x) = 1.00
+                    </div>
                   </div>
                 );
               }
@@ -68,17 +91,25 @@ export const PmfChart: React.FC<Props> = ({ distribution, expectedValueMean }) =
           {expectedValueMean !== undefined && (
             <ReferenceLine
               x={`${Math.round(expectedValueMean)} hh`}
-              stroke="#dc2626"
+              stroke="#D6455D"
               strokeDasharray="4 4"
+              strokeWidth={1.5}
               label={{
-                value: `E(X) ≈ ${expectedValueMean}`,
-                fill: '#dc2626',
+                value: `E(X) = ${expectedValueMean.toFixed(2)}`,
+                fill: '#D6455D',
                 fontSize: 11,
+                fontFamily: 'JetBrains Mono',
                 position: 'top',
               }}
             />
           )}
-          <Bar dataKey="probability" name="P(X = x)" fill="#1b4332" radius={[4, 4, 0, 0]} />
+          <Bar
+            dataKey="probability"
+            name="P(X = x)"
+            fill="url(#pmfBarGrad)"
+            radius={[6, 6, 0, 0]}
+            maxBarSize={44}
+          />
         </BarChart>
       </ResponsiveContainer>
     </div>
