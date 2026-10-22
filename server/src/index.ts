@@ -21,6 +21,24 @@ app.use(
 
 app.use(express.json());
 
+// Root Welcome & Status
+app.get('/', (_req, res) => {
+  res.json({
+    project: 'GRAM SETU API — Probability-Based Rural Resource Requirement Prediction',
+    tagline: 'Connecting What Villages Have with What Villages Need.',
+    status: 'online',
+    mode: isSupabaseConfigured ? 'Supabase Live PostgreSQL' : 'Demonstration Store Mode',
+    endpoints: {
+      health: '/health',
+      villages: '/api/villages',
+      resources: '/api/resources',
+      assessments: '/api/assessments',
+      recommendations: '/api/recommendations',
+    },
+    message: 'Backend API is running successfully. Connect frontend via Cloudflare Pages.',
+  });
+});
+
 // Health Check
 app.get('/health', (_req, res) => {
   res.json({
