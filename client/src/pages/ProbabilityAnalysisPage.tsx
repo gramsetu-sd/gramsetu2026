@@ -145,11 +145,11 @@ export const ProbabilityAnalysisPage: React.FC = () => {
               Probability Analysis Engine
             </h2>
             <span className="text-[11px] font-mono font-bold uppercase tracking-wider px-2.5 py-0.5 rounded-full bg-emerald-50 text-emerald-800 border border-emerald-200/60 shadow-xs">
-              Math-III Module 3
+              Predictive Risk Core
             </span>
           </div>
           <p className="text-xs text-stone-500 mt-1">
-            Applied Engineering Probability: Sample Space S, Kolmogorov Axioms, Bayes' Law, and Random Variables
+            Predictive Probability Architecture: Sample Space Verification, Conditional Risk, Bayes' Law, and Distribution Models
           </p>
         </div>
 
@@ -308,7 +308,7 @@ export const ProbabilityAnalysisPage: React.FC = () => {
               percentage={basicResult.percentage}
               interpretation={basicResult.interpretation}
               assumptions={basicResult.limitations}
-              badge="Module 3: Axioms of Probability"
+              badge="Axiomatic Probability Model"
               step={3}
             />
           </div>
@@ -417,14 +417,14 @@ export const ProbabilityAnalysisPage: React.FC = () => {
               percentage={condResult.percentage}
               interpretation={condResult.interpretation}
               assumptions={condResult.limitations}
-              badge="Module 3: Conditional Laws"
+              badge="Conditional Likelihood Model"
               step={3}
             />
           </div>
         </div>
       )}
 
-      {/* MODULE 3: BAYES' THEOREM */}
+      {/* SECTION 3: BAYES' THEOREM */}
       {activeModule === 'bayes' && bayesResult && (
         <div className="grid grid-cols-1 lg:grid-cols-12 gap-6">
           {/* Left: Bayes Inputs */}
@@ -553,7 +553,7 @@ export const ProbabilityAnalysisPage: React.FC = () => {
               percentage={bayesResult.percentage}
               interpretation={bayesResult.interpretation}
               assumptions={bayesResult.cautionaryNote}
-              badge="Module 3: Bayes' Inverse Law"
+              badge="Bayesian Inference Model"
               step={3}
             />
           </div>

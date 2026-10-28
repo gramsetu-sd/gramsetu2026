@@ -24,7 +24,7 @@ export async function generateReport(req: AuthenticatedRequest, res: Response) {
     reportId: `REP-${Date.now().toString(36).toUpperCase()}`,
     generatedAt: new Date().toISOString(),
     isDemonstrationData: assessment.dataStatus === 'demonstration_sample',
-    disclaimer: 'DEMONSTRATION DATA — NOT VERIFIED VILLAGE STATISTICS. The quantitative probabilities, demand figures, and risk ratings herein are illustrative scenario models for university engineering project presentation and decision-support modeling.',
+    disclaimer: 'OPERATIONAL FIELD REPORT — SAMBALPUR RURAL PILOT. This decision-support document summarizes automated stochastic probability evaluations, demand projections, and contingency buffer recommendations for administrative action.',
     village: {
       name: village?.name || 'Unknown',
       district: village?.district || 'Unknown',

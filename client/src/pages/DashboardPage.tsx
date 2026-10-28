@@ -216,7 +216,7 @@ export const DashboardPage: React.FC = () => {
               <h2 className="text-sm font-bold text-stone-900">Live Resource Deficit P(A)</h2>
             </div>
             <span className="text-[10px] font-mono uppercase bg-emerald-100 text-emerald-900 px-2 py-0.5 rounded-full font-bold">
-              Math-III
+              Predictive Core
             </span>
           </div>
 
@@ -311,7 +311,7 @@ export const DashboardPage: React.FC = () => {
             unit="hh"
             subtext={`σ = ${activeEvaluation?.discreteDistribution.standardDeviation || 14.6} hh`}
             icon={<Users className="w-4 h-4 text-amber-600" />}
-            badge={{ text: 'Math-III PMF', variant: 'neutral' }}
+            badge={{ text: 'Stochastic PMF', variant: 'neutral' }}
           />
         </div>
 
@@ -390,7 +390,7 @@ export const DashboardPage: React.FC = () => {
         </div>
       </div>
 
-      {/* Bento Row 3: Math-III Workbench (PMF 6 cols + CDF 6 cols with threshold selector) */}
+      {/* Bento Row 3: Stochastic Analytics Workbench (PMF 6 cols + CDF 6 cols with threshold selector) */}
       <div className="grid grid-cols-1 lg:grid-cols-12 gap-6">
         {/* PMF Discrete Distribution */}
         <div className="lg:col-span-6 surface p-5 sm:p-6 rounded-card border border-emerald-900/10 shadow-card space-y-4">

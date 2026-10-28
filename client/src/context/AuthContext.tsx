@@ -57,7 +57,7 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
           ? 'Shri R. K. Mohapatra (District Planning Admin)'
           : newRole === 'coordinator'
           ? 'Priyadarshini Sahu (Rengali Block Coordinator)'
-          : 'Prof. A. N. Dash (Academic Viewer)',
+          : 'A. N. Dash (District Planning Officer)',
     });
   };
 

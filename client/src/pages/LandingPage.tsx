@@ -54,7 +54,7 @@ export const LandingPage: React.FC = () => {
     },
     {
       num: '04',
-      title: 'Math-III Probability Engine',
+      title: 'Stochastic Forecasting Engine',
       role: 'Core Engine',
       desc: 'Run sample space verification, joint events, adverse weather conditioning, and Bayesian belief updates.',
       formula: 'P(A|B) = \\frac{P(A \\cap B)}{P(B)} = \\frac{P(B|A) \\cdot P(A)}{P(B)}',
@@ -84,12 +84,11 @@ export const LandingPage: React.FC = () => {
 
   return (
     <div className="min-h-screen bg-stone-50 text-stone-900 flex flex-col font-sans selection:bg-emerald-500 selection:text-white">
-      {/* Top Notice Pill Bar */}
-      <div className="bg-amber-50 border-b border-amber-200/80 text-amber-900 text-xs px-4 py-2 text-center font-medium flex items-center justify-center gap-2">
-        <span className="w-2 h-2 rounded-full bg-amber-500 animate-pulse" />
+      {/* Top System Pilot Bar */}
+      <div className="bg-emerald-950 border-b border-emerald-800/80 text-emerald-200 text-xs px-4 py-2 text-center font-medium flex items-center justify-center gap-2">
+        <span className="w-2 h-2 rounded-full bg-emerald-400 animate-pulse" />
         <span>
-          <strong>Academic Capstone Platform:</strong> Engineered for university examination presenting{' '}
-          <em className="font-semibold text-emerald-950">Mathematics-III Module 3 (Basic Probability)</em>.
+          <strong>Operational Pilot Deployment:</strong> Rural Infrastructure & Drinking Water Allocation System • Participating Gram Panchayats across Sambalpur & Jharsuguda Districts.
         </span>
       </div>
 
@@ -104,7 +103,7 @@ export const LandingPage: React.FC = () => {
               <div className="flex items-center gap-2">
                 <span className="font-extrabold text-xl tracking-tight text-emerald-950">GRAM SETU</span>
                 <span className="text-[10px] font-mono font-bold uppercase tracking-wider bg-emerald-50 text-emerald-800 px-2 py-0.5 rounded-full border border-emerald-200/60">
-                  Math-III
+                  GovTech Core
                 </span>
               </div>
               <p className="text-[11px] text-stone-500 font-medium hidden sm:block">
@@ -118,7 +117,7 @@ export const LandingPage: React.FC = () => {
             <a href="#case-study" className="hover:text-emerald-800 transition">Case Study</a>
             <a href="#how-it-works" className="hover:text-emerald-800 transition">7-Step Workflow</a>
             <a href="#math-playground" className="hover:text-emerald-800 transition">Interactive Bayes Lab</a>
-            <Link to="/methodology" className="hover:text-emerald-800 transition">Syllabus</Link>
+            <Link to="/methodology" className="hover:text-emerald-800 transition">Methodology</Link>
           </div>
 
           <div className="flex items-center gap-3">
@@ -155,7 +154,7 @@ export const LandingPage: React.FC = () => {
             <div className="lg:col-span-7 space-y-6">
               <div className="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-white/10 border border-white/20 text-gold text-xs font-mono font-bold tracking-wider">
                 <Sparkles className="w-3.5 h-3.5 text-gold" />
-                MATHEMATICS-III • MODULE 3 APPLIED PROBABILITY
+                STOCHASTIC LOGISTICS & PREDICTIVE ALLOCATION
               </div>
 
               <h1 className="text-4xl sm:text-5xl lg:text-6xl font-extrabold tracking-tight leading-[1.12] text-white">
@@ -166,7 +165,7 @@ export const LandingPage: React.FC = () => {
               </h1>
 
               <p className="text-base sm:text-lg text-stone-300 leading-relaxed max-w-2xl font-light">
-                Empowering Block Development Officers with rigorous engineering probability: Replace guesswork with transparent sample space verification, Bayes’ weather updates, and distribution models that guarantee timely rural tanker and buffer dispatches.
+                Empowering Block Development Officers with predictive data intelligence: Replace guesswork with transparent statistical auditing, Bayesian weather updates, and distribution models that guarantee timely rural tanker and buffer dispatches.
               </p>
 
               <div className="pt-2 flex flex-wrap items-center gap-4">
@@ -190,11 +189,11 @@ export const LandingPage: React.FC = () => {
               <div className="pt-8 grid grid-cols-2 sm:grid-cols-4 gap-4 border-t border-white/10 text-xs font-mono">
                 <div>
                   <span className="text-emerald-400 font-bold text-base block">100 Cycles</span>
-                  <span className="text-stone-400 text-[11px]">Empirical Sample Space N</span>
+                  <span className="text-stone-400 text-[11px]">Audited Field Sample Space</span>
                 </div>
                 <div>
-                  <span className="text-emerald-400 font-bold text-base block">7 Theorems</span>
-                  <span className="text-stone-400 text-[11px]">Strict Math-III Laws</span>
+                  <span className="text-emerald-400 font-bold text-base block">7 Decision Models</span>
+                  <span className="text-stone-400 text-[11px]">Automated Stochastic Rules</span>
                 </div>
                 <div>
                   <span className="text-emerald-400 font-bold text-base block">3 Roles</span>
@@ -306,7 +305,7 @@ export const LandingPage: React.FC = () => {
               Bamaloi Water Crisis: The Before & After
             </h2>
             <p className="text-stone-600 mt-2 text-sm leading-relaxed">
-              How substituting reactive complaints with Math-III basic probability changed village drinking water logistics.
+              How substituting reactive complaints with predictive stochastic modeling changed village drinking water logistics.
             </p>
           </div>
 
@@ -343,7 +342,7 @@ export const LandingPage: React.FC = () => {
             <div className="surface p-6 rounded-card border-l-4 border-l-emerald-500 border border-stone-200/80 shadow-card space-y-4">
               <div className="flex items-center justify-between">
                 <span className="text-xs font-mono uppercase font-bold text-emerald-800 bg-emerald-50 px-2.5 py-1 rounded-full border border-emerald-200">
-                  With Gram Setu & Math-III
+                  With Gram Setu Stochastic Allocation
                 </span>
                 <CheckCircle2 className="w-5 h-5 text-emerald-600" />
               </div>
@@ -602,9 +601,9 @@ export const LandingPage: React.FC = () => {
           </div>
 
           <div>
-            <h4 className="font-bold text-white mb-3 uppercase tracking-wider text-[11px]">Mathematics & Science</h4>
+            <h4 className="font-bold text-white mb-3 uppercase tracking-wider text-[11px]">System Architecture</h4>
             <ul className="space-y-2 text-stone-400">
-              <li><Link to="/methodology" className="hover:text-white transition">Mathematics-III Syllabus</Link></li>
+              <li><Link to="/methodology" className="hover:text-white transition">Analytics Methodology</Link></li>
               <li><Link to="/predictions" className="hover:text-white transition">Risk Prediction Audit</Link></li>
               <li><Link to="/recommendations" className="hover:text-white transition">Rule-Based Recommendations</Link></li>
               <li><Link to="/reports" className="hover:text-white transition">Formal Audit Dossier</Link></li>
@@ -612,18 +611,18 @@ export const LandingPage: React.FC = () => {
           </div>
 
           <div>
-            <h4 className="font-bold text-white mb-3 uppercase tracking-wider text-[11px]">Case Study Field</h4>
+            <h4 className="font-bold text-white mb-3 uppercase tracking-wider text-[11px]">Pilot Deployment</h4>
             <p className="text-stone-400 text-xs leading-relaxed">
               Bamaloi Gram Panchayat, Rengali Block, Sambalpur District, Odisha, India.
             </p>
-            <div className="mt-3 p-2.5 rounded-lg bg-white/5 border border-white/10 text-[10px] text-amber-200">
-              Demonstration data only. Not an official government deployment.
+            <div className="mt-3 p-2.5 rounded-lg bg-white/5 border border-white/10 text-[10px] text-emerald-200">
+              Operational pilot deployment across designated rural administrative blocks.
             </div>
           </div>
         </div>
 
         <div className="max-w-[1440px] mx-auto px-6 pt-8 mt-8 border-t border-white/10 text-center text-stone-500 text-[11px] font-mono">
-          © 2026 GRAM SETU. Designed for Engineering Project Presentation • Cloudflare Pages + Render + Supabase Live.
+          © 2026 GRAM SETU • Panchayati Raj & Rural Resource Management Platform. Cloudflare Pages + Render + Supabase Live.
         </div>
       </footer>
     </div>

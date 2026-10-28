@@ -16,7 +16,7 @@ const PAGE_TITLES: Record<string, string> = {
   '/notifications': 'Civic Alerts & Notices',
   '/settings': 'User Profile & Preferences',
   '/admin': 'Administration & Governance Panel',
-  '/methodology': 'Mathematical Methodology (Module 3)',
+  '/methodology': 'Model Architecture & Statistical Methodology',
 };
 
 export const Layout: React.FC = () => {

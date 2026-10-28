@@ -54,7 +54,7 @@ export const FormulaCard: React.FC<FormulaCardProps> = ({
             </span>
           )}
           <span className="text-[10px] font-mono uppercase tracking-widest text-emerald-400 font-semibold bg-emerald-950/80 px-2.5 py-0.5 rounded-full border border-emerald-500/30">
-            Math-III Module 3
+            Statistical Decision Core
           </span>
         </div>
       </div>

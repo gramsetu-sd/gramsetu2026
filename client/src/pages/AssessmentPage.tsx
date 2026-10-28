@@ -123,7 +123,7 @@ export const AssessmentPage: React.FC = () => {
         <p className="text-slate-600 leading-relaxed">
           Each assessment couples an administrative village with a key resource category across a defined
           temporal window. Raw field observations feeding an assessment undergo mathematical evaluation
-          via <strong>Mathematics-III Module 3 (Basic Probability)</strong> to calculate shortage risks, Bayes’
+          via <strong>Automated Stochastic Risk & Bayes Engines</strong> to calculate shortage risks, Bayes’
           posterior updates, and discrete distribution moments.
         </p>
       </div>

@@ -26,7 +26,7 @@ export const AdminPage: React.FC = () => {
   const demoUsers = [
     { name: 'Shri R. K. Mohapatra', email: 'administrator@gramsetu.org', role: 'administrator', dept: 'District Rural Development Agency (DRDA)' },
     { name: 'Priyadarshini Sahu', email: 'coordinator@gramsetu.org', role: 'coordinator', dept: 'Rengali Block Development Office' },
-    { name: 'Prof. A. N. Dash', email: 'viewer@gramsetu.org', role: 'viewer', dept: 'University Faculty Evaluator' },
+    { name: 'A. N. Dash', email: 'auditor@gramsetu.gov.in', role: 'viewer', dept: 'District Planning Directorate' },
   ];
 
   async function loadResources() {

@@ -71,7 +71,7 @@ export const Sidebar: React.FC<SidebarProps> = ({ isOpen, onClose }) => {
     {
       label: 'ANALYSIS',
       items: [
-        { name: 'Probability Lab', to: '/probability', icon: Calculator, badge: 'Math-III', badgeGold: true },
+        { name: 'Probability Engine', to: '/probability', icon: Calculator, badge: 'Predictive', badgeGold: true },
         { name: 'Predictions', to: '/predictions', icon: TrendingUp },
         { name: 'Recommendations', to: '/recommendations', icon: Lightbulb },
       ],
@@ -84,9 +84,9 @@ export const Sidebar: React.FC<SidebarProps> = ({ isOpen, onClose }) => {
       ],
     },
     {
-      label: 'LEARN',
+      label: 'SYSTEM',
       items: [
-        { name: 'Methodology', to: '/methodology', icon: BookOpen },
+        { name: 'Methodology Whitepaper', to: '/methodology', icon: BookOpen },
       ],
     },
     {

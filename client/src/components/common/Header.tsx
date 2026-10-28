@@ -67,7 +67,7 @@ export const Header: React.FC<HeaderProps> = ({ onToggleSidebar, pageTitle = 'Da
     },
     {
       id: '3',
-      title: 'Math-III Probability Engine Sync Complete',
+      title: 'Predictive Allocation Engine Synced',
       time: '2h ago',
       type: 'info',
       desc: 'All 100 sample points updated from live Supabase ledger.',
@@ -97,7 +97,7 @@ export const Header: React.FC<HeaderProps> = ({ onToggleSidebar, pageTitle = 'Da
                 {pageTitle}
                 <span className="hidden md:inline-flex items-center gap-1 text-[11px] font-semibold uppercase tracking-wider bg-emerald-50 text-emerald-800 px-2.5 py-0.5 rounded-full border border-emerald-200/60 shadow-xs">
                   <Sparkles className="w-3 h-3 text-emerald-600" />
-                  Math-III
+                  Predictive Core
                 </span>
               </h1>
             </div>

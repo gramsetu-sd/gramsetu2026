@@ -9,13 +9,13 @@ export const MethodologyPage: React.FC = () => {
       <div>
         <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-forest-100 text-forest-800 text-xs font-semibold mb-2 border border-forest-200">
           <Sparkles className="w-3.5 h-3.5" />
-          <span>Curriculum Alignment: Mathematics-III • Module 3</span>
+          <span>Statistical Architecture & Stochastic Formulations</span>
         </div>
         <h1 className="text-3xl font-extrabold text-slate-900 tracking-tight">
-          Mathematical Methodology & Formulation
+          System Methodology & Formulations
         </h1>
         <p className="text-sm text-slate-600 mt-1 leading-relaxed">
-          Comprehensive academic documentation of the probability theories, algebraic moment derivations,
+          Comprehensive technical documentation of the predictive probability theories, algebraic moment derivations,
           and statistical principles powering the GRAM SETU decision-support engine.
         </p>
       </div>
@@ -64,7 +64,7 @@ export const MethodologyPage: React.FC = () => {
         </div>
       </section>
 
-      {/* Module 3: Conditional Probability */}
+      {/* Section 3: Conditional Probability */}
       <section className="bg-white p-6 rounded-2xl border border-slate-200 shadow-2xs space-y-4">
         <div className="flex items-center gap-3 border-b border-slate-100 pb-3">
           <span className="w-7 h-7 rounded-lg bg-forest-800 text-white flex items-center justify-center font-bold text-xs">
