@@ -53,10 +53,10 @@ export const Header: React.FC<HeaderProps> = ({ onToggleSidebar, pageTitle = 'Da
   const recentAlerts = [
     {
       id: '1',
-      title: 'Bamaloi: Drinking Water P(Deficit) > 0.85',
+      title: 'Bamaloi: Drinking water shortage risk 85%',
       time: '12m ago',
       type: 'critical',
-      desc: 'Bayesian posterior indicates high probability of tube well failure.',
+      desc: 'Early warning signals indicate tube well failure is likely.',
     },
     {
       id: '2',
@@ -67,10 +67,10 @@ export const Header: React.FC<HeaderProps> = ({ onToggleSidebar, pageTitle = 'Da
     },
     {
       id: '3',
-      title: 'Predictive Allocation Engine Synced',
+      title: 'Field survey sync complete',
       time: '2h ago',
       type: 'info',
-      desc: 'All 100 sample points updated from live Supabase ledger.',
+      desc: 'All 100 village survey records updated from live database.',
     },
   ];
 
@@ -97,12 +97,12 @@ export const Header: React.FC<HeaderProps> = ({ onToggleSidebar, pageTitle = 'Da
                 {pageTitle}
                 <span className="hidden md:inline-flex items-center gap-1 text-[11px] font-semibold uppercase tracking-wider bg-emerald-50 text-emerald-800 px-2.5 py-0.5 rounded-full border border-emerald-200/60 shadow-xs">
                   <Sparkles className="w-3 h-3 text-emerald-600" />
-                  Predictive Core
+                  Live System
                 </span>
               </h1>
             </div>
             <p className="text-[11px] text-stone-500 hidden sm:block truncate max-w-xs md:max-w-md">
-              Rural Resource-Requirement Prediction Engine
+              Connecting What Villages Have with What Villages Need
             </p>
           </div>
         </div>

@@ -29,9 +29,9 @@ export const PmfChart: React.FC<Props> = ({ distribution, expectedValueMean }) =
     return (
       <div className="h-64 flex flex-col items-center justify-center text-stone-400 text-xs">
         <div className="w-10 h-10 rounded-full bg-stone-100 flex items-center justify-center mb-2 text-stone-300">
-          🎲
+          📊
         </div>
-        No PMF discrete distribution data available.
+        No survey demand data available.
       </div>
     );
   }
@@ -69,18 +69,15 @@ export const PmfChart: React.FC<Props> = ({ distribution, expectedValueMean }) =
                 return (
                   <div className="surface-glass p-3.5 rounded-2xl shadow-float border border-emerald-900/10 text-xs backdrop-blur-xl">
                     <p className="font-bold text-stone-900 mb-1">
-                      Event (X = {item.x} households)
+                      Demand: {item.x} households in need
                     </p>
                     <div className="space-y-1 font-mono text-[11px]">
                       <p className="text-emerald-700 font-bold">
-                        P(X = {item.x}) = {item.percentage} ({item.probability.toFixed(4)})
+                        Likelihood: {item.percentage}
                       </p>
                       <p className="text-stone-500">
-                        Observed frequency: {item.count} sample cycles
+                        Observed in {item.count} past survey cycles
                       </p>
-                    </div>
-                    <div className="mt-2 pt-1.5 border-t border-stone-200/60 text-[10px] text-stone-400">
-                      Satisfies ∑ P(X = x) = 1.00
                     </div>
                   </div>
                 );
@@ -95,7 +92,7 @@ export const PmfChart: React.FC<Props> = ({ distribution, expectedValueMean }) =
               strokeDasharray="4 4"
               strokeWidth={1.5}
               label={{
-                value: `E(X) = ${expectedValueMean.toFixed(2)}`,
+                value: `Typical: ~${Math.round(expectedValueMean)} hh`,
                 fill: '#D6455D',
                 fontSize: 11,
                 fontFamily: 'JetBrains Mono',
@@ -105,7 +102,7 @@ export const PmfChart: React.FC<Props> = ({ distribution, expectedValueMean }) =
           )}
           <Bar
             dataKey="probability"
-            name="P(X = x)"
+            name="Chance of this demand"
             fill="url(#pmfBarGrad)"
             radius={[6, 6, 0, 0]}
             maxBarSize={44}

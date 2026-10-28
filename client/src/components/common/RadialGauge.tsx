@@ -15,7 +15,7 @@ export const RadialGauge: React.FC<RadialGaugeProps> = ({
   value,
   size = 140,
   strokeWidth = 12,
-  label = 'Probability',
+  label = 'Shortage Risk',
   subtext,
   sublabel,
   deltaText,

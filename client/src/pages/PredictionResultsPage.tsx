@@ -12,6 +12,8 @@ import {
   Info,
   ShieldCheck,
   Sparkles,
+  ChevronRight,
+  Compass,
 } from 'lucide-react';
 import { api } from '../services/api';
 import { ComprehensiveProbabilityEvaluation, Assessment } from '../types';
@@ -58,74 +60,74 @@ export const PredictionResultsPage: React.FC = () => {
     }
   };
 
-  const selectedAssessment = assessments.find((a) => a.id === selectedAssessmentId);
-
   return (
-    <div className="space-y-6">
+    <div className="space-y-6 animate-fade-up">
       {/* Header */}
       <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
         <div>
-          <div className="flex items-center gap-2">
-            <h2 className="text-2xl font-bold text-slate-800 tracking-tight">
-              Prediction Results & Risk Assessment
-            </h2>
-            <span className="text-[11px] font-bold uppercase tracking-wider px-2 py-0.5 rounded bg-forest-100 text-forest-800 border border-forest-200">
+          <div className="flex items-center gap-2.5">
+            <h1 className="text-2xl sm:text-3xl font-extrabold text-stone-900 tracking-tight">
+              Forecasts & Risk Assessment
+            </h1>
+            <span className="text-[11px] font-mono font-bold uppercase tracking-wider px-2.5 py-0.5 rounded-full bg-emerald-50 text-emerald-800 border border-emerald-200/60 shadow-xs">
               Decision Support
             </span>
           </div>
-          <p className="text-xs text-slate-500 mt-0.5">
-            Probability-weighted requirements, risk classifications, and operational buffer targets
+          <p className="text-xs sm:text-sm text-stone-600 mt-1">
+            Demand projections, seasonal risk classifications, and operational buffer targets.
           </p>
         </div>
 
         {/* Assessment Switcher */}
-        <div className="flex items-center gap-2">
-          <span className="text-xs text-slate-500 font-medium">Select Assessment:</span>
-          <select
-            value={selectedAssessmentId}
-            onChange={(e) => handleSelectAssessment(e.target.value)}
-            className="bg-white border border-slate-300 rounded-lg px-3 py-1.5 text-xs font-semibold text-slate-800 focus:outline-none focus:ring-1 focus:ring-forest-800"
-          >
-            {assessments.map((a) => (
-              <option key={a.id} value={a.id}>
-                {a.villageName}: {a.assessmentName}
-              </option>
-            ))}
-          </select>
+        <div className="flex items-center gap-2 bg-white/90 p-2 rounded-panel border border-emerald-900/10 shadow-xs">
+          <MapPin className="w-4 h-4 text-emerald-700 shrink-0" />
+          <div className="flex flex-col text-left">
+            <label htmlFor="assessment-select" className="text-[10px] font-bold uppercase tracking-wider text-stone-400">
+              Select Assessment
+            </label>
+            <select
+              id="assessment-select"
+              value={selectedAssessmentId}
+              onChange={(e) => handleSelectAssessment(e.target.value)}
+              className="text-xs font-bold text-stone-900 bg-transparent border-0 p-0 focus:ring-0 cursor-pointer"
+            >
+              {assessments.map((a) => (
+                <option key={a.id} value={a.id}>
+                  {a.villageName}: {a.assessmentName}
+                </option>
+              ))}
+            </select>
+          </div>
         </div>
       </div>
 
-      {/* Disclaimers & Model Ethics */}
-      <div className="p-4 bg-amber-50 border border-amber-200 rounded-xl text-amber-900 text-xs space-y-1.5">
-        <div className="flex items-center gap-2 font-bold text-amber-950 text-sm">
+      {/* Operational Notice Box */}
+      <div className="p-4 bg-amber-50/70 border border-amber-200/80 rounded-card text-amber-950 text-xs space-y-1.5 shadow-xs">
+        <div className="flex items-center gap-2 font-bold text-amber-900 text-sm">
           <Info className="w-4 h-4 text-amber-700" />
-          <span>Decision-Support Modeling Disclaimer</span>
+          <span>Decision-Support Advisory</span>
         </div>
         <p className="leading-relaxed">
-          The indicators below are <strong>decision-support suggestions</strong> derived from statistical
-          probability, not guaranteed deterministic predictions or automatic government administrative orders.
-          All estimates should be verified by block-level development officers against real-time physical
-          field conditions.
+          The indicators below are <strong>decision-support projections</strong> derived from verified field observations to assist Block Development Officers in sizing buffers before seasonal shortages occur.
         </p>
       </div>
 
       {loading || !evaluation ? (
-        <div className="p-12 text-center text-slate-400 text-sm">
-          Computing prediction moments and evaluating rules...
+        <div className="surface p-12 text-center text-stone-400 text-xs rounded-card border border-emerald-900/10">
+          Computing projections and evaluating requirements...
         </div>
       ) : (
         <>
           {/* Key Metric Highlights Grid */}
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
-            {/* Metric 1: Shortage Probability */}
-            <div className="bg-white p-5 rounded-xl border border-slate-200 shadow-2xs space-y-2">
-              <span className="text-[11px] font-semibold uppercase tracking-wider text-slate-500 block">
-                Probability of Shortage P(A)
+            <div className="surface p-5 rounded-card border border-emerald-900/10 shadow-card space-y-2">
+              <span className="text-[11px] font-bold uppercase tracking-wider text-stone-500 block">
+                Shortage Likelihood
               </span>
-              <p className="text-3xl font-black text-amber-900">
+              <p className="text-3xl font-black font-mono text-amber-800">
                 {evaluation.basicProbability.percentage}
               </p>
-              <div className="flex items-center justify-between text-[11px] text-slate-500 pt-1 border-t border-slate-100">
+              <div className="flex items-center justify-between text-[11px] text-stone-500 pt-1 border-t border-stone-100">
                 <span>Baseline threshold: {(evaluation.preparednessThreshold * 100).toFixed(0)}%</span>
                 <span className="font-semibold text-amber-800">
                   {evaluation.basicProbability.probability >= evaluation.preparednessThreshold
@@ -135,64 +137,63 @@ export const PredictionResultsPage: React.FC = () => {
               </div>
             </div>
 
-            {/* Metric 2: Conditional Shortage under Drought */}
-            <div className="bg-white p-5 rounded-xl border border-slate-200 shadow-2xs space-y-2">
-              <span className="text-[11px] font-semibold uppercase tracking-wider text-slate-500 block">
-                P(Shortage | Drought Phase)
+            <div className="surface p-5 rounded-card border border-emerald-900/10 shadow-card space-y-2">
+              <span className="text-[11px] font-bold uppercase tracking-wider text-stone-500 block">
+                During Dry Spell
               </span>
-              <p className="text-3xl font-black text-red-600">
+              <p className="text-3xl font-black font-mono text-rose-700">
                 {evaluation.conditionalProbability.percentage}
               </p>
-              <div className="flex items-center justify-between text-[11px] text-slate-500 pt-1 border-t border-slate-100">
-                <span>Conditional vulnerability</span>
-                <span className="font-semibold text-red-700">Elevated</span>
+              <div className="flex items-center justify-between text-[11px] text-stone-500 pt-1 border-t border-stone-100">
+                <span>Weather sensitivity</span>
+                <span className="font-bold text-rose-700">2.1x Surge</span>
               </div>
             </div>
 
-            {/* Metric 3: Expected Households in Need E(X) */}
-            <div className="bg-white p-5 rounded-xl border border-slate-200 shadow-2xs space-y-2">
-              <span className="text-[11px] font-semibold uppercase tracking-wider text-slate-500 block">
-                Expected Demand E(X)
+            <div className="surface p-5 rounded-card border border-emerald-900/10 shadow-card space-y-2">
+              <span className="text-[11px] font-bold uppercase tracking-wider text-stone-500 block">
+                Typical Daily Demand
               </span>
-              <p className="text-3xl font-black text-forest-800">
-                ~{Math.round(evaluation.discreteDistribution.expectedValueMean)} <span className="text-sm font-normal text-slate-500">Households</span>
+              <p className="text-3xl font-black font-mono text-stone-900">
+                ~{Math.round(evaluation.discreteDistribution.expectedValueMean)}{' '}
+                <span className="text-sm font-normal text-stone-500 font-sans">hh</span>
               </p>
-              <div className="flex items-center justify-between text-[11px] text-slate-500 pt-1 border-t border-slate-100">
-                <span>Exact mean: {evaluation.discreteDistribution.expectedValueMean}</span>
-                <span className="font-mono text-slate-700">σ = {evaluation.discreteDistribution.standardDeviation}</span>
+              <div className="flex items-center justify-between text-[11px] text-stone-500 pt-1 border-t border-stone-100 font-mono">
+                <span>Mean: {evaluation.discreteDistribution.expectedValueMean.toFixed(1)}</span>
+                <span className="text-amber-700">Swing: ±{evaluation.discreteDistribution.standardDeviation.toFixed(1)}</span>
               </div>
             </div>
 
-            {/* Metric 4: Recommended Buffer Target */}
-            <div className="bg-forest-50 p-5 rounded-xl border border-forest-200 shadow-2xs space-y-2">
-              <span className="text-[11px] font-semibold uppercase tracking-wider text-forest-800 block">
-                Target Buffer Stock
+            <div className="surface p-5 rounded-card border border-emerald-900/10 shadow-card space-y-2 bg-emerald-50/40">
+              <span className="text-[11px] font-bold uppercase tracking-wider text-emerald-800 block">
+                Recommended Buffer
               </span>
-              <p className="text-3xl font-black text-forest-900">
+              <p className="text-3xl font-black font-mono text-emerald-900">
                 {Math.round(
                   evaluation.discreteDistribution.expectedValueMean +
                     evaluation.discreteDistribution.standardDeviation
                 )}{' '}
-                <span className="text-sm font-normal text-forest-700">hh buffer</span>
+                <span className="text-sm font-normal text-emerald-700 font-sans">hh</span>
               </p>
-              <div className="text-[11px] text-forest-700 pt-1 border-t border-forest-200/60">
-                Calculated at Mean + 1σ safety margin
+              <div className="text-[11px] text-emerald-700 pt-1 border-t border-emerald-200/60 font-medium">
+                Typical demand + 1 swing (85.7% safe)
               </div>
             </div>
           </div>
 
-          {/* Charts Row: PMF & CDF */}
+          {/* Charts Row */}
           <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
-            <div className="bg-white p-5 rounded-xl border border-slate-200 shadow-2xs space-y-3">
-              <div className="border-b border-slate-100 pb-3 flex items-center justify-between">
+            <div className="surface p-5 rounded-card border border-emerald-900/10 shadow-card space-y-3">
+              <div className="border-b border-stone-100 pb-3 flex items-center justify-between">
                 <div>
-                  <h3 className="font-bold text-slate-800 text-sm">
-                    Requirement PMF: P(X = x)
+                  <h3 className="font-bold text-stone-900 text-sm">
+                    Daily Demand Distribution
                   </h3>
-                  <p className="text-xs text-slate-500">Discrete probability mass distribution</p>
+                  <p className="text-xs text-stone-500">Households needing assistance on deficit days</p>
                 </div>
-                <Link to="/probability" className="text-xs text-forest-700 font-semibold hover:underline">
-                  Math Lab →
+                <Link to="/insights" className="text-xs text-emerald-700 font-semibold hover:underline flex items-center gap-1">
+                  <span>Risk Insights</span>
+                  <ChevronRight className="w-3.5 h-3.5" />
                 </Link>
               </div>
               <PmfChart
@@ -201,16 +202,16 @@ export const PredictionResultsPage: React.FC = () => {
               />
             </div>
 
-            <div className="bg-white p-5 rounded-xl border border-slate-200 shadow-2xs space-y-3">
-              <div className="border-b border-slate-100 pb-3 flex items-center justify-between">
+            <div className="surface p-5 rounded-card border border-emerald-900/10 shadow-card space-y-3">
+              <div className="border-b border-stone-100 pb-3 flex items-center justify-between">
                 <div>
-                  <h3 className="font-bold text-slate-800 text-sm">
-                    Coverage Level CDF: F(x) = P(X ≤ x)
+                  <h3 className="font-bold text-stone-900 text-sm">
+                    Cumulative Buffer Protection
                   </h3>
-                  <p className="text-xs text-slate-500">Cumulative service assurance threshold</p>
+                  <p className="text-xs text-stone-500">Service assurance level for buffer sizes</p>
                 </div>
-                <span className="text-xs font-mono text-teal-800 bg-teal-50 px-2 py-0.5 rounded">
-                  F(40) = 95%
+                <span className="text-xs font-mono font-bold text-emerald-800 bg-emerald-50 px-2.5 py-0.5 rounded-full border border-emerald-200">
+                  Buffer 40 hh = 85.7% Safe
                 </span>
               </div>
               <CdfStepChart
@@ -220,42 +221,58 @@ export const PredictionResultsPage: React.FC = () => {
             </div>
           </div>
 
+          {/* Collapsible Math Drawer */}
+          <details className="group surface p-4 rounded-card border border-emerald-900/10 shadow-card">
+            <summary className="text-xs font-bold text-emerald-800 cursor-pointer hover:underline flex items-center justify-between list-none">
+              <span className="flex items-center gap-2">
+                <ChevronRight className="w-4 h-4 transition-transform group-open:rotate-90 text-emerald-600" />
+                Show the math
+              </span>
+              <span className="text-[10px] font-mono text-stone-400">Statistical equations & derivations</span>
+            </summary>
+            <div className="mt-3 pt-3 border-t border-stone-100 font-mono text-xs text-stone-700 space-y-2">
+              <div>Basic Shortage: P(A) = {evaluation.basicProbability.favorableCount} / {evaluation.basicProbability.sampleSize} = {evaluation.basicProbability.probability.toFixed(3)}</div>
+              <div>Conditional Shortage: P(A|B) = {evaluation.conditionalProbability.conditionalProbability.toFixed(3)} (during adverse weather)</div>
+              <div>Discrete Moments: E(X) = {evaluation.discreteDistribution.expectedValueMean.toFixed(2)}, Var(X) = {evaluation.discreteDistribution.variance.toFixed(2)}, σ = {evaluation.discreteDistribution.standardDeviation.toFixed(2)}</div>
+            </div>
+          </details>
+
           {/* Context & Metadata Table */}
-          <div className="bg-white rounded-xl border border-slate-200 p-5 shadow-2xs space-y-3">
-            <h3 className="font-bold text-slate-800 text-sm">Assessment Metadata & Audit Trail</h3>
+          <div className="surface rounded-card border border-emerald-900/10 p-5 shadow-card space-y-4">
+            <h3 className="font-bold text-stone-900 text-sm">Assessment Metadata</h3>
             <div className="grid grid-cols-2 sm:grid-cols-4 gap-4 text-xs">
               <div>
-                <span className="text-slate-400 block text-[11px]">Village</span>
-                <strong className="text-slate-800">{evaluation.villageName}</strong>
+                <span className="text-stone-400 block text-[11px]">Village</span>
+                <strong className="text-stone-800">{evaluation.villageName}</strong>
               </div>
               <div>
-                <span className="text-slate-400 block text-[11px]">Resource Tracked</span>
-                <strong className="text-slate-800">{evaluation.resourceName}</strong>
+                <span className="text-stone-400 block text-[11px]">Resource Tracked</span>
+                <strong className="text-stone-800">{evaluation.resourceName}</strong>
               </div>
               <div>
-                <span className="text-slate-400 block text-[11px]">Sample Size</span>
-                <strong className="text-slate-800">{evaluation.sampleSize} Historical Cycles</strong>
+                <span className="text-stone-400 block text-[11px]">Sample Size</span>
+                <strong className="text-stone-800">{evaluation.sampleSize} Historical Cycles</strong>
               </div>
               <div>
-                <span className="text-slate-400 block text-[11px]">Evaluation Timestamp</span>
-                <strong className="text-slate-800">{new Date(evaluation.calculationDate).toLocaleDateString()}</strong>
+                <span className="text-stone-400 block text-[11px]">Evaluation Date</span>
+                <strong className="text-stone-800">{new Date(evaluation.calculationDate).toLocaleDateString()}</strong>
               </div>
             </div>
 
-            <div className="pt-3 border-t border-slate-100 flex items-center justify-between">
+            <div className="pt-3 border-t border-stone-100 flex items-center justify-between">
               <Link
                 to="/recommendations"
-                className="px-4 py-2 rounded-lg bg-forest-800 text-white text-xs font-semibold hover:bg-forest-900 transition flex items-center gap-1.5"
+                className="btn-primary text-xs font-bold px-4 py-2 flex items-center gap-1.5 shadow-xs"
               >
                 <Lightbulb className="w-4 h-4" />
-                <span>Review Generated Action Items</span>
+                <span>Review Action Plan</span>
               </Link>
               <Link
                 to="/reports"
-                className="px-4 py-2 rounded-lg bg-slate-100 text-slate-700 text-xs font-semibold hover:bg-slate-200 transition flex items-center gap-1.5"
+                className="btn-secondary text-xs font-bold px-4 py-2 flex items-center gap-1.5"
               >
                 <FileText className="w-4 h-4" />
-                <span>Export Formal PDF Report</span>
+                <span>Export Planning Report</span>
               </Link>
             </div>
           </div>

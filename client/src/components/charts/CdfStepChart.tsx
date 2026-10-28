@@ -30,7 +30,7 @@ export const CdfStepChart: React.FC<Props> = ({ distribution, thresholdX }) => {
         <div className="w-10 h-10 rounded-full bg-stone-100 flex items-center justify-center mb-2 text-stone-300">
           📈
         </div>
-        No CDF step distribution data available.
+        No buffer coverage data available.
       </div>
     );
   }
@@ -68,14 +68,14 @@ export const CdfStepChart: React.FC<Props> = ({ distribution, thresholdX }) => {
                 return (
                   <div className="surface-glass p-3.5 rounded-2xl shadow-float border border-emerald-900/10 text-xs backdrop-blur-xl">
                     <p className="font-bold text-stone-900 mb-1">
-                      Cumulative Threshold (X ≤ {item.x} households)
+                      Buffer limit: {item.x} households
                     </p>
                     <div className="space-y-1 font-mono text-[11px]">
                       <p className="text-emerald-700 font-bold">
-                        F({item.x}) = P(X ≤ {item.x}) = {item.percentage}
+                        Buffer coverage: {item.percentage}
                       </p>
                       <p className="text-stone-500">
-                        Reliability: {((1 - item.cdf) * 100).toFixed(1)}% tail risk of overflow
+                        {item.percentage} of emergency days will not exceed this buffer
                       </p>
                     </div>
                   </div>
@@ -89,7 +89,7 @@ export const CdfStepChart: React.FC<Props> = ({ distribution, thresholdX }) => {
             stroke="#C9A24B"
             strokeDasharray="4 4"
             label={{
-              value: '80% Civil Service Target',
+              value: '80% Recommended Floor',
               fill: '#C9A24B',
               fontSize: 10,
               fontFamily: 'JetBrains Mono',
@@ -102,7 +102,7 @@ export const CdfStepChart: React.FC<Props> = ({ distribution, thresholdX }) => {
               stroke="#3B82C4"
               strokeDasharray="4 4"
               label={{
-                value: `Capacity: ${thresholdX} hh`,
+                value: `Buffer: ${thresholdX} hh`,
                 fill: '#3B82C4',
                 fontSize: 10,
                 fontFamily: 'JetBrains Mono',
@@ -113,7 +113,7 @@ export const CdfStepChart: React.FC<Props> = ({ distribution, thresholdX }) => {
           <Area
             type="stepAfter"
             dataKey="cdf"
-            name="F(x) = P(X ≤ x)"
+            name="Buffer Coverage"
             stroke="#12805A"
             strokeWidth={2.5}
             fill="url(#cdfStepGrad)"

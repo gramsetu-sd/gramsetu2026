@@ -58,19 +58,13 @@ export const ContinuousPdfChart: React.FC<Props> = ({
                 return (
                   <div className="surface-glass p-3.5 rounded-2xl shadow-float border border-emerald-900/10 text-xs backdrop-blur-xl">
                     <p className="font-bold text-stone-900">
-                      Deficit x = {item.x} {unit}
+                      Shortfall: {item.x} {unit}
                     </p>
                     <div className="space-y-1 font-mono text-[11px] mt-1.5">
                       <p className="text-emerald-700 font-semibold">
-                        Density f(x): {item.density.toFixed(4)}
-                      </p>
-                      <p className="text-stone-500">
-                        Cumulative F(x): {(item.cumulative * 100).toFixed(1)}%
+                        Coverage up to here: {(item.cumulative * 100).toFixed(1)}%
                       </p>
                     </div>
-                    <p className="text-[10px] text-amber-700 mt-2 italic border-t border-stone-200/50 pt-1">
-                      Probability is area ∫ f(x)dx, not point height f(x).
-                    </p>
                   </div>
                 );
               }
@@ -83,7 +77,7 @@ export const ContinuousPdfChart: React.FC<Props> = ({
             strokeDasharray="4 4"
             strokeWidth={1.5}
             label={{
-              value: `μ = ${mean.toFixed(1)}`,
+              value: `Typical: ${mean.toFixed(1)} ${unit}`,
               fill: '#0B3D2A',
               fontSize: 11,
               fontFamily: 'JetBrains Mono',
@@ -95,7 +89,7 @@ export const ContinuousPdfChart: React.FC<Props> = ({
               x={intervalMin}
               stroke="#D97706"
               strokeDasharray="3 3"
-              label={{ value: `Min: ${intervalMin}`, fill: '#D97706', fontSize: 10, position: 'insideTopLeft' }}
+              label={{ value: `From: ${intervalMin}`, fill: '#D97706', fontSize: 10, position: 'insideTopLeft' }}
             />
           )}
           {intervalMax !== undefined && (
@@ -103,13 +97,13 @@ export const ContinuousPdfChart: React.FC<Props> = ({
               x={intervalMax}
               stroke="#D97706"
               strokeDasharray="3 3"
-              label={{ value: `Max: ${intervalMax}`, fill: '#D97706', fontSize: 10, position: 'insideTopRight' }}
+              label={{ value: `To: ${intervalMax}`, fill: '#D97706', fontSize: 10, position: 'insideTopRight' }}
             />
           )}
           <Area
             type="monotone"
             dataKey="density"
-            name="Density f(x)"
+            name="Shortfall distribution"
             stroke="#12805A"
             strokeWidth={2.5}
             fill="url(#pdfCurveGrad)"

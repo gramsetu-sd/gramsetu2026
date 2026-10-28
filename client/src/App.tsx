@@ -8,14 +8,14 @@ import { VillageDirectoryPage } from './pages/VillageDirectoryPage';
 import { VillageDetailPage } from './pages/VillageDetailPage';
 import { ResourceInventoryPage } from './pages/ResourceInventoryPage';
 import { AssessmentPage } from './pages/AssessmentPage';
-import { ProbabilityAnalysisPage } from './pages/ProbabilityAnalysisPage';
+import { RiskInsightsPage } from './pages/RiskInsightsPage';
+import { HowItWorksPage } from './pages/HowItWorksPage';
 import { PredictionResultsPage } from './pages/PredictionResultsPage';
 import { RecommendationsPage } from './pages/RecommendationsPage';
 import { ReportsPage } from './pages/ReportsPage';
 import { NotificationsPage } from './pages/NotificationsPage';
 import { SettingsPage } from './pages/SettingsPage';
 import { AdminPage } from './pages/AdminPage';
-import { MethodologyPage } from './pages/MethodologyPage';
 import { AuthPage } from './pages/AuthPage';
 
 export const App: React.FC = () => {
@@ -37,14 +37,19 @@ export const App: React.FC = () => {
             <Route path="/villages/:id" element={<VillageDetailPage />} />
             <Route path="/inventory" element={<ResourceInventoryPage />} />
             <Route path="/assessments" element={<AssessmentPage />} />
-            <Route path="/probability" element={<ProbabilityAnalysisPage />} />
+            
+            {/* Insights & How It Works (with backward compatible redirects) */}
+            <Route path="/insights" element={<RiskInsightsPage />} />
+            <Route path="/probability" element={<Navigate to="/insights" replace />} />
+            <Route path="/how-it-works" element={<HowItWorksPage />} />
+            <Route path="/methodology" element={<Navigate to="/how-it-works" replace />} />
+
             <Route path="/predictions" element={<PredictionResultsPage />} />
             <Route path="/recommendations" element={<RecommendationsPage />} />
             <Route path="/reports" element={<ReportsPage />} />
             <Route path="/notifications" element={<NotificationsPage />} />
             <Route path="/settings" element={<SettingsPage />} />
             <Route path="/admin" element={<AdminPage />} />
-            <Route path="/methodology" element={<MethodologyPage />} />
           </Route>
 
           {/* Fallback to Dashboard */}

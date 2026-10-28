@@ -6,11 +6,11 @@ import {
   Calendar,
   MapPin,
   Package,
-  Calculator,
   TrendingUp,
   ShieldAlert,
   ArrowRight,
   Info,
+  Compass,
 } from 'lucide-react';
 import { api } from '../services/api';
 import { Assessment, Village, Resource } from '../types';
@@ -91,40 +91,44 @@ export const AssessmentPage: React.FC = () => {
   };
 
   return (
-    <div className="space-y-6">
+    <div className="space-y-6 animate-fade-up">
       {/* Header */}
       <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
         <div>
-          <h2 className="text-2xl font-bold text-slate-800 tracking-tight">
-            Resource Requirement Assessments
-          </h2>
-          <p className="text-xs text-slate-500 mt-0.5">
-            Initiate and audit structured probability evaluation cycles for gram panchayats
+          <div className="flex items-center gap-2.5">
+            <h1 className="text-2xl sm:text-3xl font-extrabold text-stone-900 tracking-tight">
+              Field Surveys & Assessments
+            </h1>
+            <span className="text-[11px] font-mono font-bold uppercase tracking-wider px-2.5 py-0.5 rounded-full bg-emerald-50 text-emerald-800 border border-emerald-200/60 shadow-xs">
+              Field Cycles
+            </span>
+          </div>
+          <p className="text-xs sm:text-sm text-stone-600 mt-1">
+            Initiate and track structured resource surveys across Gram Panchayats.
           </p>
         </div>
 
         {canEdit && (
           <button
             onClick={() => setModalOpen(true)}
-            className="px-4 py-2 rounded-lg bg-forest-800 text-white text-xs sm:text-sm font-semibold hover:bg-forest-900 transition flex items-center gap-2 self-start sm:self-auto shadow-xs"
+            className="btn-primary text-xs font-bold px-4 py-2.5 flex items-center gap-2 self-start sm:self-auto shadow-xs"
           >
             <Plus className="w-4 h-4" />
-            <span>Initiate Assessment</span>
+            <span>Initiate Survey Assessment</span>
           </button>
         )}
       </div>
 
       {/* Explanatory Banner */}
-      <div className="p-4 bg-white rounded-xl border border-slate-200 shadow-2xs text-xs space-y-1.5">
-        <div className="flex items-center gap-2 font-bold text-slate-800 text-sm">
-          <Info className="w-4 h-4 text-forest-700" />
+      <div className="surface p-4 rounded-card border border-emerald-900/10 shadow-card text-xs space-y-1.5">
+        <div className="flex items-center gap-2 font-bold text-stone-900 text-sm">
+          <Info className="w-4 h-4 text-emerald-700" />
           <span>Understanding Assessment Lifecycles</span>
         </div>
-        <p className="text-slate-600 leading-relaxed">
+        <p className="text-stone-600 leading-relaxed">
           Each assessment couples an administrative village with a key resource category across a defined
-          temporal window. Raw field observations feeding an assessment undergo mathematical evaluation
-          via <strong>Automated Stochastic Risk & Bayes Engines</strong> to calculate shortage risks, Bayes’
-          posterior updates, and discrete distribution moments.
+          temporal window. Raw field observations feeding an assessment undergo automated evaluation
+          via the <strong>Risk Insights & Early Warning Engine</strong> to calculate shortage risks, weather sensitivities, and recommended buffer sizes.
         </p>
       </div>
 
@@ -133,40 +137,40 @@ export const AssessmentPage: React.FC = () => {
         {assessments.map((a) => (
           <div
             key={a.id}
-            className="bg-white rounded-xl border border-slate-200/90 shadow-2xs hover:shadow-md hover:border-forest-600 transition p-5 flex flex-col justify-between space-y-4"
+            className="surface rounded-card border border-emerald-900/10 shadow-card hover:shadow-lift transition p-5 flex flex-col justify-between space-y-4"
           >
             <div className="space-y-3">
               <div className="flex items-start justify-between">
-                <span className="text-[10px] font-bold uppercase tracking-wider px-2 py-0.5 rounded bg-forest-50 text-forest-800 border border-forest-200">
+                <span className="text-[10px] font-mono font-bold uppercase tracking-wider px-2 py-0.5 rounded-full bg-emerald-50 text-emerald-800 border border-emerald-200">
                   {a.status}
                 </span>
-                <span className="text-xs font-mono text-slate-500">
+                <span className="text-xs font-mono text-stone-500">
                   Threshold: {(a.preparednessThreshold * 100).toFixed(0)}%
                 </span>
               </div>
 
               <div>
-                <h3 className="font-bold text-base text-slate-900 leading-snug">
+                <h3 className="font-bold text-base text-stone-900 leading-snug">
                   {a.assessmentName}
                 </h3>
-                <p className="text-xs text-slate-500 flex items-center gap-1 mt-1">
-                  <MapPin className="w-3.5 h-3.5 text-forest-700 shrink-0" />
+                <p className="text-xs text-stone-500 flex items-center gap-1 mt-1">
+                  <MapPin className="w-3.5 h-3.5 text-emerald-700 shrink-0" />
                   <span>
                     {a.villageName} ({a.district})
                   </span>
                 </p>
               </div>
 
-              <div className="p-3 bg-slate-50 rounded-lg space-y-1 text-xs">
-                <div className="flex justify-between text-slate-600">
+              <div className="p-3 bg-stone-50 rounded-panel space-y-1 text-xs border border-stone-200/50">
+                <div className="flex justify-between text-stone-600">
                   <span>Resource:</span>
-                  <strong className="text-slate-800">{a.resourceName}</strong>
+                  <strong className="text-stone-800">{a.resourceName}</strong>
                 </div>
-                <div className="flex justify-between text-slate-600">
+                <div className="flex justify-between text-stone-600">
                   <span>Category:</span>
                   <span className="capitalize">{a.resourceCategory?.replace('_', ' ')}</span>
                 </div>
-                <div className="flex justify-between text-slate-600">
+                <div className="flex justify-between text-stone-600">
                   <span>Date Window:</span>
                   <span>
                     {a.startDate} to {a.endDate}
@@ -175,35 +179,35 @@ export const AssessmentPage: React.FC = () => {
               </div>
             </div>
 
-            <div className="pt-2 border-t border-slate-100 flex items-center justify-between gap-2">
+            <div className="pt-2 border-t border-stone-100 flex items-center justify-between gap-2">
               <Link
-                to="/probability"
-                className="flex-1 py-2 px-3 rounded-lg bg-forest-800 hover:bg-forest-900 text-white text-xs font-semibold flex items-center justify-center gap-1.5 transition shadow-xs"
+                to="/insights"
+                className="btn-primary flex-1 py-2 px-3 text-xs font-bold flex items-center justify-center gap-1.5 shadow-xs"
               >
-                <Calculator className="w-3.5 h-3.5" />
-                <span>Run Analysis</span>
+                <Compass className="w-3.5 h-3.5" />
+                <span>Risk Insights</span>
               </Link>
               <Link
                 to="/predictions"
-                className="py-2 px-3 rounded-lg bg-slate-100 hover:bg-slate-200 text-slate-700 text-xs font-semibold transition"
-                title="View Prediction Results"
+                className="btn-secondary py-2 px-3 text-xs font-bold"
+                title="View Forecasts"
               >
-                <TrendingUp className="w-3.5 h-3.5" />
+                <TrendingUp className="w-3.5 h-3.5 text-stone-600" />
               </Link>
             </div>
           </div>
         ))}
       </div>
 
-      {/* Initiate Assessment Modal */}
+      {/* Modal */}
       {modalOpen && (
-        <div className="fixed inset-0 bg-slate-900/40 z-50 flex items-center justify-center p-4 backdrop-blur-xs">
-          <div className="bg-white rounded-2xl max-w-lg w-full p-6 shadow-2xl space-y-4">
-            <div className="flex items-center justify-between border-b border-slate-100 pb-3">
-              <h3 className="font-bold text-slate-800 text-base">Initiate Requirement Assessment</h3>
+        <div className="fixed inset-0 bg-stone-900/50 z-50 flex items-center justify-center p-4 backdrop-blur-xs">
+          <div className="surface rounded-card max-w-lg w-full p-6 shadow-float space-y-4">
+            <div className="flex items-center justify-between border-b border-stone-100 pb-3">
+              <h3 className="font-bold text-stone-900 text-base">Initiate Requirement Assessment</h3>
               <button
                 onClick={() => setModalOpen(false)}
-                className="text-slate-400 hover:text-slate-600 text-sm font-bold"
+                className="text-stone-400 hover:text-stone-600 text-sm font-bold"
               >
                 ✕
               </button>
@@ -211,7 +215,7 @@ export const AssessmentPage: React.FC = () => {
 
             <form onSubmit={handleCreateAssessment} className="space-y-3 text-xs">
               <div>
-                <label className="block font-medium text-slate-700 mb-1">
+                <label className="block font-medium text-stone-700 mb-1">
                   Assessment Name / Title *
                 </label>
                 <input
@@ -220,18 +224,18 @@ export const AssessmentPage: React.FC = () => {
                   value={formData.assessmentName}
                   onChange={(e) => setFormData({ ...formData, assessmentName: e.target.value })}
                   placeholder="e.g., Summer Drinking Water Shortage Assessment (Bamaloi 2026)"
-                  className="w-full px-3 py-2 border border-slate-300 rounded-lg focus:outline-none focus:ring-1 focus:ring-forest-800"
+                  className="input w-full"
                 />
               </div>
 
               <div className="grid grid-cols-2 gap-3">
                 <div>
-                  <label className="block font-medium text-slate-700 mb-1">Target Village *</label>
+                  <label className="block font-medium text-stone-700 mb-1">Target Village *</label>
                   <select
                     required
                     value={formData.villageId}
                     onChange={(e) => setFormData({ ...formData, villageId: e.target.value })}
-                    className="w-full px-3 py-2 border border-slate-300 rounded-lg focus:outline-none focus:ring-1 focus:ring-forest-800"
+                    className="input w-full cursor-pointer"
                   >
                     {villages.map((v) => (
                       <option key={v.id} value={v.id}>
@@ -242,12 +246,12 @@ export const AssessmentPage: React.FC = () => {
                 </div>
 
                 <div>
-                  <label className="block font-medium text-slate-700 mb-1">Resource Tracked *</label>
+                  <label className="block font-medium text-stone-700 mb-1">Resource Tracked *</label>
                   <select
                     required
                     value={formData.resourceId}
                     onChange={(e) => setFormData({ ...formData, resourceId: e.target.value })}
-                    className="w-full px-3 py-2 border border-slate-300 rounded-lg focus:outline-none focus:ring-1 focus:ring-forest-800"
+                    className="input w-full cursor-pointer"
                   >
                     {resources.map((r) => (
                       <option key={r.id} value={r.id}>
@@ -260,31 +264,31 @@ export const AssessmentPage: React.FC = () => {
 
               <div className="grid grid-cols-2 gap-3">
                 <div>
-                  <label className="block font-medium text-slate-700 mb-1">Start Date *</label>
+                  <label className="block font-medium text-stone-700 mb-1">Start Date *</label>
                   <input
                     type="date"
                     required
                     value={formData.startDate}
                     onChange={(e) => setFormData({ ...formData, startDate: e.target.value })}
-                    className="w-full px-3 py-2 border border-slate-300 rounded-lg focus:outline-none focus:ring-1 focus:ring-forest-800"
+                    className="input w-full"
                   />
                 </div>
 
                 <div>
-                  <label className="block font-medium text-slate-700 mb-1">End Date *</label>
+                  <label className="block font-medium text-stone-700 mb-1">End Date *</label>
                   <input
                     type="date"
                     required
                     value={formData.endDate}
                     onChange={(e) => setFormData({ ...formData, endDate: e.target.value })}
-                    className="w-full px-3 py-2 border border-slate-300 rounded-lg focus:outline-none focus:ring-1 focus:ring-forest-800"
+                    className="input w-full"
                   />
                 </div>
               </div>
 
               <div>
-                <label className="block font-medium text-slate-700 mb-1">
-                  Preparedness Threshold (Probability Trigger: 0.10 to 0.90)
+                <label className="block font-medium text-stone-700 mb-1">
+                  Preparedness Threshold (Shortage Trigger: 0.10 to 0.90)
                 </label>
                 <div className="flex items-center gap-3">
                   <input
@@ -296,29 +300,29 @@ export const AssessmentPage: React.FC = () => {
                     onChange={(e) =>
                       setFormData({ ...formData, preparednessThreshold: parseFloat(e.target.value) })
                     }
-                    className="flex-1 accent-forest-800 cursor-pointer"
+                    className="flex-1 accent-emerald-600 cursor-pointer h-2 bg-stone-200 rounded-lg"
                   />
-                  <span className="font-mono font-bold text-slate-800 w-12 text-right">
+                  <span className="font-mono font-bold text-stone-800 w-12 text-right">
                     {(formData.preparednessThreshold * 100).toFixed(0)}%
                   </span>
                 </div>
-                <p className="text-[11px] text-slate-400 mt-1">
-                  If calculated shortage probability exceeds this threshold, high-priority contingency
+                <p className="text-[11px] text-stone-400 mt-1">
+                  If shortage likelihood exceeds this threshold, high-priority contingency
                   recommendations are automatically generated.
                 </p>
               </div>
 
-              <div className="flex items-center justify-end gap-2 pt-3 border-t border-slate-100">
+              <div className="flex items-center justify-end gap-2 pt-3 border-t border-stone-100">
                 <button
                   type="button"
                   onClick={() => setModalOpen(false)}
-                  className="px-4 py-2 border border-slate-300 rounded-lg text-slate-600 hover:bg-slate-50 font-medium"
+                  className="btn-secondary px-4 py-2 font-medium"
                 >
                   Cancel
                 </button>
                 <button
                   type="submit"
-                  className="px-4 py-2 bg-forest-800 text-white rounded-lg hover:bg-forest-900 font-semibold"
+                  className="btn-primary px-4 py-2 font-bold shadow-xs"
                 >
                   Create Assessment
                 </button>

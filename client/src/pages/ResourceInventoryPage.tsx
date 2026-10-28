@@ -113,31 +113,38 @@ export const ResourceInventoryPage: React.FC = () => {
   });
 
   return (
-    <div className="space-y-6">
+    <div className="space-y-6 animate-fade-up">
       {/* Header */}
       <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
         <div>
-          <h2 className="text-2xl font-bold text-slate-800 tracking-tight">Resource Inventory</h2>
-          <p className="text-xs text-slate-500 mt-0.5">
-            Audit available quantities, demand projections, and maintain strict unit consistency
+          <div className="flex items-center gap-2.5">
+            <h1 className="text-2xl sm:text-3xl font-extrabold text-stone-900 tracking-tight">
+              Resource Stock
+            </h1>
+            <span className="text-[11px] font-mono font-bold uppercase tracking-wider px-2.5 py-0.5 rounded-full bg-emerald-50 text-emerald-800 border border-emerald-200/60 shadow-xs">
+              Inventory Ledger
+            </span>
+          </div>
+          <p className="text-xs sm:text-sm text-stone-600 mt-1">
+            Audit available stock, demand projections, and maintain strict unit consistency across village channels.
           </p>
         </div>
 
         {canEdit && (
           <button
             onClick={() => setModalOpen(true)}
-            className="px-4 py-2 rounded-lg bg-forest-800 text-white text-xs sm:text-sm font-semibold hover:bg-forest-900 transition flex items-center gap-2 self-start sm:self-auto shadow-xs"
+            className="btn-primary text-xs font-bold px-4 py-2.5 flex items-center gap-2 self-start sm:self-auto shadow-xs"
           >
             <Plus className="w-4 h-4" />
-            <span>Record Resource Observation</span>
+            <span>Record Stock Observation</span>
           </button>
         )}
       </div>
 
       {/* Filter Bar */}
-      <div className="bg-white p-4 rounded-xl border border-slate-200 shadow-2xs flex flex-wrap items-center gap-3">
-        <div className="flex items-center gap-2 text-xs font-semibold text-slate-600">
-          <Filter className="w-4 h-4 text-slate-400" />
+      <div className="surface p-4 rounded-panel border border-emerald-900/10 shadow-card flex flex-wrap items-center gap-3">
+        <div className="flex items-center gap-2 text-xs font-bold text-stone-600">
+          <Filter className="w-4 h-4 text-stone-400" />
           <span>Filters:</span>
         </div>
 
@@ -145,7 +152,7 @@ export const ResourceInventoryPage: React.FC = () => {
         <select
           value={selectedVillageId}
           onChange={(e) => setSelectedVillageId(e.target.value)}
-          className="px-3 py-1.5 text-xs bg-slate-50 border border-slate-300 rounded-lg focus:outline-none focus:ring-1 focus:ring-forest-800 text-slate-700 font-medium"
+          className="px-3 py-1.5 text-xs bg-stone-50 border border-stone-200 rounded-control focus:outline-none focus:ring-2 focus:ring-emerald-500/30 text-stone-700 font-semibold cursor-pointer"
         >
           <option value="all">All Villages</option>
           {villages.map((v) => (
@@ -159,7 +166,7 @@ export const ResourceInventoryPage: React.FC = () => {
         <select
           value={selectedCategory}
           onChange={(e) => setSelectedCategory(e.target.value)}
-          className="px-3 py-1.5 text-xs bg-slate-50 border border-slate-300 rounded-lg focus:outline-none focus:ring-1 focus:ring-forest-800 text-slate-700 font-medium"
+          className="px-3 py-1.5 text-xs bg-stone-50 border border-stone-200 rounded-control focus:outline-none focus:ring-2 focus:ring-emerald-500/30 text-stone-700 font-semibold cursor-pointer"
         >
           <option value="all">All Resource Categories</option>
           <option value="drinking_water">Drinking Water</option>
@@ -170,38 +177,37 @@ export const ResourceInventoryPage: React.FC = () => {
           <option value="renewable_energy">Renewable Energy</option>
         </select>
 
-        <span className="text-xs text-slate-400 ml-auto font-medium">
+        <span className="text-xs text-stone-400 ml-auto font-mono">
           Showing {filteredObservations.length} observations
         </span>
       </div>
 
       {/* Unit Safety Notice */}
-      <div className="p-3 bg-forest-50 border border-forest-200 rounded-xl text-forest-900 text-xs flex items-center gap-2.5">
-        <Info className="w-4 h-4 text-forest-700 shrink-0" />
+      <div className="p-3 bg-emerald-50/70 border border-emerald-200/80 rounded-panel text-emerald-950 text-xs flex items-center gap-2.5">
+        <Info className="w-4 h-4 text-emerald-700 shrink-0" />
         <span>
-          <strong>Dimensional Consistency Rule:</strong> Quantities are strictly bound to their standard
-          physical units (kL/day, ha-m/month, Quintals, Medical Kits). Incompatible units are never added
-          or aggregated across different dimensions.
+          <strong>Unit Consistency Standard:</strong> Quantities are strictly bound to their standard
+          physical units (kL/day, ha-m/month, Quintals, Medical Kits). Units are verified before entering calculation engines.
         </span>
       </div>
 
       {/* Observations Table */}
-      <div className="bg-white rounded-xl border border-slate-200 overflow-hidden shadow-2xs">
+      <div className="surface rounded-card border border-emerald-900/10 overflow-hidden shadow-card">
         <div className="overflow-x-auto">
           <table className="w-full text-left text-xs">
-            <thead className="bg-slate-50 text-slate-600 uppercase text-[10px] font-bold border-b border-slate-200">
+            <thead className="bg-stone-50 text-stone-600 uppercase text-[10px] font-bold border-b border-stone-200">
               <tr>
                 <th className="px-4 py-3">Village</th>
                 <th className="px-4 py-3">Resource & Category</th>
-                <th className="px-4 py-3">Available Quantity</th>
+                <th className="px-4 py-3">Available Stock</th>
                 <th className="px-4 py-3">Estimated Demand</th>
-                <th className="px-4 py-3">Deficit / Surplus</th>
-                <th className="px-4 py-3">Observation Date</th>
+                <th className="px-4 py-3">Status</th>
+                <th className="px-4 py-3">Date</th>
                 <th className="px-4 py-3">Data Source</th>
                 <th className="px-4 py-3">Notes</th>
               </tr>
             </thead>
-            <tbody className="divide-y divide-slate-100 text-slate-700">
+            <tbody className="divide-y divide-stone-100 text-stone-700">
               {filteredObservations.map((obs) => {
                 const village = villages.find((v) => v.id === obs.villageId);
                 const resource = resources.find((r) => r.id === obs.resourceId);
@@ -209,21 +215,21 @@ export const ResourceInventoryPage: React.FC = () => {
                 const diff = (obs.estimatedDemand - obs.observedAvailableQuantity).toFixed(1);
 
                 return (
-                  <tr key={obs.id} className="hover:bg-slate-50/70 transition">
-                    <td className="px-4 py-3 font-semibold text-slate-900">
+                  <tr key={obs.id} className="hover:bg-stone-50/70 transition">
+                    <td className="px-4 py-3 font-bold text-stone-900">
                       {village?.name || 'Unknown'}
                     </td>
                     <td className="px-4 py-3">
-                      <div className="font-medium text-slate-800">{resource?.name}</div>
-                      <div className="text-[10px] text-slate-400 capitalize">
+                      <div className="font-semibold text-stone-800">{resource?.name}</div>
+                      <div className="text-[10px] text-stone-400 capitalize">
                         {resource?.category.replace('_', ' ')}
                       </div>
                     </td>
-                    <td className="px-4 py-3 font-semibold text-slate-800">
-                      {obs.observedAvailableQuantity} <span className="text-slate-400 font-normal">{resource?.unit}</span>
+                    <td className="px-4 py-3 font-mono font-bold text-stone-900">
+                      {obs.observedAvailableQuantity} <span className="text-stone-400 font-normal font-sans">{resource?.unit}</span>
                     </td>
-                    <td className="px-4 py-3 text-slate-700">
-                      {obs.estimatedDemand} <span className="text-slate-400 font-normal">{resource?.unit}</span>
+                    <td className="px-4 py-3 font-mono text-stone-700">
+                      {obs.estimatedDemand} <span className="text-stone-400 font-normal font-sans">{resource?.unit}</span>
                     </td>
                     <td className="px-4 py-3">
                       {isDeficit ? (
@@ -232,19 +238,19 @@ export const ResourceInventoryPage: React.FC = () => {
                           <span>Deficit (-{diff})</span>
                         </span>
                       ) : (
-                        <span className="inline-flex items-center gap-1 text-forest-700 font-medium">
+                        <span className="inline-flex items-center gap-1 text-emerald-700 font-bold">
                           <CheckCircle2 className="w-3.5 h-3.5" />
                           <span>Adequate</span>
                         </span>
                       )}
                     </td>
-                    <td className="px-4 py-3 text-slate-500 whitespace-nowrap">{obs.observationDate}</td>
+                    <td className="px-4 py-3 text-stone-500 font-mono text-[11px] whitespace-nowrap">{obs.observationDate}</td>
                     <td className="px-4 py-3">
-                      <span className="text-[10px] font-medium px-2 py-0.5 rounded bg-slate-100 text-slate-600 border border-slate-200">
+                      <span className="text-[10px] font-medium px-2 py-0.5 rounded-full bg-stone-100 text-stone-600 border border-stone-200">
                         {obs.sourceType.replace('_', ' ')}
                       </span>
                     </td>
-                    <td className="px-4 py-3 text-slate-500 max-w-xs truncate" title={obs.notes || ''}>
+                    <td className="px-4 py-3 text-stone-500 max-w-xs truncate" title={obs.notes || ''}>
                       {obs.notes || '—'}
                     </td>
                   </tr>
@@ -257,13 +263,13 @@ export const ResourceInventoryPage: React.FC = () => {
 
       {/* Record Observation Modal */}
       {modalOpen && (
-        <div className="fixed inset-0 bg-slate-900/40 z-50 flex items-center justify-center p-4 backdrop-blur-xs">
-          <div className="bg-white rounded-2xl max-w-lg w-full p-6 shadow-2xl space-y-4">
-            <div className="flex items-center justify-between border-b border-slate-100 pb-3">
-              <h3 className="font-bold text-slate-800 text-base">Record Resource Observation</h3>
+        <div className="fixed inset-0 bg-stone-900/50 z-50 flex items-center justify-center p-4 backdrop-blur-xs">
+          <div className="surface rounded-card max-w-lg w-full p-6 shadow-float space-y-4">
+            <div className="flex items-center justify-between border-b border-stone-100 pb-3">
+              <h3 className="font-bold text-stone-900 text-base">Record Stock Observation</h3>
               <button
                 onClick={() => setModalOpen(false)}
-                className="text-slate-400 hover:text-slate-600 text-sm font-bold"
+                className="text-stone-400 hover:text-stone-600 text-sm font-bold"
               >
                 ✕
               </button>
@@ -272,12 +278,12 @@ export const ResourceInventoryPage: React.FC = () => {
             <form onSubmit={handleRecordObservation} className="space-y-3 text-xs">
               <div className="grid grid-cols-2 gap-3">
                 <div>
-                  <label className="block font-medium text-slate-700 mb-1">Target Village *</label>
+                  <label className="block font-medium text-stone-700 mb-1">Target Village *</label>
                   <select
                     required
                     value={formData.villageId}
                     onChange={(e) => setFormData({ ...formData, villageId: e.target.value })}
-                    className="w-full px-3 py-2 border border-slate-300 rounded-lg focus:outline-none focus:ring-1 focus:ring-forest-800"
+                    className="input w-full cursor-pointer"
                   >
                     {villages.map((v) => (
                       <option key={v.id} value={v.id}>
@@ -288,12 +294,12 @@ export const ResourceInventoryPage: React.FC = () => {
                 </div>
 
                 <div>
-                  <label className="block font-medium text-slate-700 mb-1">Resource Category *</label>
+                  <label className="block font-medium text-stone-700 mb-1">Resource Category *</label>
                   <select
                     required
                     value={formData.resourceId}
                     onChange={(e) => setFormData({ ...formData, resourceId: e.target.value })}
-                    className="w-full px-3 py-2 border border-slate-300 rounded-lg focus:outline-none focus:ring-1 focus:ring-forest-800"
+                    className="input w-full cursor-pointer"
                   >
                     {resources.map((r) => (
                       <option key={r.id} value={r.id}>
@@ -306,7 +312,7 @@ export const ResourceInventoryPage: React.FC = () => {
 
               <div className="grid grid-cols-2 gap-3">
                 <div>
-                  <label className="block font-medium text-slate-700 mb-1">
+                  <label className="block font-medium text-stone-700 mb-1">
                     Observed Available Quantity *
                   </label>
                   <input
@@ -319,12 +325,12 @@ export const ResourceInventoryPage: React.FC = () => {
                       setFormData({ ...formData, observedAvailableQuantity: e.target.value })
                     }
                     placeholder="e.g., 145"
-                    className="w-full px-3 py-2 border border-slate-300 rounded-lg focus:outline-none focus:ring-1 focus:ring-forest-800"
+                    className="input w-full font-mono"
                   />
                 </div>
 
                 <div>
-                  <label className="block font-medium text-slate-700 mb-1">
+                  <label className="block font-medium text-stone-700 mb-1">
                     Estimated Demand Quantity *
                   </label>
                   <input
@@ -335,75 +341,62 @@ export const ResourceInventoryPage: React.FC = () => {
                     value={formData.estimatedDemand}
                     onChange={(e) => setFormData({ ...formData, estimatedDemand: e.target.value })}
                     placeholder="e.g., 185"
-                    className="w-full px-3 py-2 border border-slate-300 rounded-lg focus:outline-none focus:ring-1 focus:ring-forest-800"
+                    className="input w-full font-mono"
                   />
                 </div>
               </div>
 
               <div className="grid grid-cols-2 gap-3">
                 <div>
-                  <label className="block font-medium text-slate-700 mb-1">Observation Date</label>
+                  <label className="block font-medium text-stone-700 mb-1">Observation Date</label>
                   <input
                     type="date"
                     required
                     value={formData.observationDate}
                     onChange={(e) => setFormData({ ...formData, observationDate: e.target.value })}
-                    className="w-full px-3 py-2 border border-slate-300 rounded-lg focus:outline-none focus:ring-1 focus:ring-forest-800"
+                    className="input w-full"
                   />
                 </div>
 
                 <div>
-                  <label className="block font-medium text-slate-700 mb-1">Data Source Type</label>
+                  <label className="block font-medium text-stone-700 mb-1">Source Type</label>
                   <select
                     value={formData.sourceType}
                     onChange={(e) =>
                       setFormData({ ...formData, sourceType: e.target.value as any })
                     }
-                    className="w-full px-3 py-2 border border-slate-300 rounded-lg focus:outline-none focus:ring-1 focus:ring-forest-800"
+                    className="input w-full cursor-pointer"
                   >
                     <option value="coordinator_field_report">Coordinator Field Report</option>
-                    <option value="verified_sensor">Verified Flow / Storage Sensor</option>
-                    <option value="official_survey">Panchayat Official Survey</option>
+                    <option value="verified_sensor">Verified Sensor</option>
+                    <option value="official_survey">Official Survey</option>
                     <option value="demonstration_sample">Demonstration Sample</option>
                   </select>
                 </div>
               </div>
 
               <div>
-                <label className="block font-medium text-slate-700 mb-1">
-                  Source Description / Sensor ID
-                </label>
-                <input
-                  type="text"
-                  value={formData.sourceDescription}
-                  onChange={(e) => setFormData({ ...formData, sourceDescription: e.target.value })}
-                  placeholder="e.g., Ward 4 Master Borewell Flow Meter"
-                  className="w-full px-3 py-2 border border-slate-300 rounded-lg focus:outline-none focus:ring-1 focus:ring-forest-800"
-                />
-              </div>
-
-              <div>
-                <label className="block font-medium text-slate-700 mb-1">Field Notes</label>
+                <label className="block font-medium text-stone-700 mb-1">Notes / Context</label>
                 <textarea
                   rows={2}
                   value={formData.notes}
                   onChange={(e) => setFormData({ ...formData, notes: e.target.value })}
-                  placeholder="Specific seasonal conditions, pump performance, rationing status..."
-                  className="w-full px-3 py-2 border border-slate-300 rounded-lg focus:outline-none focus:ring-1 focus:ring-forest-800"
+                  placeholder="e.g., Solar pump operating at 60% due to cloudy weather..."
+                  className="input w-full"
                 />
               </div>
 
-              <div className="flex items-center justify-end gap-2 pt-3 border-t border-slate-100">
+              <div className="flex items-center justify-end gap-2 pt-3 border-t border-stone-100">
                 <button
                   type="button"
                   onClick={() => setModalOpen(false)}
-                  className="px-4 py-2 border border-slate-300 rounded-lg text-slate-600 hover:bg-slate-50 font-medium"
+                  className="btn-secondary px-4 py-2 font-medium"
                 >
                   Cancel
                 </button>
                 <button
                   type="submit"
-                  className="px-4 py-2 bg-forest-800 text-white rounded-lg hover:bg-forest-900 font-semibold"
+                  className="btn-primary px-4 py-2 font-bold shadow-xs"
                 >
                   Save Observation
                 </button>

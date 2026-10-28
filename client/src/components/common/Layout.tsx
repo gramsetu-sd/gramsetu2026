@@ -7,16 +7,18 @@ import { DemoBanner } from './DemoBanner';
 const PAGE_TITLES: Record<string, string> = {
   '/dashboard': 'Executive Dashboard',
   '/villages': 'Village Directory',
-  '/inventory': 'Resource Inventory & Availability',
-  '/assessments': 'Resource Requirement Assessment',
-  '/probability': 'Probability Analysis Engine',
-  '/predictions': 'Prediction Results & Risk Assessment',
-  '/recommendations': 'Actionable Recommendations',
-  '/reports': 'Reports & Formal Export',
-  '/notifications': 'Civic Alerts & Notices',
-  '/settings': 'User Profile & Preferences',
-  '/admin': 'Administration & Governance Panel',
-  '/methodology': 'Model Architecture & Statistical Methodology',
+  '/inventory': 'Resource Stock',
+  '/assessments': 'Field Surveys',
+  '/insights': 'Risk Insights',
+  '/probability': 'Risk Insights',
+  '/predictions': 'Resource Forecasts',
+  '/recommendations': 'Action Plan',
+  '/reports': 'Planning Reports',
+  '/notifications': 'Alerts & Notices',
+  '/settings': 'User Profile & Settings',
+  '/admin': 'Administration & Governance',
+  '/how-it-works': 'How It Works',
+  '/methodology': 'How It Works',
 };
 
 export const Layout: React.FC = () => {

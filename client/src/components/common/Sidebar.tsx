@@ -62,18 +62,18 @@ export const Sidebar: React.FC<SidebarProps> = ({ isOpen, onClose }) => {
       ],
     },
     {
-      label: 'DATA',
+      label: 'FIELD DATA',
       items: [
-        { name: 'Inventory', to: '/inventory', icon: Package },
-        { name: 'Assessments', to: '/assessments', icon: ClipboardList },
+        { name: 'Resource Stock', to: '/inventory', icon: Package },
+        { name: 'Field Surveys', to: '/assessments', icon: ClipboardList },
       ],
     },
     {
-      label: 'ANALYSIS',
+      label: 'INSIGHTS',
       items: [
-        { name: 'Probability Engine', to: '/probability', icon: Calculator, badge: 'Predictive', badgeGold: true },
-        { name: 'Predictions', to: '/predictions', icon: TrendingUp },
-        { name: 'Recommendations', to: '/recommendations', icon: Lightbulb },
+        { name: 'Risk Insights', to: '/insights', icon: Calculator, badge: 'Live', badgeGold: true },
+        { name: 'Forecasts', to: '/predictions', icon: TrendingUp },
+        { name: 'Action Plan', to: '/recommendations', icon: Lightbulb },
       ],
     },
     {
@@ -86,7 +86,7 @@ export const Sidebar: React.FC<SidebarProps> = ({ isOpen, onClose }) => {
     {
       label: 'SYSTEM',
       items: [
-        { name: 'Methodology Whitepaper', to: '/methodology', icon: BookOpen },
+        { name: 'How It Works', to: '/how-it-works', icon: BookOpen },
       ],
     },
     {

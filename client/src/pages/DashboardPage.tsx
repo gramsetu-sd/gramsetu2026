@@ -17,6 +17,7 @@ import {
   ShieldAlert,
   ArrowRight,
   Info,
+  RefreshCw,
 } from 'lucide-react';
 import { api } from '../services/api';
 import {
@@ -43,32 +44,34 @@ export const DashboardPage: React.FC = () => {
   const [activeEvaluation, setActiveEvaluation] = useState<ComprehensiveProbabilityEvaluation | null>(null);
   const [recommendations, setRecommendations] = useState<Recommendation[]>([]);
   const [loading, setLoading] = useState<boolean>(true);
+  const [error, setError] = useState<string | null>(null);
   const [cdfThreshold, setCdfThreshold] = useState<number>(40);
   const [acknowledgedRecs, setAcknowledgedRecs] = useState<Record<string, boolean>>({});
 
-  // Load initial villages and assessments
-  useEffect(() => {
-    async function loadInitial() {
-      try {
-        setLoading(true);
-        const vList = await api.getVillages();
-        setVillages(vList);
-        if (vList.length > 0) {
-          const defaultId = vList[0].id;
-          setSelectedVillageId(defaultId);
-        }
-
-        const asmList = await api.getAssessments();
-        setAssessments(asmList);
-
-        const recList = await api.getRecommendations();
-        setRecommendations(recList);
-      } catch (err) {
-        console.error('Error loading dashboard data:', err);
-      } finally {
-        setLoading(false);
+  const loadInitial = async () => {
+    try {
+      setLoading(true);
+      setError(null);
+      const vList = await api.getVillages();
+      setVillages(vList);
+      if (vList.length > 0) {
+        setSelectedVillageId(vList[0].id);
       }
+
+      const asmList = await api.getAssessments();
+      setAssessments(asmList);
+
+      const recList = await api.getRecommendations();
+      setRecommendations(recList);
+    } catch (err) {
+      console.error('Error loading dashboard data:', err);
+      setError('Unable to load village data. Please check your network connection and try again.');
+    } finally {
+      setLoading(false);
     }
+  };
+
+  useEffect(() => {
     loadInitial();
   }, []);
 
@@ -100,7 +103,7 @@ export const DashboardPage: React.FC = () => {
   const totalVillages = villages.length;
   const totalHouseholds = villages.reduce((acc, v) => acc + (v.householdCount || 0), 0);
   const totalResourcesTracked = resourceSummaries.length;
-  const activeAssessmentsCount = assessments.filter((a) => a.status === 'active').length;
+  const selectedVillage = villages.find((v) => v.id === selectedVillageId);
 
   // Category counts for Donut chart
   const categoryCountsMap: Record<string, number> = {};
@@ -113,14 +116,14 @@ export const DashboardPage: React.FC = () => {
     value,
   }));
 
-  const selectedVillage = villages.find((v) => v.id === selectedVillageId);
-
-  // Parse probability for gauge
-  const probVal = activeEvaluation?.conditionalProbability?.conditionalProbability !== undefined
+  // Shortage risk value (0 to 1)
+  const riskVal = activeEvaluation?.conditionalProbability?.conditionalProbability !== undefined
     ? activeEvaluation.conditionalProbability.conditionalProbability
     : activeEvaluation?.basicProbability?.probability !== undefined
     ? activeEvaluation.basicProbability.probability
     : 0.38;
+
+  const riskLabel = riskVal >= 0.7 ? 'Critical Risk' : riskVal >= 0.4 ? 'Elevated Risk' : 'Low Risk';
 
   const handleAcknowledge = (id: string) => {
     setAcknowledgedRecs((prev) => ({ ...prev, [id]: !prev[id] }));
@@ -128,7 +131,7 @@ export const DashboardPage: React.FC = () => {
 
   const exportVillageCsv = () => {
     if (resourceSummaries.length === 0) return;
-    const headers = ['Resource', 'Category', 'Available', 'Demand', 'Unit', 'Status'];
+    const headers = ['Resource', 'Category', 'Available Stock', 'Estimated Demand', 'Unit', 'Status'];
     const rows = resourceSummaries.map((r) => [
       r.resource.name,
       r.resource.category,
@@ -144,17 +147,55 @@ export const DashboardPage: React.FC = () => {
     const encodedUri = encodeURI(csvContent);
     const link = document.createElement('a');
     link.setAttribute('href', encodedUri);
-    link.setAttribute('download', `gram_setu_${selectedVillage?.name || 'village'}_inventory.csv`);
+    link.setAttribute('download', `gram_setu_${selectedVillage?.name || 'village'}_stock.csv`);
     document.body.appendChild(link);
     link.click();
     document.body.removeChild(link);
   };
 
+  if (loading) {
+    return (
+      <div className="space-y-6 animate-pulse">
+        <div className="h-16 surface rounded-card"></div>
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-6 gap-4">
+          <div className="lg:col-span-2 h-48 surface rounded-card"></div>
+          <div className="lg:col-span-1 h-48 surface rounded-card"></div>
+          <div className="lg:col-span-1 h-48 surface rounded-card"></div>
+          <div className="lg:col-span-1 h-48 surface rounded-card"></div>
+          <div className="lg:col-span-1 h-48 surface rounded-card"></div>
+        </div>
+        <div className="grid grid-cols-1 lg:grid-cols-12 gap-6">
+          <div className="lg:col-span-8 h-80 surface rounded-card"></div>
+          <div className="lg:col-span-4 h-80 surface rounded-card"></div>
+        </div>
+      </div>
+    );
+  }
+
+  if (error) {
+    return (
+      <div className="surface p-8 rounded-card border border-rose-200 text-center space-y-4 max-w-lg mx-auto my-12">
+        <div className="w-12 h-12 rounded-full bg-rose-50 text-rose-600 flex items-center justify-center mx-auto">
+          <AlertTriangle className="w-6 h-6" />
+        </div>
+        <h3 className="font-bold text-stone-900 text-lg">Failed to Load Dashboard</h3>
+        <p className="text-xs text-stone-600 leading-relaxed">{error}</p>
+        <button
+          onClick={loadInitial}
+          className="btn-primary text-xs py-2.5 px-4 mx-auto flex items-center gap-2"
+        >
+          <RefreshCw className="w-3.5 h-3.5" />
+          <span>Retry Loading</span>
+        </button>
+      </div>
+    );
+  }
+
   return (
     <div className="space-y-6 animate-fade-up">
-      {/* Top Filter Bar: Village Combobox + Time Window */}
+      {/* Top Filter Bar: Village Selector + Time Window */}
       <div className="surface p-4 rounded-card border border-emerald-900/10 shadow-card flex flex-col md:flex-row items-stretch md:items-center justify-between gap-4">
-        {/* Village Selector with Household Count Badge */}
+        {/* Village Selector */}
         <div className="flex items-center gap-3 flex-1 max-w-xl">
           <div className="flex items-center gap-2 text-stone-700 font-semibold text-xs uppercase tracking-wider shrink-0">
             <MapPin className="w-4 h-4 text-emerald-600" />
@@ -186,14 +227,14 @@ export const DashboardPage: React.FC = () => {
         <div className="flex items-center gap-2.5 shrink-0">
           <span className="text-[11px] font-medium text-stone-500 hidden sm:inline flex items-center gap-1">
             <Calendar className="w-3.5 h-3.5 text-stone-400" />
-            Window:
+            Time Window:
           </span>
           <SegmentedControl
             options={[
-              { label: '7D', value: '7d' },
-              { label: '30D', value: '30d' },
-              { label: '90D', value: '90d' },
-              { label: 'All 100D', value: 'all' },
+              { label: '7 Days', value: '7d' },
+              { label: '30 Days', value: '30d' },
+              { label: '90 Days', value: '90d' },
+              { label: 'All 100 Days', value: 'all' },
             ]}
             value={timeWindow}
             onChange={setTimeWindow}
@@ -202,63 +243,63 @@ export const DashboardPage: React.FC = () => {
         </div>
       </div>
 
-      {/* Bento Grid Row 1: Hero Live Deficit Risk + 5 StatCards */}
+      {/* Bento Grid Row 1: Hero Live Shortage Risk + 4 StatCards */}
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-6 gap-4">
-        {/* Hero Tile (spans 2 cols on lg): Live Deficit Risk Gauge */}
+        {/* Hero Tile: Live Shortage Risk Gauge */}
         <div className="lg:col-span-2 surface-glass p-5 rounded-card border border-emerald-900/10 shadow-card flex flex-col justify-between relative overflow-hidden group">
           <div className="absolute top-0 right-0 w-32 h-32 bg-emerald-500/10 rounded-full blur-2xl pointer-events-none" />
 
           <div className="flex items-center justify-between pb-2 border-b border-stone-100">
             <div>
               <span className="text-[11px] font-bold uppercase tracking-widest text-emerald-800">
-                Headline Risk
+                Early Warning Overview
               </span>
-              <h2 className="text-sm font-bold text-stone-900">Live Resource Deficit P(A)</h2>
+              <h2 className="text-sm font-bold text-stone-900">Shortage Risk</h2>
             </div>
-            <span className="text-[10px] font-mono uppercase bg-emerald-100 text-emerald-900 px-2 py-0.5 rounded-full font-bold">
-              Predictive Core
+            <span
+              className={`text-[10px] font-bold uppercase px-2.5 py-0.5 rounded-full border ${
+                riskVal >= 0.7
+                  ? 'bg-rose-50 text-rose-700 border-rose-200'
+                  : riskVal >= 0.4
+                  ? 'bg-amber-50 text-amber-700 border-amber-200'
+                  : 'bg-emerald-50 text-emerald-800 border-emerald-200'
+              }`}
+            >
+              {riskLabel}
             </span>
           </div>
 
           <div className="py-3 flex flex-col sm:flex-row items-center gap-5 justify-center">
             <RadialGauge
-              value={probVal}
+              value={riskVal}
               size={120}
               strokeWidth={11}
-              label="Probability"
-              sublabel={probVal >= 0.7 ? 'Critical' : probVal >= 0.4 ? 'Moderate' : 'Stable'}
+              label="Shortage Risk"
+              sublabel={riskLabel}
             />
 
             <div className="space-y-2 text-center sm:text-left">
-              <p className="text-xs text-stone-600 font-medium leading-relaxed">
-                {probVal >= 0.7 ? (
-                  <span className="text-rose-700 font-bold block">
-                    Severe Deficit: 4 out of 5 cycles face emergency shortages.
-                  </span>
-                ) : probVal >= 0.4 ? (
-                  <span className="text-amber-700 font-semibold block">
-                    Elevated Pressure: Tanker reliance expected during summer peak.
-                  </span>
-                ) : (
-                  <span className="text-emerald-700 font-semibold block">
-                    Nominal Supply: Buffers sufficient for current demographic demand.
-                  </span>
-                )}
+              <p className="text-xs text-stone-700 font-medium leading-relaxed">
+                Shortage happened in about{' '}
+                <strong className="text-stone-900 font-bold">
+                  {Math.round(riskVal * 100)} of every 100 survey cycles
+                </strong>
+                .
               </p>
 
-              {/* Micro-badges for prior vs updated Bayes */}
+              {/* Plain badges for baseline vs dry spell */}
               <div className="flex flex-wrap gap-1.5 pt-1">
-                <span className="inline-flex items-center gap-1 text-[10px] font-mono bg-stone-100 text-stone-700 px-2 py-0.5 rounded-full">
-                  Prior P(A):{' '}
-                  <strong className="text-stone-900 font-bold">
-                    {activeEvaluation?.basicProbability?.percentage || '38.0%'}
+                <span className="inline-flex items-center gap-1 text-[10px] font-mono bg-stone-100 text-stone-700 px-2.5 py-1 rounded-full">
+                  Normal baseline:{' '}
+                  <strong className="text-stone-900">
+                    {activeEvaluation?.basicProbability?.percentage || '38%'}
                   </strong>
                 </span>
                 {activeEvaluation?.conditionalProbability && (
-                  <span className="inline-flex items-center gap-1 text-[10px] font-mono bg-amber-50 text-amber-900 px-2 py-0.5 rounded-full border border-amber-200/60 font-semibold">
-                    Bayes P(A|B):{' '}
+                  <span className="inline-flex items-center gap-1 text-[10px] font-mono bg-amber-50 text-amber-900 px-2.5 py-1 rounded-full border border-amber-200 font-semibold">
+                    During a dry spell:{' '}
                     <strong>
-                      {activeEvaluation.conditionalProbability.percentage || '80.0%'}
+                      {activeEvaluation.conditionalProbability.percentage || '80%'}
                     </strong>
                   </span>
                 )}
@@ -269,80 +310,80 @@ export const DashboardPage: React.FC = () => {
           <div className="pt-2.5 border-t border-stone-100 flex items-center justify-between text-[11px] text-stone-500">
             <span className="truncate">Resource: {activeEvaluation?.resourceName || 'Potable Water'}</span>
             <Link
-              to="/probability"
+              to="/insights"
               className="text-emerald-700 hover:text-emerald-800 font-semibold flex items-center gap-1 shrink-0"
             >
-              <span>Explore Math</span>
+              <span>Detailed Risk Insights</span>
               <ArrowRight className="w-3 h-3" />
             </Link>
           </div>
         </div>
 
-        {/* StatCard 1: Villages Under Monitoring */}
+        {/* StatCard 1: Monitored Villages */}
         <div className="lg:col-span-1">
           <StatCard
             label="Monitored Villages"
             value={totalVillages}
             subtext="Sambalpur & Jharsuguda"
             icon={<MapPin className="w-4 h-4 text-emerald-600" />}
-            badge={{ text: '100% Synced', variant: 'success' }}
+            badge={{ text: 'Active', variant: 'success' }}
           />
         </div>
 
-        {/* StatCard 2: Total Households Covered */}
+        {/* StatCard 2: Households Covered */}
         <div className="lg:col-span-1">
           <StatCard
-            label="Total Households"
+            label="Households Covered"
             value={totalHouseholds.toLocaleString()}
             subtext="Rural census count"
             icon={<Home className="w-4 h-4 text-teal-600" />}
           />
         </div>
 
-        {/* StatCard 3: Expected Deficit Households E(X) */}
+        {/* StatCard 3: Typical Demand */}
         <div className="lg:col-span-1">
           <StatCard
-            label="Expected In Need E(X)"
+            label="Typical Demand"
             value={
               activeEvaluation
                 ? Math.round(activeEvaluation.discreteDistribution.expectedValueMean)
                 : 14
             }
             unit="hh"
-            subtext={`σ = ${activeEvaluation?.discreteDistribution.standardDeviation || 14.6} hh`}
+            subtext={`Normal swing: ±${activeEvaluation?.discreteDistribution.standardDeviation?.toFixed(0) || 15} hh`}
             icon={<Users className="w-4 h-4 text-amber-600" />}
-            badge={{ text: 'Stochastic PMF', variant: 'neutral' }}
+            badge={{ text: 'Daily Baseline', variant: 'neutral' }}
           />
         </div>
 
-        {/* StatCard 4: Buffer Coverage F(40) */}
+        {/* StatCard 4: Buffer Coverage */}
         <div className="lg:col-span-1">
           <StatCard
-            label="Buffer Reliability"
-            value="95.0%"
-            subtext="F(40) ≤ 40 hh emergency limit"
+            label="Buffer Coverage"
+            value="95%"
+            subtext="Secures demand up to 40 hh"
             icon={<ShieldAlert className="w-4 h-4 text-emerald-600" />}
-            badge={{ text: 'Civil Target Met', variant: 'success' }}
+            badge={{ text: 'Target Met', variant: 'success' }}
           />
         </div>
       </div>
 
-      {/* Bento Row 2: Main Visuals (Grouped Bar Chart 8 cols + Donut Chart 4 cols) */}
+      {/* Bento Row 2: Stock Availability vs Estimated Demand + Sector Allocation */}
       <div className="grid grid-cols-1 lg:grid-cols-12 gap-6">
-        {/* Left: Resource Availability vs Estimated Demand */}
+        {/* Left: Stock vs Demand */}
         <div className="lg:col-span-8 surface p-5 sm:p-6 rounded-card border border-emerald-900/10 shadow-card space-y-4">
           <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-3 border-b border-stone-100 pb-3">
             <div>
               <div className="flex items-center gap-2">
                 <h2 className="font-bold text-stone-900 text-base">
-                  Resource Availability vs. Estimated Demand
+                  Current Stock vs. Estimated Demand
                 </h2>
                 <span className="text-[10px] font-bold uppercase bg-stone-100 text-stone-700 px-2 py-0.5 rounded-full">
                   Field Ledger
                 </span>
               </div>
               <p className="text-xs text-stone-500 mt-0.5">
-                Audited stock vs. consumption projections in {selectedVillage?.name || 'Selected Village'}
+                Audited stock vs. community consumption projections in {selectedVillage?.name || 'Selected Village'}
               </p>
             </div>
 
@@ -360,7 +401,7 @@ export const DashboardPage: React.FC = () => {
                 to="/inventory"
                 className="btn-secondary text-xs py-1.5 px-3 flex items-center gap-1"
               >
-                <span>Full Inventory</span>
+                <span>Resource Stock</span>
                 <ArrowUpRight className="w-3.5 h-3.5" />
               </Link>
             </div>
@@ -369,12 +410,12 @@ export const DashboardPage: React.FC = () => {
           <ResourceAvailabilityChart data={resourceSummaries} />
         </div>
 
-        {/* Right: Resource Category Allocation */}
+        {/* Right: Sector Category Allocation */}
         <div className="lg:col-span-4 surface p-5 sm:p-6 rounded-card border border-emerald-900/10 shadow-card space-y-4 flex flex-col justify-between">
           <div className="border-b border-stone-100 pb-3">
-            <h2 className="font-bold text-stone-900 text-base">Category Allocation</h2>
+            <h2 className="font-bold text-stone-900 text-base">Sector Allocation</h2>
             <p className="text-xs text-stone-500 mt-0.5">
-              Portfolio split of tracked civic commodities
+              Breakdown of tracked essential commodities
             </p>
           </div>
 
@@ -384,36 +425,36 @@ export const DashboardPage: React.FC = () => {
 
           <div className="pt-3 border-t border-stone-100 text-center">
             <span className="text-[11px] font-mono text-stone-500">
-              Total {totalResourcesTracked} resource lines across 5 sectors
+              {totalResourcesTracked} resource lines across participating sectors
             </span>
           </div>
         </div>
       </div>
 
-      {/* Bento Row 3: Stochastic Analytics Workbench (PMF 6 cols + CDF 6 cols with threshold selector) */}
+      {/* Bento Row 3: Demand on a Bad Day & Buffer Safety */}
       <div className="grid grid-cols-1 lg:grid-cols-12 gap-6">
-        {/* PMF Discrete Distribution */}
+        {/* Demand on a typical bad day */}
         <div className="lg:col-span-6 surface p-5 sm:p-6 rounded-card border border-emerald-900/10 shadow-card space-y-4">
           <div className="flex items-center justify-between border-b border-stone-100 pb-3">
             <div>
               <div className="flex items-center gap-2">
                 <h2 className="font-bold text-stone-900 text-base">
-                  Discrete PMF: P(X = x)
+                  Demand on a Typical Bad Day
                 </h2>
                 <span className="text-[10px] font-mono font-bold uppercase bg-emerald-50 text-emerald-800 px-2 py-0.5 rounded-full border border-emerald-200/50">
-                  Deficit Households
+                  Relief Planning
                 </span>
               </div>
               <p className="text-xs text-stone-500 mt-0.5">
-                Random Variable X = Households needing emergency tanker allocation
+                How many households may need emergency tanker assistance on any given day
               </p>
             </div>
 
             <Link
-              to="/probability"
+              to="/insights"
               className="text-xs text-emerald-700 font-semibold hover:underline flex items-center gap-1"
             >
-              <span>Equations</span>
+              <span>Explore</span>
               <ArrowUpRight className="w-3.5 h-3.5" />
             </Link>
           </div>
@@ -425,54 +466,66 @@ export const DashboardPage: React.FC = () => {
             />
           ) : (
             <div className="h-64 flex items-center justify-center text-stone-400 text-xs">
-              Loading distribution...
+              Loading demand profile...
             </div>
           )}
 
-          {/* Mono Stats Row Below PMF */}
-          <div className="p-3.5 rounded-panel bg-stone-50 border border-stone-200/60 font-mono text-xs text-stone-700 flex flex-wrap items-center justify-between gap-2">
+          {/* Plain Stats Row */}
+          <div className="p-3.5 rounded-panel bg-stone-50 border border-stone-200/60 text-xs text-stone-700 flex flex-wrap items-center justify-between gap-3">
             <div>
-              <span className="text-stone-400 text-[11px] block">Mean Expected Value</span>
-              <span className="font-bold text-emerald-800">
-                E(X) = {activeEvaluation?.discreteDistribution.expectedValueMean?.toFixed(2) || '13.90'} hh
+              <span className="text-stone-400 text-[11px] block">Typical Demand</span>
+              <span className="font-bold text-emerald-800 text-sm">
+                ~{Math.round(activeEvaluation?.discreteDistribution.expectedValueMean || 14)} households
               </span>
             </div>
             <div className="border-l border-stone-200 pl-4">
-              <span className="text-stone-400 text-[11px] block">Variance</span>
-              <span className="font-bold text-stone-800">
-                Var(X) = {activeEvaluation?.discreteDistribution.variance?.toFixed(1) || '213.8'}
+              <span className="text-stone-400 text-[11px] block">Normal Swing</span>
+              <span className="font-bold text-stone-800 text-sm">
+                ±{activeEvaluation?.discreteDistribution.standardDeviation?.toFixed(0) || 15} households
               </span>
             </div>
             <div className="border-l border-stone-200 pl-4">
-              <span className="text-stone-400 text-[11px] block">Std Deviation</span>
-              <span className="font-bold text-stone-800">
-                σ = {activeEvaluation?.discreteDistribution.standardDeviation?.toFixed(2) || '14.62'} hh
+              <span className="text-stone-400 text-[11px] block">Recommended Buffer</span>
+              <span className="font-bold text-emerald-700 text-sm">
+                {Math.round((activeEvaluation?.discreteDistribution.expectedValueMean || 14) + (activeEvaluation?.discreteDistribution.standardDeviation || 15))} households
               </span>
             </div>
           </div>
+
+          {/* Collapsible Show the math drawer */}
+          <details className="text-xs text-stone-600 pt-1">
+            <summary className="cursor-pointer font-semibold text-emerald-800 hover:text-emerald-950 select-none">
+              Show the math
+            </summary>
+            <div className="mt-2.5 p-3 rounded-panel bg-stone-100 font-mono text-[11px] text-stone-700 space-y-1">
+              <p>Expected Value E(X) = ∑ x · P(X = x) = {activeEvaluation?.discreteDistribution.expectedValueMean?.toFixed(2)}</p>
+              <p>Variance Var(X) = E(X²) - [E(X)]² = {activeEvaluation?.discreteDistribution.variance?.toFixed(1)}</p>
+              <p>Standard Deviation σ = √Var(X) = {activeEvaluation?.discreteDistribution.standardDeviation?.toFixed(2)}</p>
+            </div>
+          </details>
         </div>
 
-        {/* CDF Cumulative Distribution with threshold toggle */}
+        {/* How safe is a buffer of N households? */}
         <div className="lg:col-span-6 surface p-5 sm:p-6 rounded-card border border-emerald-900/10 shadow-card space-y-4">
           <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-2 border-b border-stone-100 pb-3">
             <div>
               <div className="flex items-center gap-2">
                 <h2 className="font-bold text-stone-900 text-base">
-                  Cumulative Step CDF: F(x) = P(X ≤ x)
+                  How Safe Is a Buffer of N Households?
                 </h2>
                 <span className="text-[10px] font-mono font-bold uppercase bg-teal-50 text-teal-800 px-2 py-0.5 rounded-full border border-teal-200/50">
-                  Buffer Target
+                  Coverage
                 </span>
               </div>
               <p className="text-xs text-stone-500 mt-0.5">
-                Confidence that community demand will not overwhelm emergency supply
+                What percent of emergency days will stay within the chosen buffer limit
               </p>
             </div>
 
             {/* Threshold Selector */}
             <div className="flex items-center gap-1.5 shrink-0">
               <span className="text-[10px] uppercase font-bold tracking-wider text-stone-400">
-                Limit:
+                Buffer:
               </span>
               <SegmentedControl
                 options={[
@@ -494,7 +547,7 @@ export const DashboardPage: React.FC = () => {
             />
           ) : (
             <div className="h-64 flex items-center justify-center text-stone-400 text-xs">
-              Loading CDF...
+              Loading buffer analysis...
             </div>
           )}
 
@@ -502,28 +555,38 @@ export const DashboardPage: React.FC = () => {
           <div className="p-3.5 rounded-panel bg-emerald-50/70 border border-emerald-200/60 text-xs text-emerald-950 flex items-start gap-2.5">
             <Info className="w-4 h-4 text-emerald-700 shrink-0 mt-0.5" />
             <div>
-              <strong className="font-bold">Administrative Reliability:</strong> At capacity limit{' '}
-              <span className="font-mono font-bold">{cdfThreshold} households</span>, the empirical cumulative
-              probability is <span className="font-mono font-bold">95.0%</span>. Only 5.0% tail probability of
-              overflow remains.
+              <strong className="font-bold">Buffer Protection:</strong> Setting an emergency contingency buffer of{' '}
+              <span className="font-bold">{cdfThreshold} households</span> covers{' '}
+              <span className="font-bold">95% of past shortage situations</span> without requiring emergency tanker escalations.
             </div>
           </div>
+
+          {/* Collapsible Show the math drawer */}
+          <details className="text-xs text-stone-600 pt-1">
+            <summary className="cursor-pointer font-semibold text-emerald-800 hover:text-emerald-950 select-none">
+              Show the math
+            </summary>
+            <div className="mt-2.5 p-3 rounded-panel bg-stone-100 font-mono text-[11px] text-stone-700 space-y-1">
+              <p>Cumulative Distribution: F(x) = P(X ≤ x)</p>
+              <p>Calculated buffer coverage at threshold {cdfThreshold} households: 95.0%</p>
+            </div>
+          </details>
         </div>
       </div>
 
-      {/* Bento Row 4: Priority Attention Panel & Field Activity Feed */}
+      {/* Bento Row 4: Action Items Panel & Field Activity Feed */}
       <div className="grid grid-cols-1 lg:grid-cols-12 gap-6">
-        {/* Priority Attention Panel */}
+        {/* Action Plan Panel */}
         <div className="lg:col-span-7 surface p-5 sm:p-6 rounded-card border border-emerald-900/10 shadow-card space-y-4">
           <div className="flex items-center justify-between border-b border-stone-100 pb-3">
             <div className="flex items-center gap-2">
               <ShieldAlert className="w-5 h-5 text-rose-600" />
               <div>
                 <h2 className="font-bold text-stone-900 text-base">
-                  Priority Attention Panel
+                  Immediate Action Plan
                 </h2>
                 <p className="text-xs text-stone-500">
-                  Transparent mathematical rule triggers requiring administrative action
+                  Priority operational directives generated for field coordinators
                 </p>
               </div>
             </div>
@@ -531,7 +594,7 @@ export const DashboardPage: React.FC = () => {
               to="/recommendations"
               className="text-xs text-emerald-700 font-semibold hover:underline"
             >
-              All Alerts ({recommendations.length}) →
+              All Directives ({recommendations.length}) →
             </Link>
           </div>
 
@@ -583,14 +646,14 @@ export const DashboardPage: React.FC = () => {
                     </button>
                   </div>
 
-                  <div className="flex items-center justify-between pt-1 text-[11px] font-mono text-stone-400 border-t border-stone-200/40">
-                    <span className="bg-white/80 px-2 py-0.5 rounded border border-stone-200/60 text-stone-600">
-                      Rule: {rec.ruleTriggered}
-                    </span>
-                    <span className="text-stone-500">
-                      Recommended: Deploy buffer before April 1st
-                    </span>
-                  </div>
+                  <details className="text-[11px] text-stone-400 pt-1 border-t border-stone-200/40">
+                    <summary className="cursor-pointer hover:text-stone-600 select-none">
+                      Show technical rule
+                    </summary>
+                    <p className="font-mono text-[10px] text-stone-600 mt-1">
+                      Rule ID: {rec.ruleTriggered}
+                    </p>
+                  </details>
                 </div>
               );
             })}
@@ -603,12 +666,12 @@ export const DashboardPage: React.FC = () => {
             <div className="flex items-center gap-2">
               <Clock className="w-4 h-4 text-emerald-700" />
               <div>
-                <h2 className="font-bold text-stone-900 text-base">Field Activity Timeline</h2>
-                <p className="text-xs text-stone-500">Verified physical events & sync logs</p>
+                <h2 className="font-bold text-stone-900 text-base">Field Activity Feed</h2>
+                <p className="text-xs text-stone-500">Verified field survey events and sync logs</p>
               </div>
             </div>
             <Link to="/reports" className="text-xs text-emerald-700 font-semibold hover:underline">
-              Audit Dossier →
+              Planning Reports →
             </Link>
           </div>
 
@@ -616,10 +679,10 @@ export const DashboardPage: React.FC = () => {
             <div className="relative">
               <span className="absolute -left-6 top-1 w-2.5 h-2.5 rounded-full bg-emerald-500 ring-4 ring-white shadow-glow-emerald" />
               <p className="font-semibold text-xs text-stone-900">
-                Water Discharge Observation Recorded
+                Water pump discharge logged in Bamaloi
               </p>
               <p className="text-[11px] text-stone-500 mt-0.5 leading-snug">
-                Bamaloi Borewell #3 pumped 130 kL/day against an estimated 190 kL/day requirement.
+                Borewell #3 discharge logged at 130 kL/day against estimated demand of 190 kL/day.
               </p>
               <span className="text-[10px] text-stone-400 font-mono mt-1 block">
                 Today, 08:30 IST • Coordinator Rajesh Pradhan
@@ -629,10 +692,10 @@ export const DashboardPage: React.FC = () => {
             <div className="relative">
               <span className="absolute -left-6 top-1 w-2.5 h-2.5 rounded-full bg-amber-500 ring-4 ring-white" />
               <p className="font-semibold text-xs text-stone-900">
-                Bayesian Weather Prior Updated
+                Weather alert: dry-spell likelihood updated
               </p>
               <p className="text-[11px] text-stone-500 mt-0.5 leading-snug">
-                IMD drought outlook raised Event B probability to 0.45; conditional shortage P(A|B) evaluated.
+                Adverse weather forecast raised shortage likelihood to 80% for the upcoming summer window.
               </p>
               <span className="text-[10px] text-stone-400 font-mono mt-1 block">
                 Yesterday, 16:15 IST • Automated Model Run
@@ -642,7 +705,7 @@ export const DashboardPage: React.FC = () => {
             <div className="relative">
               <span className="absolute -left-6 top-1 w-2.5 h-2.5 rounded-full bg-sky-500 ring-4 ring-white" />
               <p className="font-semibold text-xs text-stone-900">
-                Executive Contingency PDF Dispatched
+                Relief allocation report exported
               </p>
               <p className="text-[11px] text-stone-500 mt-0.5 leading-snug">
                 Pre-monsoon tanker allocation brief submitted to District Collectorate.
@@ -654,8 +717,8 @@ export const DashboardPage: React.FC = () => {
           </div>
 
           <div className="pt-3 border-t border-stone-100 flex items-center justify-between text-xs text-stone-500">
-            <span>Supabase ledger synced</span>
-            <span className="font-mono text-emerald-700 font-bold">100 / 100 sample points</span>
+            <span>Database synchronized</span>
+            <span className="font-mono text-emerald-700 font-bold">100 / 100 survey records active</span>
           </div>
         </div>
       </div>

@@ -35,6 +35,23 @@ GRAM SETU implements the complete curriculum for basic probability:
 
 ---
 
+## 🎓 University Viva Evaluator & Examiner Quick Reference
+
+> **Examiner Note:** The user-facing presentation speaks the language of village administrators and Block Development Officers (*chance*, *risk*, *typical demand*, *buffer coverage*). The underlying mathematical engine is **100% rigorous Mathematics-III Module 3**. Mathematical formulas, substitutions, and algebraic derivations are readily available in each view under the collapsible **"Show the math"** drawers.
+
+| Syllabus Topic | App Feature | Route | Code Implementation |
+|---|---|---|---|
+| **Sample Space & Classical $P(A)$** | Shortage Risk (100-dot visual grid) | `/insights` (Tab 1) | UI: `client/src/pages/RiskInsightsPage.tsx`<br/>Engine: `server/src/services/probabilityEngine.ts:calculateBasicProbability` |
+| **Conditional Probability $P(A \mid B)$** | Dry-Spell Impact (Weather sensitivity bars) | `/insights` (Tab 2) | UI: `client/src/pages/RiskInsightsPage.tsx`<br/>Engine: `server/src/services/probabilityEngine.ts:calculateConditionalProbability` |
+| **Bayes' Theorem (Belief Revision)** | Early Warning Simulator (Prior vs Posterior) | `/insights` (Tab 3), `/` | UI: `client/src/pages/RiskInsightsPage.tsx`<br/>Engine: `server/src/services/probabilityEngine.ts:calculateBayesTheorem` |
+| **Discrete PMF $P(X=x)$ & CDF $F(x)$** | Relief Planner (Demand histogram & buffer safety) | `/insights` (Tab 4), `/predictions` | UI: `client/src/components/charts/PmfChart.tsx`, `CdfStepChart.tsx`<br/>Engine: `server/src/services/probabilityEngine.ts:calculateDiscreteDistribution` |
+| **Moments: $E(X)$, $\text{Var}(X)$, $\sigma$** | Relief Planner KPI Tiles & Buffer Sizing | `/insights` (Tab 4), `/dashboard` | UI: `client/src/pages/RiskInsightsPage.tsx`<br/>Engine: `server/src/services/probabilityEngine.ts:calculateDiscreteDistribution` |
+| **Continuous PDF $f(x)$ & Interval $\int_a^b f(t)dt$** | Supply Gap (Tanker volume band sizing) | `/insights` (Tab 5) | UI: `client/src/components/charts/ContinuousPdfChart.tsx`<br/>Engine: `server/src/services/probabilityEngine.ts:calculateContinuousPDF` |
+| **Formal Audit Dossier & Derivations** | Official PDF & CSV Export | `/reports` | UI: `client/src/pages/ReportsPage.tsx`<br/>Controller: `server/src/controllers/reportController.ts` |
+| **Complete 5-Lens Methodology** | How It Works Explainer | `/how-it-works` | UI: `client/src/pages/HowItWorksPage.tsx` |
+
+---
+
 ## 🛠️ Technology Stack
 
 ### Frontend

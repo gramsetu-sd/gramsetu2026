@@ -183,10 +183,10 @@ export const VillageDetailPage: React.FC = () => {
       <div className="border-b border-slate-200 flex overflow-x-auto gap-2 text-xs font-semibold">
         {[
           { key: 'overview', label: 'Overview & Profile', icon: Home },
-          { key: 'inventory', label: 'Resource Inventory', icon: Package },
-          { key: 'assessments', label: 'Demand Assessments', icon: ClipboardList },
-          { key: 'probability', label: 'Probability Analysis', icon: Calculator },
-          { key: 'recommendations', label: 'Recommendations', icon: Lightbulb },
+          { key: 'inventory', label: 'Resource Stock', icon: Package },
+          { key: 'assessments', label: 'Field Surveys', icon: ClipboardList },
+          { key: 'probability', label: 'Risk Insights', icon: Calculator },
+          { key: 'recommendations', label: 'Action Plan', icon: Lightbulb },
           { key: 'reports', label: 'History & Reports', icon: FileText },
         ].map((tab) => {
           const Icon = tab.icon;
@@ -345,10 +345,10 @@ export const VillageDetailPage: React.FC = () => {
                     Threshold: {(a.preparednessThreshold * 100).toFixed(0)}%
                   </span>
                   <Link
-                    to="/probability"
-                    className="px-3 py-1.5 rounded-lg bg-forest-800 text-white font-semibold hover:bg-forest-900"
+                    to="/insights"
+                    className="px-3 py-1.5 rounded-lg bg-emerald-800 text-white font-semibold hover:bg-emerald-900"
                   >
-                    Run Math Engine
+                    View Risk Insights
                   </Link>
                 </div>
               </div>
@@ -357,19 +357,19 @@ export const VillageDetailPage: React.FC = () => {
         </div>
       )}
 
-      {/* Tab 4: Probability Analysis */}
+      {/* Tab 4: Risk Insights */}
       {activeTab === 'probability' && evaluation && (
         <div className="space-y-6">
           <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
             <div className="bg-white p-5 rounded-xl border border-slate-200 shadow-2xs space-y-3">
-              <h3 className="font-bold text-slate-800 text-sm">PMF Demand Distribution P(X = x)</h3>
+              <h3 className="font-bold text-slate-800 text-sm">Households Needing Help on a Typical Bad Day</h3>
               <PmfChart
                 distribution={evaluation.discreteDistribution.distribution}
                 expectedValueMean={evaluation.discreteDistribution.expectedValueMean}
               />
             </div>
             <div className="bg-white p-5 rounded-xl border border-slate-200 shadow-2xs space-y-3">
-              <h3 className="font-bold text-slate-800 text-sm">CDF Service Level Curve F(x) = P(X ≤ x)</h3>
+              <h3 className="font-bold text-slate-800 text-sm">Buffer Coverage Reliability</h3>
               <CdfStepChart
                 distribution={evaluation.discreteDistribution.distribution}
                 thresholdX={40}
@@ -377,22 +377,36 @@ export const VillageDetailPage: React.FC = () => {
             </div>
           </div>
 
-          <div className="bg-white p-5 rounded-xl border border-slate-200 shadow-2xs text-xs space-y-2">
-            <h4 className="font-bold text-slate-800">Analytical Moments Summary</h4>
-            <div className="grid grid-cols-1 sm:grid-cols-3 gap-3 pt-2">
+          <div className="bg-white p-5 rounded-xl border border-slate-200 shadow-2xs text-xs space-y-3">
+            <h4 className="font-bold text-slate-800 text-sm">Demand & Buffer Summary</h4>
+            <div className="grid grid-cols-1 sm:grid-cols-3 gap-3 pt-1">
               <div className="p-3 bg-slate-50 rounded-lg">
-                <span className="text-slate-500 block">Expected Value E(X)</span>
-                <strong className="text-forest-800 text-base">{evaluation.discreteDistribution.expectedValueMean} Households</strong>
+                <span className="text-slate-500 block">Typical Demand</span>
+                <strong className="text-emerald-800 text-base">{evaluation.discreteDistribution.expectedValueMean} Households</strong>
               </div>
               <div className="p-3 bg-slate-50 rounded-lg">
-                <span className="text-slate-500 block">Variance Var(X)</span>
-                <strong className="text-slate-800 text-base">{evaluation.discreteDistribution.variance}</strong>
+                <span className="text-slate-500 block">Normal Demand Swing</span>
+                <strong className="text-slate-800 text-base">± {evaluation.discreteDistribution.standardDeviation} Households</strong>
               </div>
               <div className="p-3 bg-slate-50 rounded-lg">
-                <span className="text-slate-500 block">Standard Deviation σ</span>
-                <strong className="text-slate-800 text-base">{evaluation.discreteDistribution.standardDeviation} Households</strong>
+                <span className="text-slate-500 block">Recommended Safety Buffer</span>
+                <strong className="text-emerald-800 text-base">
+                  {Math.round(evaluation.discreteDistribution.expectedValueMean + evaluation.discreteDistribution.standardDeviation)} Households
+                </strong>
               </div>
             </div>
+
+            {/* Collapsible Show the math drawer */}
+            <details className="mt-4 pt-3 border-t border-slate-100 text-xs text-slate-600">
+              <summary className="cursor-pointer font-semibold text-emerald-800 hover:text-emerald-950 select-none">
+                Show the math
+              </summary>
+              <div className="mt-3 p-3 bg-slate-50 rounded-lg border border-slate-200 font-mono text-[11px] space-y-1 text-slate-700">
+                <p>Expected Value E(X) = ∑ x · P(X = x) = {evaluation.discreteDistribution.expectedValueMean}</p>
+                <p>Variance Var(X) = E(X²) - [E(X)]² = {evaluation.discreteDistribution.variance}</p>
+                <p>Standard Deviation σ = √Var(X) = {evaluation.discreteDistribution.standardDeviation}</p>
+              </div>
+            </details>
           </div>
         </div>
       )}

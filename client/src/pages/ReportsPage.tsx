@@ -71,7 +71,7 @@ export const ReportsPage: React.FC = () => {
     if (!report) return;
 
     let csvContent = 'data:text/csv;charset=utf-8,';
-    csvContent += 'GRAM SETU — Formal Resource Assessment Dossier\n';
+    csvContent += 'GRAM SETU — Village Resource Planning Report\n';
     csvContent += `Report ID,${report.reportId}\n`;
     csvContent += `Generated At,${report.generatedAt}\n`;
     csvContent += `Village,${report.village.name},District,${report.village.district},Block,${report.village.block}\n`;
@@ -79,27 +79,26 @@ export const ReportsPage: React.FC = () => {
     csvContent += `Resource,${report.resource.name},Category,${report.resource.category},Unit,${report.resource.unit}\n\n`;
 
     if (includeMathAudit) {
-      csvContent += 'Mathematics-III Probability Results\n';
-      csvContent += `Basic Shortage Probability P(A),${report.metrics.basicShortagePercentage} (${report.metrics.basicShortageProbability})\n`;
-      csvContent += `Conditional Shortage P(A|B),${report.metrics.conditionalPercentage}\n`;
-      csvContent += `Bayes Posterior P(Hypothesis|Evidence),${report.metrics.bayesPosteriorPercentage}\n`;
-      csvContent += `Expected Demand E(X) Mean,${report.metrics.expectedHouseholdsMean} Households\n`;
-      csvContent += `Variance Var(X),${report.metrics.variance}\n`;
-      csvContent += `Standard Deviation Sigma,${report.metrics.standardDeviation} Households\n`;
+      csvContent += 'Resource Planning & Risk Metrics\n';
+      csvContent += `Shortage Likelihood,${report.metrics.basicShortagePercentage} (${report.metrics.basicShortageProbability})\n`;
+      csvContent += `Dry-Spell Sensitivity,${report.metrics.conditionalPercentage}\n`;
+      csvContent += `Early Warning Likelihood (Revised after signal),${report.metrics.bayesPosteriorPercentage}\n`;
+      csvContent += `Typical Daily Demand,${report.metrics.expectedHouseholdsMean} Households\n`;
+      csvContent += `Day-to-Day Swing (Std Dev),${report.metrics.standardDeviation} Households\n`;
       csvContent += `Recommended Safety Buffer,${report.metrics.recommendedBufferStockUnits} Units\n\n`;
     }
 
     if (includePmfTable) {
-      csvContent += 'Discrete Probability Distribution (PMF / CDF Table)\n';
-      csvContent += 'Households (x),P(X = x) [PMF],F(x) = P(X <= x) [CDF],x * P(x),x^2 * P(x)\n';
+      csvContent += 'Daily Demand Distribution & Buffer Coverage\n';
+      csvContent += 'Households in Need (x),Frequency n(x),Likelihood Share P(x),Cumulative Buffer Coverage F(x)\n';
       report.mathematicalAudit.distribution.distribution.forEach((row) => {
-        csvContent += `${row.x},${row.px},${row.fx},${row.xTimesPx},${row.xSquaredTimesPx}\n`;
+        csvContent += `${row.x},${row.count},${row.px},${row.fx}\n`;
       });
       csvContent += '\n';
     }
 
     if (includeRecommendations) {
-      csvContent += 'Operational Recommendations\n';
+      csvContent += 'Action Directives & Allocation Plan\n';
       csvContent += 'Title,Priority,Rule Triggered,Description\n';
       report.recommendations.forEach((r) => {
         csvContent += `"${r.title}",${r.priority},"${r.ruleTriggered}","${r.description}"\n`;
@@ -109,13 +108,13 @@ export const ReportsPage: React.FC = () => {
     const encodedUri = encodeURI(csvContent);
     const link = document.createElement('a');
     link.setAttribute('href', encodedUri);
-    link.setAttribute('download', `GramSetu_Dossier_${report.village.name}_${report.reportId}.csv`);
+    link.setAttribute('download', `GramSetu_Report_${report.village.name}_${report.reportId}.csv`);
     document.body.appendChild(link);
     link.click();
     document.body.removeChild(link);
   };
 
-  // PDF Export using jsPDF and autoTable (with Emerald / Stone palette)
+  // PDF Export using jsPDF and autoTable
   const handleExportPDF = () => {
     if (!report) return;
 
@@ -128,21 +127,21 @@ export const ReportsPage: React.FC = () => {
     doc.setTextColor(255, 255, 255);
     doc.setFontSize(14);
     doc.setFont('helvetica', 'bold');
-    doc.text('GRAM SETU — RURAL RESOURCE PLANNING DOSSIER', 14, 14);
+    doc.text('GRAM SETU — VILLAGE RESOURCE PLANNING REPORT', 14, 14);
     doc.setFontSize(8);
     doc.setFont('helvetica', 'normal');
     doc.setTextColor(127, 221, 184); // #7FDDB8
-    doc.text('Stochastic Decision-Support & Resource Allocation Dossier', 14, 21);
+    doc.text('Resource Requirement Assessment & Buffer Allocation Report', 14, 21);
 
     // 2. Operational Notice Box
-    doc.setFillColor(240, 251, 246); // Emerald 50
+    doc.setFillColor(240, 251, 246);
     doc.rect(14, 30, pageWidth - 28, 12, 'F');
-    doc.setTextColor(15, 82, 56); // Emerald 700
+    doc.setTextColor(15, 82, 56);
     doc.setFontSize(8);
     doc.setFont('helvetica', 'bold');
-    doc.text('OFFICIAL PLANNING DOSSIER — RURAL RESOURCE INFRASTRUCTURE PILOT.', 18, 35);
+    doc.text('OFFICIAL PLANNING REPORT — RURAL RESOURCE INFRASTRUCTURE PILOT.', 18, 35);
     doc.setFont('helvetica', 'normal');
-    doc.text('Automated stochastic demand forecasting and allocation orders for administrative review.', 18, 39);
+    doc.text('Automated demand forecasting and buffer allocation directives for administrative review.', 18, 39);
 
     let currentY = 46;
 
@@ -168,52 +167,52 @@ export const ReportsPage: React.FC = () => {
       currentY = (doc as any).lastAutoTable.finalY + 8;
     }
 
-    // 4. Probability Summary Table
+    // 4. Planning Metrics Table
     if (includeMathAudit) {
       doc.setFontSize(10);
       doc.setFont('helvetica', 'bold');
       doc.setTextColor(7, 42, 29);
-      doc.text('Mathematics-III Probability Engine Derivations & Moments', 14, currentY);
+      doc.text('Risk Insights & Planning Metrics', 14, currentY);
 
       autoTable(doc, {
         startY: currentY + 3,
-        head: [['Metric', 'Mathematical Law', 'Computed Value', 'Outcome & Interpretation']],
+        head: [['Planning Metric', 'Formula', 'Value', 'Operational Interpretation']],
         body: [
           [
-            'Basic Shortage P(A)',
+            'Shortage Likelihood',
             'P(A) = n(A) / N',
             report.metrics.basicShortagePercentage,
             report.mathematicalAudit.basic.interpretation.substring(0, 90) + '...',
           ],
           [
-            'Conditional Shortage P(A|B)',
-            'P(A ∩ B) / P(B)',
+            'Dry-Spell Sensitivity',
+            'P(A|B) = P(A ∩ B) / P(B)',
             report.metrics.conditionalPercentage,
-            'Deficit risk conditioned on adverse below-normal rainfall.',
+            'Deficit likelihood when rainfall falls below normal.',
           ],
           [
-            'Bayes Posterior P(Hypothesis|Evidence)',
+            'Early Warning Likelihood',
             '[P(B|A) · P(A)] / P(B)',
             report.metrics.bayesPosteriorPercentage,
-            'Updated probability of drought given registered resource shortage.',
+            'Updated drought likelihood upon verified borehole failure.',
           ],
           [
-            'Expected Demand E(X)',
+            'Typical Daily Demand',
             'E(X) = ∑ x · P(X=x)',
             `${report.metrics.expectedHouseholdsMean} Households`,
-            'Mean anticipated households in need of emergency supply.',
+            'Average number of households needing emergency supply.',
           ],
           [
-            'Variance Var(X)',
-            'Var(X) = E(X²) - [E(X)]²',
-            String(report.metrics.variance),
-            'Dispersion metric of community demand fluctuations.',
-          ],
-          [
-            'Standard Deviation σ',
+            'Day-to-Day Swing',
             'σ = √Var(X)',
-            `${report.metrics.standardDeviation} Households`,
-            'Empirical confidence spread (Mean ± 1σ).',
+            `±${report.metrics.standardDeviation} Households`,
+            'Normal daily fluctuation spread around average demand.',
+          ],
+          [
+            'Recommended Safety Buffer',
+            'k ≈ Mean + 1σ',
+            `${report.metrics.recommendedBufferStockUnits} Units`,
+            'Covers demand spikes in 85%+ of deficit scenarios.',
           ],
         ],
         theme: 'striped',
@@ -223,7 +222,7 @@ export const ReportsPage: React.FC = () => {
       currentY = (doc as any).lastAutoTable.finalY + 8;
     }
 
-    // 5. PMF / CDF Table
+    // 5. Distribution Table
     if (includePmfTable) {
       if (currentY > 210) {
         doc.addPage();
@@ -233,20 +232,18 @@ export const ReportsPage: React.FC = () => {
       doc.setFontSize(10);
       doc.setFont('helvetica', 'bold');
       doc.setTextColor(7, 42, 29);
-      doc.text('Discrete Random Variable Distribution (X = Households in Need)', 14, currentY);
+      doc.text('Daily Demand Distribution & Cumulative Buffer Coverage', 14, currentY);
 
       const distRows = report.mathematicalAudit.distribution.distribution.map((d) => [
         String(d.x),
         String(d.count),
         String(d.px),
-        String(d.fx),
-        String(d.xTimesPx),
-        String(d.xSquaredTimesPx),
+        String((d.fx * 100).toFixed(1) + '%'),
       ]);
 
       autoTable(doc, {
         startY: currentY + 3,
-        head: [['x (hh)', 'n(x)', 'P(X = x) [PMF]', 'F(x) = P(X ≤ x) [CDF]', 'x · P(x)', 'x² · P(x)']],
+        head: [['Households (x)', 'Recorded Days', 'Likelihood Share', 'Cumulative Buffer Coverage']],
         body: distRows,
         theme: 'grid',
         headStyles: { fillColor: [18, 128, 90], fontSize: 8 },
@@ -265,7 +262,7 @@ export const ReportsPage: React.FC = () => {
       doc.setFontSize(10);
       doc.setFont('helvetica', 'bold');
       doc.setTextColor(7, 42, 29);
-      doc.text('Rule-Based Directives & Resource Allocation Orders', 14, currentY);
+      doc.text('Action Directives & Buffer Logistics Tasks', 14, currentY);
 
       const recRows = report.recommendations.map((r) => [
         r.title,
@@ -276,7 +273,7 @@ export const ReportsPage: React.FC = () => {
 
       autoTable(doc, {
         startY: currentY + 3,
-        head: [['Directive', 'Priority', 'Rule Trigger', 'Operational Details']],
+        head: [['Action Directive', 'Priority', 'Rule Trigger', 'Operational Details']],
         body: recRows,
         theme: 'striped',
         headStyles: { fillColor: [11, 61, 42], fontSize: 8 },
@@ -308,13 +305,13 @@ export const ReportsPage: React.FC = () => {
       doc.setFontSize(7);
       doc.setTextColor(160, 160, 160);
       doc.text(
-        `GRAM SETU | Dossier ID: ${report.reportId} | Generated: ${report.generatedAt} | Page ${i} of ${totalPages}`,
+        `GRAM SETU | Report ID: ${report.reportId} | Generated: ${report.generatedAt} | Page ${i} of ${totalPages}`,
         14,
         290
       );
     }
 
-    doc.save(`GramSetu_Dossier_${report.village.name}.pdf`);
+    doc.save(`GramSetu_Report_${report.village.name}.pdf`);
   };
 
   return (
@@ -323,61 +320,59 @@ export const ReportsPage: React.FC = () => {
       <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 no-print">
         <div>
           <div className="flex items-center gap-2.5">
-            <h2 className="text-2xl font-extrabold text-stone-900 tracking-tight">
-              Reports & Formal Audit Dossier
-            </h2>
+            <h1 className="text-2xl sm:text-3xl font-extrabold text-stone-900 tracking-tight">
+              Reports & Planning Dossiers
+            </h1>
             <span className="text-[11px] font-mono font-bold uppercase tracking-wider px-2.5 py-0.5 rounded-full bg-emerald-50 text-emerald-800 border border-emerald-200/60 shadow-xs">
               Executive Dossier
             </span>
           </div>
-          <p className="text-xs text-stone-500 mt-1">
-            Export formal statistical assessments for administrative review and block planning sanctioning
+          <p className="text-xs sm:text-sm text-stone-600 mt-1">
+            Export official resource planning reports and buffer allocations for administrative review and block sanctioning.
           </p>
         </div>
       </div>
 
       {loading || !report ? (
         <div className="surface p-16 text-center text-stone-400 text-xs rounded-card border border-emerald-900/10">
-          Generating comprehensive assessment dossier...
+          Generating comprehensive assessment report...
         </div>
       ) : (
-        /* 2-Column Layout: Left = A4 Dossier Paper Pane, Right = Sticky Action Cards */
         <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 items-start">
-          {/* Left: A4 Dossier "Paper Pane" with soft 3D shadow */}
+          {/* Left: A4 Report Paper Pane */}
           <div className="lg:col-span-8 surface bg-white rounded-card border border-stone-200/90 p-8 sm:p-12 shadow-float relative space-y-8 print:shadow-none print:border-none print:p-0">
-            {/* Corner highlight decoration */}
             <div className="absolute top-0 right-0 w-24 h-24 bg-gradient-to-bl from-emerald-500/10 to-transparent rounded-tr-card pointer-events-none" />
 
-            {/* Dossier Document Header */}
+            {/* Document Header */}
             <div className="border-b-2 border-emerald-950 pb-5 flex flex-col md:flex-row md:items-center justify-between gap-4">
               <div>
                 <span className="text-[10px] font-mono uppercase tracking-widest text-emerald-800 font-bold block">
-                  Official Decision-Support Dossier • Gram Setu
+                  Official Decision-Support Report • Gram Setu
                 </span>
-                <h1 className="text-2xl font-black text-stone-900 tracking-tight mt-1">
-                  VILLAGE RESOURCE REQUIREMENT ASSESSMENT DOSSIER
-                </h1>
+                <h2 className="text-2xl font-black text-stone-900 tracking-tight mt-1">
+                  VILLAGE RESOURCE REQUIREMENT ASSESSMENT REPORT
+                </h2>
                 <p className="text-xs text-emerald-800 font-semibold mt-1">
-                  Automated Stochastic Risk Modeling & Logistics Planning
+                  Automated Risk Modeling & Resource Planning
                 </p>
               </div>
 
               <div className="text-right text-xs space-y-1 font-mono text-stone-500">
                 <p>
-                  Dossier ID: <strong className="text-stone-900">{report.reportId}</strong>
+                  Report ID: <strong className="text-stone-900">{report.reportId}</strong>
                 </p>
                 <p>Date: {new Date(report.generatedAt).toLocaleDateString()}</p>
                 <span className="inline-block px-2 py-0.5 rounded-full text-[10px] font-bold bg-emerald-50 text-emerald-800 border border-emerald-200">
-                  PostgreSQL Sealed
+                  Verified Data
                 </span>
               </div>
             </div>
 
-            {/* Operational Pilot Notice Box */}
+            {/* Operational Notice Box */}
             <div className="p-4 rounded-panel bg-emerald-50 border border-emerald-200/80 text-emerald-950 text-xs flex items-center gap-3">
               <ShieldCheck className="w-4 h-4 text-emerald-700 shrink-0" />
               <span>
-                <strong>Operational Field Dossier:</strong> Validated against current census household baselines and synchronized field inventory ledgers across Rengali block.
+                <strong>Operational Field Report:</strong> Validated against current census household baselines and synchronized field inventory ledgers across Rengali block.
               </span>
             </div>
 
@@ -411,90 +406,85 @@ export const ReportsPage: React.FC = () => {
               </div>
             )}
 
-            {/* Section 2: Mathematical Probability Audit Trail */}
+            {/* Section 2: Risk Findings & Planning Metrics */}
             {includeMathAudit && (
               <div className="space-y-3">
                 <h3 className="text-xs uppercase font-mono font-bold tracking-wider text-stone-400 border-b border-stone-100 pb-1.5 flex items-center gap-1.5">
                   <Sparkles className="w-3.5 h-3.5 text-emerald-600" />
-                  <span>2. Mathematics-III Probability Derivations & Analytical Moments</span>
+                  <span>2. Risk Findings & Planning Metrics</span>
                 </h3>
 
                 <div className="grid grid-cols-1 md:grid-cols-3 gap-3 text-xs">
                   <div className="p-4 rounded-panel bg-stone-50 border border-stone-200/60 space-y-1">
                     <span className="text-stone-400 text-[10px] uppercase font-mono block">
-                      P(A) = n(A) / N
+                      Historical Frequency
                     </span>
-                    <strong className="text-stone-900 text-xs block">Basic Shortage Probability</strong>
+                    <strong className="text-stone-900 text-xs block">Shortage Likelihood</strong>
                     <p className="text-2xl font-black text-amber-900 font-mono">
                       {report.metrics.basicShortagePercentage}
                     </p>
-                    <p className="text-[11px] text-stone-500 font-mono">
-                      {report.mathematicalAudit.basic.substitution}
+                    <p className="text-[11px] text-stone-500">
+                      Based on {report.mathematicalAudit.basic.sampleSize} survey cycles
                     </p>
                   </div>
 
                   <div className="p-4 rounded-panel bg-stone-50 border border-stone-200/60 space-y-1">
                     <span className="text-stone-400 text-[10px] uppercase font-mono block">
-                      P(A|B) = n(A ∩ B) / n(B)
+                      Weather Sensitivity
                     </span>
-                    <strong className="text-stone-900 text-xs block">Conditional P(Shortage|Drought)</strong>
-                    <p className="text-2xl font-black text-teal-800 font-mono">
+                    <strong className="text-stone-900 text-xs block">Dry-Spell Likelihood</strong>
+                    <p className="text-2xl font-black text-rose-700 font-mono">
                       {report.metrics.conditionalPercentage}
                     </p>
-                    <p className="text-[11px] text-stone-500 font-mono">
-                      {report.mathematicalAudit.conditional.substitution}
+                    <p className="text-[11px] text-stone-500">
+                      Surges during below-normal rainfall
                     </p>
                   </div>
 
                   <div className="p-4 rounded-panel bg-stone-50 border border-stone-200/60 space-y-1">
                     <span className="text-stone-400 text-[10px] uppercase font-mono block">
-                      P(A|B) = [P(B|A) · P(A)] / P(B)
+                      Early Warning
                     </span>
-                    <strong className="text-stone-900 text-xs block">Bayes Posterior Update</strong>
-                    <p className="text-2xl font-black text-purple-800 font-mono">
+                    <strong className="text-stone-900 text-xs block">Revised Drought Risk</strong>
+                    <p className="text-2xl font-black text-emerald-800 font-mono">
                       {report.metrics.bayesPosteriorPercentage}
                     </p>
-                    <p className="text-[11px] text-stone-500 font-mono">
-                      {report.mathematicalAudit.bayes.substitution}
+                    <p className="text-[11px] text-stone-500">
+                      Following verified borehole failure
                     </p>
                   </div>
                 </div>
 
                 <div className="p-3.5 rounded-panel bg-emerald-50/70 border border-emerald-200/60 flex flex-wrap items-center justify-between gap-3 text-xs font-mono text-emerald-950">
                   <span>
-                    Expected Demand: <strong>E(X) = {report.metrics.expectedHouseholdsMean} hh</strong>
+                    Typical Demand: <strong>~{Math.round(report.metrics.expectedHouseholdsMean)} households</strong>
                   </span>
                   <span>
-                    Variance: <strong>Var(X) = {report.metrics.variance}</strong>
-                  </span>
-                  <span>
-                    Std Deviation: <strong>σ = {report.metrics.standardDeviation} hh</strong>
+                    Normal Swing: <strong>±{Math.round(report.metrics.standardDeviation)} households</strong>
                   </span>
                   <span className="text-emerald-800 font-bold">
-                    Buffer: {report.metrics.recommendedBufferStockUnits} Units
+                    Recommended Buffer: {report.metrics.recommendedBufferStockUnits} Units
                   </span>
                 </div>
               </div>
             )}
 
-            {/* Section 3: PMF / CDF Frequency Table */}
+            {/* Section 3: Demand Distribution Table */}
             {includePmfTable && (
               <div className="space-y-3 print-page-break">
                 <h3 className="text-xs uppercase font-mono font-bold tracking-wider text-stone-400 border-b border-stone-100 pb-1.5 flex items-center gap-1.5">
                   <Layers className="w-3.5 h-3.5 text-emerald-600" />
-                  <span>3. Discrete Probability Distribution Table (X = Emergency Households)</span>
+                  <span>3. Daily Demand Distribution & Buffer Coverage</span>
                 </h3>
 
                 <div className="overflow-x-auto border border-stone-200/80 rounded-panel">
                   <table className="w-full text-left text-xs font-mono">
                     <thead className="bg-stone-100 text-stone-600 border-b border-stone-200 uppercase text-[10px]">
                       <tr>
-                        <th className="px-3.5 py-2">x (Households)</th>
-                        <th className="px-3.5 py-2">Frequency n(x)</th>
-                        <th className="px-3.5 py-2">P(X = x) [PMF]</th>
-                        <th className="px-3.5 py-2">F(x) = P(X ≤ x) [CDF]</th>
-                        <th className="px-3.5 py-2">x · P(X = x)</th>
-                        <th className="px-3.5 py-2">x² · P(X = x)</th>
+                        <th className="px-3.5 py-2">Households in Need (x)</th>
+                        <th className="px-3.5 py-2">Recorded Days</th>
+                        <th className="px-3.5 py-2">Likelihood Share</th>
+                        <th className="px-3.5 py-2">Cumulative Buffer Coverage</th>
                       </tr>
                     </thead>
                     <tbody className="divide-y divide-stone-100 text-stone-700">
@@ -505,10 +495,8 @@ export const ReportsPage: React.FC = () => {
                         >
                           <td className="px-3.5 py-2 font-bold text-stone-900">{d.x}</td>
                           <td className="px-3.5 py-2 text-stone-500">{d.count}</td>
-                          <td className="px-3.5 py-2 text-emerald-800 font-bold">{d.px}</td>
-                          <td className="px-3.5 py-2 text-teal-800 font-bold">{d.fx}</td>
-                          <td className="px-3.5 py-2 text-stone-600">{d.xTimesPx}</td>
-                          <td className="px-3.5 py-2 text-stone-600">{d.xSquaredTimesPx}</td>
+                          <td className="px-3.5 py-2 text-emerald-800 font-bold">{d.px.toFixed(3)}</td>
+                          <td className="px-3.5 py-2 text-teal-800 font-bold">{(d.fx * 100).toFixed(1)}%</td>
                         </tr>
                       ))}
                     </tbody>
@@ -517,12 +505,12 @@ export const ReportsPage: React.FC = () => {
               </div>
             )}
 
-            {/* Section 4: Triggered Directives */}
+            {/* Section 4: Action Directives */}
             {includeRecommendations && (
               <div className="space-y-3">
                 <h3 className="text-xs uppercase font-mono font-bold tracking-wider text-stone-400 border-b border-stone-100 pb-1.5 flex items-center gap-1.5">
                   <ShieldCheck className="w-3.5 h-3.5 text-emerald-600" />
-                  <span>4. Algorithmic Recommendations & Sanction Orders</span>
+                  <span>4. Recommended Action Directives</span>
                 </h3>
 
                 <div className="space-y-2.5">
@@ -566,12 +554,12 @@ export const ReportsPage: React.FC = () => {
             </div>
           </div>
 
-          {/* Right: Sticky Action Cards & Section Toggles */}
+          {/* Right: Sticky Action Cards */}
           <div className="lg:col-span-4 space-y-4 lg:sticky lg:top-24 no-print">
             {/* Target Assessment Selector Card */}
             <div className="surface p-5 rounded-card border border-emerald-900/10 shadow-card space-y-3">
               <label className="text-[11px] font-bold uppercase tracking-wider text-stone-400 block">
-                Target Assessment Dossier
+                Target Village Report
               </label>
               <div className="relative">
                 <select
@@ -592,7 +580,7 @@ export const ReportsPage: React.FC = () => {
             {/* Section Toggles */}
             <div className="surface p-5 rounded-card border border-emerald-900/10 shadow-card space-y-3 text-xs">
               <label className="text-[11px] font-bold uppercase tracking-wider text-stone-400 block border-b border-stone-100 pb-2">
-                Dossier Sections Included
+                Report Sections Included
               </label>
 
               <div className="space-y-2.5">
@@ -614,7 +602,7 @@ export const ReportsPage: React.FC = () => {
                   onClick={() => setIncludeMathAudit(!includeMathAudit)}
                   className="w-full flex items-center justify-between p-2 rounded-lg hover:bg-stone-50 transition"
                 >
-                  <span className="font-medium text-stone-700">Stochastic Derivations & Moments</span>
+                  <span className="font-medium text-stone-700">Risk Findings & Planning Metrics</span>
                   {includeMathAudit ? (
                     <ToggleRight className="w-5 h-5 text-emerald-600" />
                   ) : (
@@ -627,7 +615,7 @@ export const ReportsPage: React.FC = () => {
                   onClick={() => setIncludePmfTable(!includePmfTable)}
                   className="w-full flex items-center justify-between p-2 rounded-lg hover:bg-stone-50 transition"
                 >
-                  <span className="font-medium text-stone-700">PMF / CDF Frequency Table</span>
+                  <span className="font-medium text-stone-700">Daily Demand Distribution</span>
                   {includePmfTable ? (
                     <ToggleRight className="w-5 h-5 text-emerald-600" />
                   ) : (
@@ -640,7 +628,7 @@ export const ReportsPage: React.FC = () => {
                   onClick={() => setIncludeRecommendations(!includeRecommendations)}
                   className="w-full flex items-center justify-between p-2 rounded-lg hover:bg-stone-50 transition"
                 >
-                  <span className="font-medium text-stone-700">Rule-Based Recommendations</span>
+                  <span className="font-medium text-stone-700">Recommended Action Directives</span>
                   {includeRecommendations ? (
                     <ToggleRight className="w-5 h-5 text-emerald-600" />
                   ) : (
@@ -661,7 +649,7 @@ export const ReportsPage: React.FC = () => {
                 className="btn-primary w-full py-3 text-xs flex items-center justify-center gap-2 shadow-glow-emerald"
               >
                 <Download className="w-4 h-4" />
-                <span>Export Formal PDF Dossier</span>
+                <span>Export Official PDF Report</span>
               </button>
 
               <button
