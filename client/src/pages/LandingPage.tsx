@@ -15,11 +15,22 @@ import {
   Tag,
   TrendingUp,
 } from 'lucide-react';
+import { SunriseWelcome } from '../components/common/SunriseWelcome';
 
 export const LandingPage: React.FC = () => {
   const navigate = useNavigate();
+  const [showSunrise, setShowSunrise] = useState(() => {
+    // Only show once per session or fresh visit
+    const hasSeen = sessionStorage.getItem('gramsetu_sunrise_seen');
+    return !hasSeen;
+  });
   const [category, setCategory] = useState('all');
   const [village, setVillage] = useState('all');
+
+  const handleSunriseComplete = () => {
+    sessionStorage.setItem('gramsetu_sunrise_seen', 'true');
+    setShowSunrise(false);
+  };
 
   // Calculator
   const [calcType, setCalcType] = useState<'tractor' | 'pump' | 'harvester' | 'drone'>('tractor');
@@ -39,6 +50,9 @@ export const LandingPage: React.FC = () => {
 
   return (
     <div className="min-h-screen bg-stone-50 text-stone-900 flex flex-col font-sans selection:bg-emerald-500 selection:text-white">
+      {/* 1. Sunrise Welcome Animation (2-3s cinematic intro) */}
+      {showSunrise && <SunriseWelcome onComplete={handleSunriseComplete} />}
+
       {/* Top Banner */}
       <div className="bg-emerald-950 border-b border-emerald-800/80 text-emerald-200 text-xs px-4 py-2 text-center font-medium flex items-center justify-center gap-2">
         <span className="w-2 h-2 rounded-full bg-emerald-400 animate-pulse" />
@@ -420,22 +434,49 @@ export const LandingPage: React.FC = () => {
         </div>
       </section>
 
-      {/* Owner Call to Action */}
-      <section className="py-16 bg-emerald-900 text-white">
-        <div className="max-w-[1440px] mx-auto px-6 text-center space-y-6">
-          <h2 className="text-3xl sm:text-4xl font-extrabold tracking-tight">
-            Have Idle Equipment on Your Farm?
-          </h2>
-          <p className="text-stone-300 max-w-xl mx-auto text-sm leading-relaxed">
-            Put your tractor, thresher, sprayer, or pump to work when you are not using it. Earn ₹15,000 to ₹40,000 extra each month while helping neighbor farmers.
-          </p>
-          <div className="pt-2">
+      {/* Owner Call to Action / Banner */}
+      <section className="py-16 bg-stone-50">
+        <div className="max-w-[1440px] mx-auto px-6">
+          <div className="relative rounded-2xl md:rounded-3xl overflow-hidden shadow-xl border border-emerald-900/10 bg-[#0d2a1d]">
+            <img
+              src="/images/idle-equipment-banner.png"
+              alt="Have Idle Equipment on Your Farm? List Your Equipment for Rent or Find Equipment Nearby"
+              className="w-full h-auto block select-none"
+            />
+
+            {/* Clickable interactive hotspots matching the banner buttons */}
+            <div className="absolute inset-0">
+              <Link
+                to="/list-commodity"
+                aria-label="List Your Equipment for Rent"
+                title="List Your Equipment for Rent"
+                className="absolute left-[5.4%] top-[61.6%] w-[20.5%] h-[13.2%] rounded-full cursor-pointer transition-all duration-150 hover:bg-white/15 hover:ring-2 hover:ring-emerald-300 active:scale-95 focus:outline-none focus:ring-2 focus:ring-emerald-400"
+              />
+              <Link
+                to="/marketplace"
+                aria-label="Find Equipment Nearby"
+                title="Find Equipment Nearby"
+                className="absolute left-[26.9%] top-[61.6%] w-[16.1%] h-[13.2%] rounded-full cursor-pointer transition-all duration-150 hover:bg-white/20 hover:ring-2 hover:ring-white/80 active:scale-95 focus:outline-none focus:ring-2 focus:ring-white"
+              />
+            </div>
+          </div>
+
+          {/* Accessible buttons on small/mobile screens */}
+          <div className="flex sm:hidden flex-col gap-2.5 mt-4">
             <Link
               to="/list-commodity"
-              className="btn-primary text-xs font-bold py-3.5 px-6 inline-flex items-center gap-2 shadow-glow-emerald"
+              className="btn-primary text-xs font-bold py-3 px-5 w-full flex items-center justify-center gap-2 rounded-xl shadow-glow-emerald"
             >
               <Plus className="w-4 h-4" />
               <span>List Your Equipment for Rent</span>
+              <ArrowRight className="w-4 h-4 ml-0.5" />
+            </Link>
+            <Link
+              to="/marketplace"
+              className="w-full py-3 px-5 text-xs font-bold rounded-xl border border-emerald-800/30 text-emerald-950 bg-white hover:bg-emerald-50 flex items-center justify-center gap-2 transition shadow-sm"
+            >
+              <Search className="w-4 h-4 text-emerald-700" />
+              <span>Find Equipment Nearby</span>
             </Link>
           </div>
         </div>
