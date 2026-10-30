@@ -108,8 +108,8 @@ export const MyRentalsPage: React.FC = () => {
               Live Tracker
             </span>
           </div>
-          <p className="text-xs sm:text-sm text-stone-600 mt-1">
-            Manage your hired equipment, track active hours in the field, and review incoming requests.
+          <p className="text-xs sm:text-sm text-stone-600 mt-1 font-medium">
+            <strong className="text-emerald-800">Connecting What Villages Have with What Villages Need</strong> — Track active hourly jobs across multiple villages, approve incoming requests, and monitor equipment run times.
           </p>
         </div>
 

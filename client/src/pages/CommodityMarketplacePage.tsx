@@ -22,15 +22,19 @@ import { Commodity, CommodityCategory, HourlyRental } from '../types';
 import { Link, useNavigate } from 'react-router-dom';
 
 const CATEGORIES: { key: string; label: string; icon: string }[] = [
-  { key: 'all', label: 'All Equipment', icon: '🌾' },
-  { key: 'tractor', label: 'Tractors', icon: '🚜' },
+  { key: 'all', label: 'All Village Assets', icon: '✨' },
+  { key: 'transport', label: 'Transport & Pickups', icon: '🚚' },
+  { key: 'tractor', label: 'Tractors & Farm', icon: '🚜' },
+  { key: 'power_energy', label: 'Generators & Power', icon: '⚡' },
+  { key: 'community_events', label: 'Tents & Event Sound', icon: '🎪' },
+  { key: 'construction', label: 'Construction & Mixers', icon: '🏗️' },
   { key: 'water_pump', label: 'Water Pumps', icon: '💧' },
   { key: 'harvester', label: 'Harvesters', icon: '🌾' },
   { key: 'drone', label: 'Spraying Drones', icon: '🛸' },
   { key: 'tiller', label: 'Power Tillers', icon: '⚙️' },
   { key: 'thresher', label: 'Threshers', icon: '🌽' },
   { key: 'storage_silo', label: 'Grain Silos', icon: '🛖' },
-  { key: 'implements', label: 'Implements', icon: '🛠️' },
+  { key: 'implements', label: 'Tools & Implements', icon: '🛠️' },
 ];
 
 export const CommodityMarketplacePage: React.FC = () => {
@@ -128,25 +132,25 @@ export const CommodityMarketplacePage: React.FC = () => {
       {/* Top Banner Header */}
       <div className="flex flex-col md:flex-row md:items-center justify-between gap-4">
         <div>
-          <div className="flex items-center gap-2.5">
+          <div className="flex items-center gap-2.5 flex-wrap">
             <h1 className="text-2xl sm:text-3xl font-extrabold text-stone-900 tracking-tight">
-              Farmer Commodity & Equipment Sharing
+              Village Asset & Commodity Sharing Network
             </h1>
             <span className="text-[11px] font-mono font-bold uppercase tracking-wider px-2.5 py-0.5 rounded-full bg-emerald-50 text-emerald-800 border border-emerald-200/60 shadow-xs">
-              Hourly Rentals
+              Multi-Village Cluster
             </span>
           </div>
-          <p className="text-xs sm:text-sm text-stone-600 mt-1">
-            Rent tractors, water pumps, harvesters, and sprayers directly from neighbor farmers by the hour.
+          <p className="text-xs sm:text-sm text-stone-600 mt-1 font-medium">
+            <strong className="text-emerald-800">Connecting What Villages Have with What Villages Need</strong> — Share, rent, and borrow agricultural machinery, transport pickups, power generators, event sound sets, and tools across neighboring villages.
           </p>
         </div>
 
         <Link
           to="/list-commodity"
-          className="btn-primary text-xs font-bold py-2.5 px-4 flex items-center gap-2 self-start md:self-auto shadow-xs"
+          className="btn-primary text-xs font-bold py-2.5 px-4 flex items-center gap-2 self-start md:self-auto shadow-xs shrink-0"
         >
           <Sparkles className="w-4 h-4 text-emerald-200" />
-          <span>List My Equipment to Earn ₹/hr</span>
+          <span>List Village Asset to Earn ₹/hr</span>
         </Link>
       </div>
 
@@ -190,12 +194,14 @@ export const CommodityMarketplacePage: React.FC = () => {
               onChange={(e) => setSelectedVillage(e.target.value)}
               className="input w-full text-xs font-semibold cursor-pointer"
             >
-              <option value="all">📍 All Villages (Sambalpur Block)</option>
-              <option value="Bamaloi">Bamaloi Gram Panchayat</option>
-              <option value="Rengali">Rengali Village</option>
-              <option value="Lapanga">Lapanga Cluster</option>
-              <option value="Katarbaga">Katarbaga Village</option>
-              <option value="Thebra">Thebra Panchayat</option>
+              <option value="all">🌐 All Connected Villages (Inter-Village Sharing)</option>
+              <option value="Bamaloi">📍 Bamaloi (Panchayat Hub)</option>
+              <option value="Lapanga">📍 Lapanga (Transport & Machinery)</option>
+              <option value="Khinda">📍 Khinda (Energy & Agriculture)</option>
+              <option value="Rengali">📍 Rengali (Block Center)</option>
+              <option value="Durgapali">📍 Durgapali (Command Area)</option>
+              <option value="Thebra">📍 Thebra (Highland Cluster)</option>
+              <option value="Katarbaga">📍 Katarbaga (Farming Cluster)</option>
             </select>
           </div>
 

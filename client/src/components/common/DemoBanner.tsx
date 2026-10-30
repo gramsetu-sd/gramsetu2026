@@ -18,7 +18,7 @@ export const DemoBanner: React.FC = () => {
           </span>
 
           <span className="font-bold uppercase tracking-wider text-[11px] text-emerald-200 truncate">
-            🌾 Gram Setu • Rural Farmer Commodity & Hourly Equipment Sharing Network
+            🌐 Gram Setu • Connecting What Villages Have with What Villages Need • Multi-Village Network
           </span>
 
           <button
@@ -90,18 +90,18 @@ export const DemoBanner: React.FC = () => {
             </div>
 
             <p className="text-xs text-stone-600 leading-relaxed">
-              <strong>GRAM SETU</strong> is a peer-to-peer rural equipment and commodity sharing marketplace. Farmers can rent expensive agricultural machinery (tractors, drone sprayers, harvesters, water pumps) by the hour from fellow village owners, drastically cutting capital costs.
+              <strong>GRAM SETU</strong> ("Connecting What Villages Have with What Villages Need") is a multi-village commodity and equipment sharing network. Villagers across neighboring gram panchayats can rent and share expensive machinery, transport pickups, soundproof generators, event tents, and construction tools by the hour.
             </p>
 
             <div className="p-3 bg-emerald-50 rounded-xl border border-emerald-200 text-xs text-emerald-950 space-y-1">
-              <strong>Active Pilot Cluster:</strong>
+              <strong>Connected Multi-Village Clusters:</strong>
               <p>
-                Currently serving farming communities in Sambalpur and Jharsuguda clusters (including Bamaloi, Lapanga, and Rengali blocks) with verified local machine owners and instant hourly booking.
+                Currently serving connected rural communities across Bamaloi, Lapanga, Khinda, Rengali, Durgapali, Thebra, and Katarbaga clusters in Sambalpur district with verified asset owners and instant inter-village booking.
               </p>
             </div>
 
             <p className="text-xs text-stone-600 leading-relaxed">
-              Equipped with transparent hourly rates (₹/hour), driver/operator verification, and direct WhatsApp / phone contact for seamless village logistics.
+              Transparent hourly rates (₹/hour), operator verification, and direct phone contact for smooth inter-village transit and coordination.
             </p>
 
             <button

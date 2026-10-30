@@ -136,7 +136,7 @@ export const Sidebar: React.FC<SidebarProps> = ({ isOpen, onClose }) => {
                   <span>GRAM SETU</span>
                 </div>
                 <p className="text-[10px] text-emerald-300/80 leading-tight truncate">
-                  Connecting village needs
+                  Connecting What Villages Have & Need
                 </p>
               </div>
             )}

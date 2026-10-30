@@ -96,7 +96,7 @@ export interface Recommendation {
   createdAt: string;
 }
 
-// --- Farmer Commodity & Equipment Sharing Types ---
+// --- Village Asset, Commodity & Equipment Sharing Types ---
 export type CommodityCategory =
   | 'tractor'
   | 'harvester'
@@ -105,6 +105,10 @@ export type CommodityCategory =
   | 'drone'
   | 'thresher'
   | 'storage_silo'
+  | 'transport'
+  | 'power_energy'
+  | 'community_events'
+  | 'construction'
   | 'implements';
 
 export interface Commodity {
@@ -154,17 +158,20 @@ export interface HourlyRental {
   createdAt: string;
 }
 
-export interface FarmerProfile {
+export interface VillagerProfile {
   id: string;
   fullName: string;
   phone: string;
   village: string;
   district: string;
-  role: 'farmer' | 'owner' | 'both';
+  role: 'renter' | 'owner' | 'both';
+  occupation?: string;
   landAcreage?: number;
   isVerified: boolean;
   avatarUrl?: string;
 }
+
+export type FarmerProfile = VillagerProfile;
 
 // Probability Engine specific structures
 export interface BasicProbabilityCalculation {

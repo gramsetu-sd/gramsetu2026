@@ -72,16 +72,16 @@ export const DashboardPage: React.FC = () => {
           <div className="space-y-2 max-w-2xl">
             <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-white/10 border border-white/20 text-emerald-300 text-xs font-mono font-bold tracking-wider">
               <Sparkles className="w-3.5 h-3.5" />
-              GRAM SETU • PEER-TO-PEER FARM EQUIPMENT SHARING
+              GRAM SETU • MULTI-VILLAGE ASSET & EQUIPMENT SHARING
             </div>
             <h1 className="text-2xl sm:text-3xl lg:text-4xl font-extrabold tracking-tight text-white">
-              Rent Farm Commodities & Machinery{' '}
+              Connecting What Villages Have with{' '}
               <span className="bg-gradient-to-r from-emerald-300 to-emerald-400 bg-clip-text text-transparent">
-                By The Hour.
+                What Villages Need.
               </span>
             </h1>
             <p className="text-xs sm:text-sm text-stone-300 font-light leading-relaxed">
-              Why buy expensive tractors and pumps when you can share them with neighbor farmers? Browse verified machines in your Gram Panchayat or list your own idle equipment to earn hourly rental income.
+              Why let valuable assets sit idle or take heavy loans? Share, rent, and borrow tractors, transport pickups, diesel generators, event sound sets, and construction tools across multiple connected villages.
             </p>
           </div>
 

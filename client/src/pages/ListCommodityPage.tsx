@@ -85,16 +85,16 @@ export const ListCommodityPage: React.FC = () => {
     <div className="space-y-6 max-w-5xl mx-auto animate-fade-up">
       {/* Page Header */}
       <div>
-        <div className="flex items-center gap-2.5">
+        <div className="flex items-center gap-2.5 flex-wrap">
           <h1 className="text-2xl sm:text-3xl font-extrabold text-stone-900 tracking-tight">
-            Share Your Farm Commodity & Equipment
+            Share a Village Asset or Equipment
           </h1>
           <span className="text-[11px] font-mono font-bold uppercase tracking-wider px-2.5 py-0.5 rounded-full bg-emerald-50 text-emerald-800 border border-emerald-200/60 shadow-xs">
             Earn ₹ / Hour
           </span>
         </div>
-        <p className="text-xs sm:text-sm text-stone-600 mt-1">
-          Have an idle tractor, water pump, thresher, or harvester? Put it on rent to neighboring farmers and generate regular hourly income.
+        <p className="text-xs sm:text-sm text-stone-600 mt-1 font-medium">
+          <strong className="text-emerald-800">Connecting What Villages Have with What Villages Need</strong> — Have an idle tractor, pickup truck, generator, cement mixer, or event tent? Put it to work for fellow villagers across neighboring clusters and generate steady hourly revenue.
         </p>
       </div>
 
@@ -127,14 +127,18 @@ export const ListCommodityPage: React.FC = () => {
                   onChange={(e) => setFormData({ ...formData, category: e.target.value as any })}
                   className="input w-full text-xs font-semibold cursor-pointer"
                 >
-                  <option value="tractor">🚜 Tractor</option>
-                  <option value="water_pump">💧 Water Pump</option>
+                  <option value="transport">🚚 Transport & Goods Pickup</option>
+                  <option value="tractor">🚜 Tractor & Machinery</option>
+                  <option value="power_energy">⚡ Generator & Power Kit</option>
+                  <option value="community_events">🎪 Shamiana / Event Tent & Sound</option>
+                  <option value="construction">🏗️ Construction & Cement Mixer</option>
+                  <option value="water_pump">💧 Water / Dewatering Pump</option>
                   <option value="harvester">🌾 Combine Harvester</option>
                   <option value="drone">🛸 Spraying Drone</option>
                   <option value="tiller">⚙️ Power Tiller</option>
-                  <option value="thresher">🌽 Thresher</option>
-                  <option value="storage_silo">🛖 Grain Silo</option>
-                  <option value="implements">🛠️ Implement / Harrow</option>
+                  <option value="thresher">🌽 Grain Thresher</option>
+                  <option value="storage_silo">🛖 Grain Silo / Storage</option>
+                  <option value="implements">🛠️ Farm Implements & Tools</option>
                 </select>
               </div>
 
@@ -184,11 +188,13 @@ export const ListCommodityPage: React.FC = () => {
                   onChange={(e) => setFormData({ ...formData, village: e.target.value })}
                   className="input w-full text-xs font-semibold cursor-pointer"
                 >
-                  <option value="Bamaloi">Bamaloi Gram Panchayat</option>
-                  <option value="Rengali">Rengali Village</option>
-                  <option value="Lapanga">Lapanga Cluster</option>
-                  <option value="Katarbaga">Katarbaga Village</option>
-                  <option value="Thebra">Thebra Panchayat</option>
+                  <option value="Bamaloi">📍 Bamaloi (Panchayat Center)</option>
+                  <option value="Lapanga">📍 Lapanga (Transport & Machinery)</option>
+                  <option value="Khinda">📍 Khinda (Energy & Agriculture)</option>
+                  <option value="Rengali">📍 Rengali (Block Hub)</option>
+                  <option value="Durgapali">📍 Durgapali (Command Area)</option>
+                  <option value="Thebra">📍 Thebra (Highland Cluster)</option>
+                  <option value="Katarbaga">📍 Katarbaga (Farming Cluster)</option>
                 </select>
               </div>
             </div>

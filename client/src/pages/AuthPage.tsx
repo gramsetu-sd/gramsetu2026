@@ -71,10 +71,10 @@ export const AuthPage: React.FC = () => {
           </div>
         </Link>
         <h2 className="text-2xl sm:text-3xl font-extrabold text-stone-900 tracking-tight">
-          {isRegistering ? 'Farmer Registration' : 'Farmer Sign In'}
+          {isRegistering ? 'Join Village Network' : 'Villager Sign In'}
         </h2>
-        <p className="text-xs text-stone-500">
-          Peer-to-Peer Agricultural Equipment & Hourly Commodity Sharing
+        <p className="text-xs text-stone-500 font-medium">
+          Connecting What Villages Have with What Villages Need
         </p>
       </div>
 
@@ -83,7 +83,7 @@ export const AuthPage: React.FC = () => {
           {/* Quick Demo Personas */}
           <div className="space-y-2.5">
             <span className="text-[10px] font-mono font-bold uppercase tracking-wider text-stone-400 block text-center">
-              1-Click Fast Farmer Login
+              1-Click Fast Villager Login
             </span>
             <div className="grid grid-cols-2 gap-2 text-xs">
               <button
@@ -91,17 +91,17 @@ export const AuthPage: React.FC = () => {
                 onClick={() => handleQuickLogin('renter')}
                 className="p-3 rounded-xl border border-emerald-200 bg-emerald-50/70 text-emerald-900 hover:bg-emerald-100 font-bold text-center transition flex flex-col items-center gap-1 shadow-xs"
               >
-                <span>🚜 Farmer Suresh</span>
-                <span className="text-[10px] font-normal text-emerald-700">Looking to Rent Equipment</span>
+                <span>🌾 Suresh Bhoi</span>
+                <span className="text-[10px] font-normal text-emerald-700">Villager (Looking to Rent)</span>
               </button>
 
               <button
                 type="button"
                 onClick={() => handleQuickLogin('owner')}
-                className="p-3 rounded-xl border border-amber-200 bg-amber-50/70 text-amber-900 hover:bg-amber-100 font-bold text-center transition flex flex-col items-center gap-1 shadow-xs"
+                className="p-3 rounded-xl border border-stone-200 bg-stone-50 hover:bg-stone-100 text-stone-900 font-bold text-center transition flex flex-col items-center gap-1 shadow-xs"
               >
-                <span>⚙️ Owner Ramesh</span>
-                <span className="text-[10px] font-normal text-amber-700">Has Tractors to Rent</span>
+                <span>🚜 Ramesh Patel</span>
+                <span className="text-[10px] font-normal text-stone-600">Asset Owner (Machinery & Trucks)</span>
               </button>
             </div>
           </div>
@@ -159,11 +159,13 @@ export const AuthPage: React.FC = () => {
                       onChange={(e) => setVillage(e.target.value)}
                       className="input w-full pl-9 cursor-pointer font-semibold"
                     >
-                      <option value="Bamaloi">Bamaloi (Rengali Block)</option>
-                      <option value="Rengali">Rengali Village</option>
-                      <option value="Lapanga">Lapanga Cluster</option>
-                      <option value="Katarbaga">Katarbaga Village</option>
-                      <option value="Thebra">Thebra Panchayat</option>
+                      <option value="Bamaloi">📍 Bamaloi (Panchayat Center)</option>
+                      <option value="Lapanga">📍 Lapanga (Transport & Machinery)</option>
+                      <option value="Khinda">📍 Khinda (Energy & Agriculture)</option>
+                      <option value="Rengali">📍 Rengali (Block Hub)</option>
+                      <option value="Durgapali">📍 Durgapali (Command Area)</option>
+                      <option value="Thebra">📍 Thebra (Highland Cluster)</option>
+                      <option value="Katarbaga">📍 Katarbaga (Farming Cluster)</option>
                     </select>
                   </div>
                 </div>
@@ -180,7 +182,7 @@ export const AuthPage: React.FC = () => {
                           : 'border-stone-200 text-stone-600 hover:bg-stone-50'
                       }`}
                     >
-                      🌾 Farmer (Renter)
+                      🌾 Villager (Renter)
                     </button>
                     <button
                       type="button"
@@ -191,7 +193,7 @@ export const AuthPage: React.FC = () => {
                           : 'border-stone-200 text-stone-600 hover:bg-stone-50'
                       }`}
                     >
-                      ⚙️ Equipment Owner
+                      🚜 Asset Owner
                     </button>
                   </div>
                 </div>

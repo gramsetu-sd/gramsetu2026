@@ -62,7 +62,7 @@ export const LandingPage: React.FC = () => {
                 </span>
               </div>
               <p className="text-[11px] text-stone-500 font-medium hidden sm:block">
-                Connecting What Farmers Have with What Farmers Need
+                Connecting What Villages Have with What Villages Need
               </p>
             </div>
           </div>
@@ -103,54 +103,60 @@ export const LandingPage: React.FC = () => {
             <div className="lg:col-span-7 space-y-6">
               <div className="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-white/10 border border-white/20 text-emerald-300 text-xs font-mono font-bold tracking-wider">
                 <Sparkles className="w-3.5 h-3.5 text-emerald-400" />
-                PEER-TO-PEER FARM MACHINERY & COMMODITY RENTALS
+                MULTI-VILLAGE ASSET & HOURLY EQUIPMENT SHARING NETWORK
               </div>
 
               <h1 className="text-4xl sm:text-5xl lg:text-6xl font-extrabold tracking-tight leading-[1.12] text-white">
-                Rent Farm Equipment{' '}
+                Connecting What Villages Have with{' '}
                 <span className="bg-gradient-to-r from-emerald-300 to-emerald-400 bg-clip-text text-transparent">
-                  By The Hour.
+                  What Villages Need.
                 </span>
               </h1>
 
               <p className="text-base sm:text-lg text-stone-300 leading-relaxed max-w-2xl font-light">
-                Why take heavy bank loans to buy tractors and pumps? Share and rent machinery directly with neighbor farmers in your Gram Panchayat. Pay only for the exact hours you use.
+                Why take heavy loans or let valuable equipment sit idle? Share, rent, and borrow agricultural machinery, transport pickups, generators, event sound sets, and tools across multiple connected villages. Pay only for the exact hours you need.
               </p>
 
               {/* Quick Search Widget */}
               <form onSubmit={handleQuickSearch} className="surface p-3 rounded-2xl bg-white text-stone-900 shadow-float border border-white/20 grid grid-cols-1 sm:grid-cols-3 gap-2">
                 <div>
                   <label className="text-[10px] font-bold uppercase text-stone-400 block px-2 pt-1">
-                    Equipment Type
+                    Asset / Equipment
                   </label>
                   <select
                     value={category}
                     onChange={(e) => setCategory(e.target.value)}
                     className="w-full bg-transparent border-0 text-xs font-bold text-stone-900 p-2 focus:ring-0 cursor-pointer"
                   >
-                    <option value="all">🌾 All Categories</option>
-                    <option value="tractor">🚜 Tractor (₹450/hr)</option>
+                    <option value="all">✨ All Village Assets</option>
+                    <option value="transport">🚚 Transport Pickup (₹350/hr)</option>
+                    <option value="tractor">🚜 Tractor + Rotavator (₹450/hr)</option>
+                    <option value="power_energy">⚡ Silent Generator (₹240/hr)</option>
+                    <option value="community_events">🎪 Shamiana & Sound (₹180/hr)</option>
+                    <option value="construction">🏗️ Cement Mixer (₹220/hr)</option>
                     <option value="water_pump">💧 Water Pump (₹150/hr)</option>
                     <option value="harvester">🌾 Harvester (₹1,200/hr)</option>
-                    <option value="drone">🛸 Drone (₹600/hr)</option>
-                    <option value="tiller">⚙️ Power Tiller (₹220/hr)</option>
+                    <option value="drone">🛸 Drone Sprayer (₹600/hr)</option>
                   </select>
                 </div>
 
                 <div className="border-t sm:border-t-0 sm:border-l border-stone-100">
                   <label className="text-[10px] font-bold uppercase text-stone-400 block px-2 pt-1">
-                    Village / Block
+                    Village / Cluster
                   </label>
                   <select
                     value={village}
                     onChange={(e) => setVillage(e.target.value)}
                     className="w-full bg-transparent border-0 text-xs font-bold text-stone-900 p-2 focus:ring-0 cursor-pointer"
                   >
-                    <option value="all">📍 All Villages</option>
-                    <option value="Bamaloi">Bamaloi</option>
-                    <option value="Rengali">Rengali</option>
-                    <option value="Lapanga">Lapanga</option>
-                    <option value="Katarbaga">Katarbaga</option>
+                    <option value="all">🌐 All Connected Villages</option>
+                    <option value="Bamaloi">📍 Bamaloi</option>
+                    <option value="Lapanga">📍 Lapanga</option>
+                    <option value="Khinda">📍 Khinda</option>
+                    <option value="Rengali">📍 Rengali</option>
+                    <option value="Durgapali">📍 Durgapali</option>
+                    <option value="Thebra">📍 Thebra</option>
+                    <option value="Katarbaga">📍 Katarbaga</option>
                   </select>
                 </div>
 
@@ -159,7 +165,7 @@ export const LandingPage: React.FC = () => {
                   className="btn-primary text-xs font-bold py-3 px-4 rounded-xl flex items-center justify-center gap-1.5 shadow-glow-emerald"
                 >
                   <Search className="w-4 h-4" />
-                  <span>Find Equipment</span>
+                  <span>Find Available Assets</span>
                 </button>
               </form>
 
@@ -446,39 +452,40 @@ export const LandingPage: React.FC = () => {
               <span>GRAM SETU</span>
             </div>
             <p className="text-stone-400 text-xs leading-relaxed">
-              Connecting What Farmers Have with What Farmers Need through peer-to-peer hourly equipment sharing.
+              Connecting What Villages Have with What Villages Need through peer-to-peer hourly asset and equipment sharing across village clusters.
             </p>
           </div>
 
           <div>
-            <h4 className="font-bold text-white mb-3 uppercase tracking-wider text-[11px]">Rent Machinery</h4>
+            <h4 className="font-bold text-white mb-3 uppercase tracking-wider text-[11px]">Rent Village Assets</h4>
             <ul className="space-y-2 text-stone-400">
-              <li><Link to="/marketplace" className="hover:text-white transition">Tractors on Rent</Link></li>
-              <li><Link to="/marketplace" className="hover:text-white transition">Water Pumps</Link></li>
-              <li><Link to="/marketplace" className="hover:text-white transition">Combine Harvesters</Link></li>
-              <li><Link to="/marketplace" className="hover:text-white transition">Crop Spraying Drones</Link></li>
+              <li><Link to="/marketplace" className="hover:text-white transition">Transport & Pickup Trucks</Link></li>
+              <li><Link to="/marketplace" className="hover:text-white transition">Tractors & Rotavators</Link></li>
+              <li><Link to="/marketplace" className="hover:text-white transition">Silent Diesel Generators</Link></li>
+              <li><Link to="/marketplace" className="hover:text-white transition">Shamiana & Sound Systems</Link></li>
+              <li><Link to="/marketplace" className="hover:text-white transition">Cement Concrete Mixers</Link></li>
             </ul>
           </div>
 
           <div>
-            <h4 className="font-bold text-white mb-3 uppercase tracking-wider text-[11px]">Equipment Owners</h4>
+            <h4 className="font-bold text-white mb-3 uppercase tracking-wider text-[11px]">Asset Owners</h4>
             <ul className="space-y-2 text-stone-400">
-              <li><Link to="/list-commodity" className="hover:text-white transition">List Equipment</Link></li>
+              <li><Link to="/list-commodity" className="hover:text-white transition">List an Asset or Tool</Link></li>
               <li><Link to="/my-rentals" className="hover:text-white transition">Booking Requests</Link></li>
               <li><Link to="/dashboard" className="hover:text-white transition">Hourly Earnings</Link></li>
             </ul>
           </div>
 
           <div>
-            <h4 className="font-bold text-white mb-3 uppercase tracking-wider text-[11px]">Pilot Network</h4>
+            <h4 className="font-bold text-white mb-3 uppercase tracking-wider text-[11px]">Connected Clusters</h4>
             <p className="text-stone-400 text-xs leading-relaxed">
-              Bamaloi, Rengali, Lapanga, Katarbaga, and Thebra Gram Panchayats, Sambalpur, Odisha.
+              Serving Bamaloi, Lapanga, Khinda, Rengali, Durgapali, Katarbaga, and Thebra Gram Panchayats.
             </p>
           </div>
         </div>
 
         <div className="max-w-[1440px] mx-auto px-6 pt-8 mt-8 border-t border-white/10 text-center text-stone-500 text-[11px] font-mono">
-          © 2026 GRAM SETU • Farmer Commodity & Hourly Equipment Sharing Network.
+          © 2026 GRAM SETU • Connecting What Villages Have with What Villages Need • Multi-Village Community Sharing Network.
         </div>
       </footer>
     </div>
