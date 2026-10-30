@@ -20,6 +20,10 @@ import {
   X,
   Compass,
   Sparkles,
+  Plus,
+  Clock,
+  Calendar,
+  ShoppingBag,
 } from 'lucide-react';
 
 interface SidebarItem {
@@ -55,44 +59,30 @@ export const Sidebar: React.FC<SidebarProps> = ({ isOpen, onClose }) => {
 
   const navGroups: SidebarGroup[] = [
     {
-      label: 'OVERVIEW',
+      label: 'MARKETPLACE',
       items: [
-        { name: 'Dashboard', to: '/dashboard', icon: LayoutDashboard },
-        { name: 'Villages', to: '/villages', icon: MapPin },
+        { name: 'Browse Equipment', to: '/marketplace', icon: Package, badge: 'Rent ₹/hr' },
+        { name: 'Share Commodity', to: '/list-commodity', icon: Plus, badgeGold: true },
       ],
     },
     {
-      label: 'FIELD DATA',
+      label: 'HOURLY RENTALS',
       items: [
-        { name: 'Resource Stock', to: '/inventory', icon: Package },
-        { name: 'Field Surveys', to: '/assessments', icon: ClipboardList },
+        { name: 'My Rentals', to: '/my-rentals', icon: Clock, badge: 'Live' },
+        { name: 'Farmer Dashboard', to: '/dashboard', icon: LayoutDashboard },
       ],
     },
     {
-      label: 'INSIGHTS',
+      label: 'COMMUNITY',
       items: [
-        { name: 'Risk Insights', to: '/insights', icon: Calculator, badge: 'Live', badgeGold: true },
-        { name: 'Forecasts', to: '/predictions', icon: TrendingUp },
-        { name: 'Action Plan', to: '/recommendations', icon: Lightbulb },
-      ],
-    },
-    {
-      label: 'OUTPUT',
-      items: [
-        { name: 'Reports', to: '/reports', icon: FileText },
-        { name: 'Alerts', to: '/notifications', icon: Bell, count: 2 },
-      ],
-    },
-    {
-      label: 'SYSTEM',
-      items: [
-        { name: 'How It Works', to: '/how-it-works', icon: BookOpen },
+        { name: 'Village Network', to: '/villages', icon: MapPin },
+        { name: 'How Sharing Works', to: '/how-it-works', icon: BookOpen },
       ],
     },
     {
       label: 'ACCOUNT',
       items: [
-        { name: 'Settings', to: '/settings', icon: Settings },
+        { name: 'Farmer Settings', to: '/settings', icon: Settings },
         ...(role === 'administrator'
           ? [{ name: 'Admin', to: '/admin', icon: Shield }]
           : []),

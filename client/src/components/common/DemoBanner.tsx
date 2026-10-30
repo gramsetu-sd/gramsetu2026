@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { useAuth } from '../../context/AuthContext';
-import { ShieldCheck, Info, Database, Users, Shield, Check, X } from 'lucide-react';
+import { ShieldCheck, Info, Tractor, Check, X } from 'lucide-react';
 import { UserRole } from '../../types';
 
 export const DemoBanner: React.FC = () => {
@@ -18,7 +18,7 @@ export const DemoBanner: React.FC = () => {
           </span>
 
           <span className="font-bold uppercase tracking-wider text-[11px] text-emerald-200 truncate">
-            Operational Pilot — Odisha Rural Resource Management Network
+            🌾 Gram Setu • Rural Farmer Commodity & Hourly Equipment Sharing Network
           </span>
 
           <button
@@ -26,7 +26,7 @@ export const DemoBanner: React.FC = () => {
             onClick={() => setInfoOpen(!infoOpen)}
             className="inline-flex items-center gap-1 text-[11px] font-medium text-emerald-300 underline hover:text-white shrink-0 ml-1 transition"
           >
-            <span>Deployment Info</span>
+            <span>Platform Info</span>
             <Info className="w-3 h-3" />
           </button>
         </div>
@@ -41,16 +41,16 @@ export const DemoBanner: React.FC = () => {
               }`}
             />
             <span className="text-emerald-200">
-              {isSupabaseLive ? 'Supabase Live DB' : 'Local Storage Cache'}
+              {isSupabaseLive ? 'Live DB' : 'Instant Demo Cache'}
             </span>
           </div>
 
           {/* Pill-style Role Switcher */}
           <div className="flex items-center bg-black/40 p-0.5 rounded-full border border-emerald-700/60 text-[10px] font-semibold shadow-sm">
             {[
-              { id: 'administrator' as UserRole, label: 'District Admin' },
-              { id: 'coordinator' as UserRole, label: 'Block Officer' },
-              { id: 'viewer' as UserRole, label: 'Auditor' },
+              { id: 'coordinator' as UserRole, label: 'Farmer (Renter)' },
+              { id: 'administrator' as UserRole, label: 'Equipment Owner' },
+              { id: 'viewer' as UserRole, label: 'Coordinator' },
             ].map((r) => (
               <button
                 key={r.id}
@@ -75,9 +75,9 @@ export const DemoBanner: React.FC = () => {
           <div className="bg-white rounded-2xl max-w-md w-full p-6 border border-stone-200 shadow-float space-y-4 relative text-stone-800">
             <div className="flex items-center justify-between border-b border-stone-100 pb-3">
               <div className="flex items-center gap-2">
-                <ShieldCheck className="w-5 h-5 text-emerald-600" />
+                <Tractor className="w-5 h-5 text-emerald-600" />
                 <h4 className="font-bold text-stone-900 text-sm">
-                  System Deployment Notice
+                  Farmer Commodity Sharing System
                 </h4>
               </div>
               <button
@@ -90,18 +90,18 @@ export const DemoBanner: React.FC = () => {
             </div>
 
             <p className="text-xs text-stone-600 leading-relaxed">
-              <strong>GRAM SETU</strong> is an automated rural resource-requirement prediction and inventory allocation software platform engineered for Block Development Officers and District Collectors.
+              <strong>GRAM SETU</strong> is a peer-to-peer rural equipment and commodity sharing marketplace. Farmers can rent expensive agricultural machinery (tractors, drone sprayers, harvesters, water pumps) by the hour from fellow village owners, drastically cutting capital costs.
             </p>
 
             <div className="p-3 bg-emerald-50 rounded-xl border border-emerald-200 text-xs text-emerald-950 space-y-1">
-              <strong>Pilot Administrative Scope:</strong>
+              <strong>Active Pilot Cluster:</strong>
               <p>
-                Currently monitoring critical drinking water and grain logistics across pilot gram panchayats in Sambalpur and Jharsuguda districts (including authentic Census units such as <em>Bamaloi</em> in Rengali Block).
+                Currently serving farming communities in Sambalpur and Jharsuguda clusters (including Bamaloi, Lapanga, and Rengali blocks) with verified local machine owners and instant hourly booking.
               </p>
             </div>
 
             <p className="text-xs text-stone-600 leading-relaxed">
-              Resource availability data is synchronized with the live PostgreSQL ledger. Stochastic demand forecasting algorithms calculate early warning indicators to eliminate emergency deficits.
+              Equipped with transparent hourly rates (₹/hour), driver/operator verification, and direct WhatsApp / phone contact for seamless village logistics.
             </p>
 
             <button
@@ -109,7 +109,7 @@ export const DemoBanner: React.FC = () => {
               onClick={() => setInfoOpen(false)}
               className="w-full btn-primary text-xs py-2.5"
             >
-              Acknowledge System Notice
+              Continue to Marketplace
             </button>
           </div>
         </div>

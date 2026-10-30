@@ -30,12 +30,31 @@ import {
   updateRecommendationStatus,
 } from '../controllers/recommendationController.js';
 import { generateReport } from '../controllers/reportController.js';
+import {
+  getCommodities,
+  getCommodityById,
+  createCommodity,
+  updateCommodity,
+  getRentals,
+  createRental,
+  updateRentalStatus,
+} from '../controllers/commodityController.js';
 import { authMiddleware, requireRole } from '../middleware/authMiddleware.js';
 
 export const apiRouter = Router();
 
 // Global auth simulation / verification
 apiRouter.use(authMiddleware);
+
+// --- Farmer Commodity Sharing & Hourly Rentals ---
+apiRouter.get('/commodities', getCommodities);
+apiRouter.get('/commodities/:id', getCommodityById);
+apiRouter.post('/commodities', createCommodity);
+apiRouter.patch('/commodities/:id', updateCommodity);
+
+apiRouter.get('/rentals', getRentals);
+apiRouter.post('/rentals', createRental);
+apiRouter.patch('/rentals/:id/status', updateRentalStatus);
 
 // --- Village Endpoints ---
 apiRouter.get('/villages', getVillages);

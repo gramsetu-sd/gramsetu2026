@@ -5,20 +5,17 @@ import { Header } from './Header';
 import { DemoBanner } from './DemoBanner';
 
 const PAGE_TITLES: Record<string, string> = {
-  '/dashboard': 'Executive Dashboard',
-  '/villages': 'Village Directory',
+  '/dashboard': 'Farmer Dashboard',
+  '/marketplace': 'Equipment Marketplace',
+  '/list-commodity': 'Share Farm Equipment',
+  '/my-rentals': 'My Hourly Rentals',
+  '/villages': 'Village Network',
   '/inventory': 'Resource Stock',
   '/assessments': 'Field Surveys',
   '/insights': 'Risk Insights',
-  '/probability': 'Risk Insights',
-  '/predictions': 'Resource Forecasts',
-  '/recommendations': 'Action Plan',
-  '/reports': 'Planning Reports',
-  '/notifications': 'Alerts & Notices',
-  '/settings': 'User Profile & Settings',
-  '/admin': 'Administration & Governance',
-  '/how-it-works': 'How It Works',
-  '/methodology': 'How It Works',
+  '/settings': 'Farmer Settings',
+  '/admin': 'Platform Administration',
+  '/how-it-works': 'How Sharing Works',
 };
 
 export const Layout: React.FC = () => {

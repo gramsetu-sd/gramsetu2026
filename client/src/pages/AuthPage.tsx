@@ -2,17 +2,18 @@ import React, { useState } from 'react';
 import { useNavigate, Link } from 'react-router-dom';
 import { useAuth } from '../context/AuthContext';
 import { supabase, isSupabaseConfigured } from '../services/supabase';
-import { Shield, Lock, Mail, User, CheckCircle2, AlertCircle, ArrowRight } from 'lucide-react';
+import { Lock, Mail, User, CheckCircle2, AlertCircle, ArrowRight, Phone, MapPin, Sparkles } from 'lucide-react';
 import { UserRole } from '../types';
 
 export const AuthPage: React.FC = () => {
   const { loginDemo, setRole } = useAuth();
   const navigate = useNavigate();
   const [isRegistering, setIsRegistering] = useState(false);
-  const [email, setEmail] = useState('');
+  const [phoneOrEmail, setPhoneOrEmail] = useState('');
   const [password, setPassword] = useState('');
   const [fullName, setFullName] = useState('');
-  const [selectedRole, setSelectedRole] = useState<UserRole>('coordinator');
+  const [village, setVillage] = useState('Bamaloi');
+  const [selectedRole, setSelectedRole] = useState<'farmer' | 'owner' | 'both'>('farmer');
   const [errorMsg, setErrorMsg] = useState('');
   const [successMsg, setSuccessMsg] = useState('');
   const [loading, setLoading] = useState(false);
@@ -27,23 +28,27 @@ export const AuthPage: React.FC = () => {
       if (isSupabaseConfigured && supabase) {
         if (isRegistering) {
           const { error } = await supabase.auth.signUp({
-            email,
+            email: phoneOrEmail.includes('@') ? phoneOrEmail : `${phoneOrEmail.replace(/\D/g, '')}@gramsetu.in`,
             password,
             options: {
-              data: { full_name: fullName, role: selectedRole },
+              data: { full_name: fullName, village, role: selectedRole },
             },
           });
           if (error) throw error;
-          setSuccessMsg('Registration successful! Check your email or login directly.');
+          setSuccessMsg('Farmer account created successfully! Signing you in...');
+          setTimeout(() => navigate('/marketplace'), 1000);
         } else {
-          const { error } = await supabase.auth.signInWithPassword({ email, password });
+          const { error } = await supabase.auth.signInWithPassword({
+            email: phoneOrEmail.includes('@') ? phoneOrEmail : `${phoneOrEmail.replace(/\D/g, '')}@gramsetu.in`,
+            password,
+          });
           if (error) throw error;
-          navigate('/dashboard');
+          navigate('/marketplace');
         }
       } else {
         // Demonstration Mode login
-        loginDemo(selectedRole);
-        navigate('/dashboard');
+        loginDemo('coordinator');
+        navigate('/marketplace');
       }
     } catch (err) {
       setErrorMsg((err as Error).message);
@@ -52,70 +57,68 @@ export const AuthPage: React.FC = () => {
     }
   };
 
-  const handleDemoLogin = (role: UserRole) => {
-    loginDemo(role);
-    navigate('/dashboard');
+  const handleQuickLogin = (roleType: 'renter' | 'owner') => {
+    loginDemo(roleType === 'renter' ? 'coordinator' : 'administrator');
+    navigate(roleType === 'renter' ? '/marketplace' : '/dashboard');
   };
 
   return (
-    <div className="min-h-screen bg-slate-50 flex flex-col justify-center py-12 sm:px-6 lg:px-8">
+    <div className="min-h-screen bg-stone-50 flex flex-col justify-center py-12 sm:px-6 lg:px-8 font-sans selection:bg-emerald-500 selection:text-white animate-fade-up">
       <div className="sm:mx-auto sm:w-full sm:max-w-md text-center space-y-2">
         <Link to="/" className="inline-flex items-center gap-2 group">
-          <div className="w-12 h-12 rounded-xl bg-forest-800 text-white flex items-center justify-center font-bold text-xl shadow-md">
+          <div className="w-12 h-12 rounded-2xl bg-gradient-to-br from-emerald-600 to-emerald-950 text-white flex items-center justify-center font-bold text-xl shadow-glow-emerald">
             GS
           </div>
         </Link>
-        <h2 className="text-2xl font-extrabold text-slate-900 tracking-tight">
-          {isRegistering ? 'Create Gram Setu Account' : 'Sign in to Gram Setu'}
+        <h2 className="text-2xl sm:text-3xl font-extrabold text-stone-900 tracking-tight">
+          {isRegistering ? 'Farmer Registration' : 'Farmer Sign In'}
         </h2>
-        <p className="text-xs text-slate-500">
-          Probability-Based Rural Resource Requirement Prediction Platform
+        <p className="text-xs text-stone-500">
+          Peer-to-Peer Agricultural Equipment & Hourly Commodity Sharing
         </p>
       </div>
 
       <div className="mt-8 sm:mx-auto sm:w-full sm:max-w-md px-4">
-        <div className="bg-white py-8 px-6 shadow-md rounded-2xl border border-slate-200 space-y-6">
+        <div className="surface py-8 px-6 sm:px-8 shadow-card rounded-card border border-emerald-900/10 space-y-6">
           {/* Quick Demo Personas */}
-          <div className="space-y-2">
-            <span className="text-[11px] font-bold uppercase tracking-wider text-slate-400 block text-center">
-              Instant Presentation Personas (1-Click Login)
+          <div className="space-y-2.5">
+            <span className="text-[10px] font-mono font-bold uppercase tracking-wider text-stone-400 block text-center">
+              1-Click Fast Farmer Login
             </span>
-            <div className="grid grid-cols-3 gap-2 text-xs">
+            <div className="grid grid-cols-2 gap-2 text-xs">
               <button
                 type="button"
-                onClick={() => handleDemoLogin('administrator')}
-                className="p-2.5 rounded-lg border border-purple-200 bg-purple-50 text-purple-900 hover:bg-purple-100 font-semibold text-center transition"
+                onClick={() => handleQuickLogin('renter')}
+                className="p-3 rounded-xl border border-emerald-200 bg-emerald-50/70 text-emerald-900 hover:bg-emerald-100 font-bold text-center transition flex flex-col items-center gap-1 shadow-xs"
               >
-                Administrator
+                <span>🚜 Farmer Suresh</span>
+                <span className="text-[10px] font-normal text-emerald-700">Looking to Rent Equipment</span>
               </button>
+
               <button
                 type="button"
-                onClick={() => handleDemoLogin('coordinator')}
-                className="p-2.5 rounded-lg border border-forest-200 bg-forest-50 text-forest-900 hover:bg-forest-100 font-semibold text-center transition"
+                onClick={() => handleQuickLogin('owner')}
+                className="p-3 rounded-xl border border-amber-200 bg-amber-50/70 text-amber-900 hover:bg-amber-100 font-bold text-center transition flex flex-col items-center gap-1 shadow-xs"
               >
-                Coordinator
-              </button>
-              <button
-                type="button"
-                onClick={() => handleDemoLogin('viewer')}
-                className="p-2.5 rounded-lg border border-blue-200 bg-blue-50 text-blue-900 hover:bg-blue-100 font-semibold text-center transition"
-              >
-                Viewer
+                <span>⚙️ Owner Ramesh</span>
+                <span className="text-[10px] font-normal text-amber-700">Has Tractors to Rent</span>
               </button>
             </div>
           </div>
 
           <div className="relative">
             <div className="absolute inset-0 flex items-center">
-              <div className="w-full border-t border-slate-200" />
+              <div className="w-full border-t border-stone-200" />
             </div>
             <div className="relative flex justify-center text-xs">
-              <span className="px-2 bg-white text-slate-400">or sign in with credentials</span>
+              <span className="px-3 bg-white text-stone-400 text-[11px] font-medium">
+                or continue with credentials
+              </span>
             </div>
           </div>
 
           {errorMsg && (
-            <div className="p-3 bg-red-50 border border-red-200 text-red-700 rounded-lg text-xs flex items-center gap-2">
+            <div className="p-3 bg-rose-50 border border-rose-200 text-rose-700 rounded-lg text-xs flex items-center gap-2">
               <AlertCircle className="w-4 h-4 shrink-0" />
               <span>{errorMsg}</span>
             </div>
@@ -131,101 +134,133 @@ export const AuthPage: React.FC = () => {
           {/* Form */}
           <form onSubmit={handleSubmit} className="space-y-4 text-xs">
             {isRegistering && (
-              <div>
-                <label className="block font-medium text-slate-700 mb-1">Full Name</label>
-                <div className="relative">
-                  <User className="w-4 h-4 text-slate-400 absolute left-3 top-1/2 -translate-y-1/2" />
-                  <input
-                    type="text"
-                    required
-                    value={fullName}
-                    onChange={(e) => setFullName(e.target.value)}
-                    placeholder="e.g., Priyadarshini Sahu"
-                    className="w-full pl-9 pr-3 py-2 border border-slate-300 rounded-lg focus:outline-none focus:ring-1 focus:ring-forest-800"
-                  />
+              <>
+                <div>
+                  <label className="block font-bold text-stone-700 mb-1">Full Name *</label>
+                  <div className="relative">
+                    <User className="w-4 h-4 text-stone-400 absolute left-3 top-1/2 -translate-y-1/2" />
+                    <input
+                      type="text"
+                      required
+                      value={fullName}
+                      onChange={(e) => setFullName(e.target.value)}
+                      placeholder="e.g., Suresh Bhoi"
+                      className="input w-full pl-9"
+                    />
+                  </div>
                 </div>
-              </div>
+
+                <div>
+                  <label className="block font-bold text-stone-700 mb-1">Your Village / Gram Panchayat *</label>
+                  <div className="relative">
+                    <MapPin className="w-4 h-4 text-stone-400 absolute left-3 top-1/2 -translate-y-1/2" />
+                    <select
+                      value={village}
+                      onChange={(e) => setVillage(e.target.value)}
+                      className="input w-full pl-9 cursor-pointer font-semibold"
+                    >
+                      <option value="Bamaloi">Bamaloi (Rengali Block)</option>
+                      <option value="Rengali">Rengali Village</option>
+                      <option value="Lapanga">Lapanga Cluster</option>
+                      <option value="Katarbaga">Katarbaga Village</option>
+                      <option value="Thebra">Thebra Panchayat</option>
+                    </select>
+                  </div>
+                </div>
+
+                <div>
+                  <label className="block font-bold text-stone-700 mb-1">I am joining as: *</label>
+                  <div className="grid grid-cols-2 gap-2">
+                    <button
+                      type="button"
+                      onClick={() => setSelectedRole('farmer')}
+                      className={`p-2.5 rounded-lg border text-left font-bold text-[11px] transition ${
+                        selectedRole === 'farmer'
+                          ? 'border-emerald-700 bg-emerald-50 text-emerald-900 shadow-xs ring-1 ring-emerald-700'
+                          : 'border-stone-200 text-stone-600 hover:bg-stone-50'
+                      }`}
+                    >
+                      🌾 Farmer (Renter)
+                    </button>
+                    <button
+                      type="button"
+                      onClick={() => setSelectedRole('owner')}
+                      className={`p-2.5 rounded-lg border text-left font-bold text-[11px] transition ${
+                        selectedRole === 'owner'
+                          ? 'border-emerald-700 bg-emerald-50 text-emerald-900 shadow-xs ring-1 ring-emerald-700'
+                          : 'border-stone-200 text-stone-600 hover:bg-stone-50'
+                      }`}
+                    >
+                      ⚙️ Equipment Owner
+                    </button>
+                  </div>
+                </div>
+              </>
             )}
 
             <div>
-              <label className="block font-medium text-slate-700 mb-1">Email Address</label>
+              <label className="block font-bold text-stone-700 mb-1">
+                Mobile Number or Email *
+              </label>
               <div className="relative">
-                <Mail className="w-4 h-4 text-slate-400 absolute left-3 top-1/2 -translate-y-1/2" />
+                <Phone className="w-4 h-4 text-stone-400 absolute left-3 top-1/2 -translate-y-1/2" />
                 <input
-                  type="email"
+                  type="text"
                   required
-                  value={email}
-                  onChange={(e) => setEmail(e.target.value)}
-                  placeholder="coordinator@gramsetu.org"
-                  className="w-full pl-9 pr-3 py-2 border border-slate-300 rounded-lg focus:outline-none focus:ring-1 focus:ring-forest-800"
+                  value={phoneOrEmail}
+                  onChange={(e) => setPhoneOrEmail(e.target.value)}
+                  placeholder="+91 98610 23412 or email"
+                  className="input w-full pl-9 font-mono"
                 />
               </div>
             </div>
 
             <div>
-              <label className="block font-medium text-slate-700 mb-1">Password</label>
+              <label className="block font-bold text-stone-700 mb-1">Password *</label>
               <div className="relative">
-                <Lock className="w-4 h-4 text-slate-400 absolute left-3 top-1/2 -translate-y-1/2" />
+                <Lock className="w-4 h-4 text-stone-400 absolute left-3 top-1/2 -translate-y-1/2" />
                 <input
                   type="password"
                   required
                   value={password}
                   onChange={(e) => setPassword(e.target.value)}
                   placeholder="••••••••"
-                  className="w-full pl-9 pr-3 py-2 border border-slate-300 rounded-lg focus:outline-none focus:ring-1 focus:ring-forest-800"
+                  className="input w-full pl-9 font-mono"
                 />
               </div>
             </div>
 
-            {isRegistering && (
-              <div>
-                <label className="block font-medium text-slate-700 mb-1">Requested Role</label>
-                <select
-                  value={selectedRole}
-                  onChange={(e) => setSelectedRole(e.target.value as any)}
-                  className="w-full px-3 py-2 border border-slate-300 rounded-lg focus:outline-none focus:ring-1 focus:ring-forest-800"
-                >
-                  <option value="coordinator">Village Coordinator</option>
-                  <option value="viewer">Viewer</option>
-                  <option value="administrator">Administrator</option>
-                </select>
-              </div>
-            )}
-
             <button
               type="submit"
               disabled={loading}
-              className="w-full py-2.5 bg-forest-800 hover:bg-forest-900 text-white rounded-lg font-semibold shadow-xs transition flex items-center justify-center gap-2"
+              className="btn-primary w-full py-2.5 text-xs font-bold flex items-center justify-center gap-2 shadow-xs"
             >
-              <span>{isRegistering ? 'Register Account' : 'Sign In'}</span>
-              <ArrowRight className="w-4 h-4" />
+              {loading ? (
+                <span>Verifying...</span>
+              ) : (
+                <>
+                  <span>{isRegistering ? 'Register as Farmer' : 'Sign in to Marketplace'}</span>
+                  <ArrowRight className="w-4 h-4" />
+                </>
+              )}
             </button>
           </form>
 
-          <div className="text-center text-xs text-slate-500">
-            {isRegistering ? (
-              <p>
-                Already have an account?{' '}
-                <button
-                  type="button"
-                  onClick={() => setIsRegistering(false)}
-                  className="text-forest-800 font-semibold hover:underline"
-                >
-                  Sign in
-                </button>
-              </p>
-            ) : (
-              <p>
-                Need an account for field registration?{' '}
-                <button
-                  type="button"
-                  onClick={() => setIsRegistering(true)}
-                  className="text-forest-800 font-semibold hover:underline"
-                >
-                  Create account
-                </button>
-              </p>
-            )}
+          {/* Toggle Register / Login */}
+          <div className="text-center pt-2 border-t border-stone-100">
+            <button
+              type="button"
+              onClick={() => {
+                setIsRegistering(!isRegistering);
+                setErrorMsg('');
+                setSuccessMsg('');
+              }}
+              className="text-xs text-emerald-700 hover:underline font-bold"
+            >
+              {isRegistering
+                ? 'Already have a farmer account? Sign in'
+                : "New to Gram Setu? Register your farm"}
+            </button>
           </div>
         </div>
       </div>

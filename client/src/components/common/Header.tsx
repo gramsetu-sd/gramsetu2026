@@ -45,32 +45,32 @@ export const Header: React.FC<HeaderProps> = ({ onToggleSidebar, pageTitle = 'Da
   const handleSearchSubmit = (e: React.FormEvent) => {
     e.preventDefault();
     if (searchQuery.trim()) {
-      navigate(`/villages?search=${encodeURIComponent(searchQuery.trim())}`);
+      navigate(`/marketplace?search=${encodeURIComponent(searchQuery.trim())}`);
     }
   };
 
-  // Sample live notifications preview for BDO / Officer
+  // Live notifications for farmer equipment rentals
   const recentAlerts = [
     {
       id: '1',
-      title: 'Bamaloi: Drinking water shortage risk 85%',
+      title: 'Mahindra Tractor Booked for 4 Hours',
       time: '12m ago',
-      type: 'critical',
-      desc: 'Early warning signals indicate tube well failure is likely.',
+      type: 'info',
+      desc: 'Suresh Bhoi booked for plowing tomorrow 08:00 AM.',
     },
     {
       id: '2',
-      title: 'Kumbhari: Storage buffer allocation pending',
+      title: 'Water Pump Returned on Time',
       time: '45m ago',
-      type: 'warning',
-      desc: 'Crop harvesting surge requires temporary grain warehouse.',
+      type: 'success',
+      desc: 'Dileswar Munda completed 6-hour irrigation job in Rengali.',
     },
     {
       id: '3',
-      title: 'Field survey sync complete',
+      title: 'DJI Drone Spraying Request',
       time: '2h ago',
-      type: 'info',
-      desc: 'All 100 village survey records updated from live database.',
+      type: 'warning',
+      desc: 'Kalia Bag requested 2-hour nano-urea spray for Katarbaga field.',
     },
   ];
 

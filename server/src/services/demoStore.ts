@@ -6,6 +6,8 @@ import {
   ProbabilityObservation,
   Recommendation,
   ComprehensiveProbabilityEvaluation,
+  Commodity,
+  HourlyRental,
 } from '../types/index.js';
 import { evaluateAssessment } from './probabilityEngine.js';
 
@@ -16,6 +18,8 @@ class DemoStore {
   private assessments: Map<string, Assessment> = new Map();
   private probabilityObservations: Map<string, ProbabilityObservation[]> = new Map();
   private recommendations: Map<string, Recommendation[]> = new Map();
+  private commodities: Map<string, Commodity> = new Map();
+  private rentals: Map<string, HourlyRental> = new Map();
 
   constructor() {
     this.seedInitialData();
@@ -316,6 +320,297 @@ class DemoStore {
         createdAt: '2026-04-18T10:00:00Z',
       },
     ]);
+
+    // 6. Farmer Commodities for Hourly Rental Sharing
+    const initialCommodities: Commodity[] = [
+      {
+        id: 'cmd-1',
+        title: 'Mahindra 575 DI 45HP Tractor + Rotary Tiller',
+        category: 'tractor',
+        ownerId: 'owner-1',
+        ownerName: 'Ramesh Patel',
+        ownerPhone: '+91 98610 23412',
+        village: 'Bamaloi',
+        block: 'Rengali',
+        district: 'Sambalpur',
+        ratePerHour: 450,
+        minHours: 2,
+        description: 'Powerful 45 HP fuel-efficient tractor equipped with 48-blade rotavator for wetland puddling and dryland plowing. Well-maintained 2023 model.',
+        specifications: {
+          'Engine Power': '45 HP',
+          'Fuel Type': 'Diesel',
+          'Tiller Attachment': 'Rotavator (48 Blades)',
+          'Condition': 'Excellent / Serviced last week',
+        },
+        features: ['Operator Included', 'Diesel Included', 'Available Same-Day', 'Heavy Duty Puddling'],
+        isAvailable: true,
+        imageUrl: 'https://images.unsplash.com/photo-1592982537447-7440770cbfc9?auto=format&fit=crop&w=800&q=80',
+        rating: 4.9,
+        reviewCount: 38,
+        createdAt: '2026-01-10T00:00:00Z',
+      },
+      {
+        id: 'cmd-2',
+        title: 'Kirloskar 7.5 HP Diesel High-Discharge Water Pump',
+        category: 'water_pump',
+        ownerId: 'owner-2',
+        ownerName: 'Bijay Pradhan',
+        ownerPhone: '+91 97782 45890',
+        village: 'Rengali',
+        block: 'Rengali',
+        district: 'Sambalpur',
+        ratePerHour: 150,
+        minHours: 3,
+        description: 'High-lift irrigation water pump with 300 meters of flexible canvas pipe. Perfect for drawing water from ponds, canals, and borewells to distant vegetable plots.',
+        specifications: {
+          'Power': '7.5 HP',
+          'Discharge': '1,200 Litres / Minute',
+          'Suction / Delivery Pipe': '3-inch / 300m canvas included',
+          'Fuel': 'Diesel (2.5L tank)',
+        },
+        features: ['Delivery to Field', '300m Pipe Included', 'Low Fuel Consumption', 'Foot Valve Fitted'],
+        isAvailable: true,
+        imageUrl: 'https://images.unsplash.com/photo-1589923188900-85dae523342b?auto=format&fit=crop&w=800&q=80',
+        rating: 4.8,
+        reviewCount: 52,
+        createdAt: '2026-01-12T00:00:00Z',
+      },
+      {
+        id: 'cmd-3',
+        title: 'Swaraj 8100 Multi-Crop Combine Harvester',
+        category: 'harvester',
+        ownerId: 'owner-3',
+        ownerName: 'Mahendra Sahu',
+        ownerPhone: '+91 94371 89230',
+        village: 'Lapanga',
+        block: 'Rengali',
+        district: 'Sambalpur',
+        ratePerHour: 1200,
+        minHours: 1,
+        description: 'Heavy duty combine harvester suitable for paddy, wheat, and pulses. High grain cleaning efficiency with minimal loss. Comes with skilled crew.',
+        specifications: {
+          'Cutter Bar Width': '14 Feet',
+          'Grain Tank Capacity': '1,800 Litres',
+          'Engine': '101 HP Turbocharged',
+          'Crops': 'Paddy, Wheat, Soybean',
+        },
+        features: ['Experienced Crew of 2', 'Night Working LED Lights', 'Straw Chopper Attached', 'Zero Grain Wastage'],
+        isAvailable: true,
+        imageUrl: 'https://images.unsplash.com/photo-1500937386664-56d1dfef3854?auto=format&fit=crop&w=800&q=80',
+        rating: 5.0,
+        reviewCount: 29,
+        createdAt: '2026-01-15T00:00:00Z',
+      },
+      {
+        id: 'cmd-4',
+        title: 'DJI Agras T40 Precision Agricultural Drone',
+        category: 'drone',
+        ownerId: 'owner-4',
+        ownerName: 'Amit Kerketta',
+        ownerPhone: '+91 98612 77410',
+        village: 'Katarbaga',
+        block: 'Rengali',
+        district: 'Sambalpur',
+        ratePerHour: 600,
+        minHours: 1,
+        description: 'Autonomous crop spraying drone. Spray pesticide, liquid fertilizer, or urea across 8-10 acres in under 1 hour. Uniform droplet coverage without crop trampling.',
+        specifications: {
+          'Payload Capacity': '40 Litre Liquid / 50 kg Granular',
+          'Coverage Speed': '8 to 10 Acres per Hour',
+          'Obstacle Avoidance': 'Active Phased Array Radar',
+          'Pilot': 'DGCA Certified Drone Pilot Included',
+        },
+        features: ['Certified Pilot Included', 'Saves 30% Fertilizer', 'Zero Crop Damage', 'Fast 10-Min Battery Swaps'],
+        isAvailable: true,
+        imageUrl: 'https://images.unsplash.com/photo-1527977966376-1c8408f9f108?auto=format&fit=crop&w=800&q=80',
+        rating: 4.9,
+        reviewCount: 44,
+        createdAt: '2026-01-18T00:00:00Z',
+      },
+      {
+        id: 'cmd-5',
+        title: 'VST Shakti 130 DI Power Tiller (13 HP)',
+        category: 'tiller',
+        ownerId: 'owner-5',
+        ownerName: 'Sudhir Barik',
+        ownerPhone: '+91 97770 12899',
+        village: 'Thebra',
+        block: 'Rengali',
+        district: 'Sambalpur',
+        ratePerHour: 220,
+        minHours: 2,
+        description: 'Compact diesel power tiller ideal for small-holder farmers, terraced paddy fields, and vegetable beds where large tractors cannot enter.',
+        specifications: {
+          'Engine': '13 HP Single Cylinder',
+          'Starting': 'Self Electric Start + Handle',
+          'Blades': '18 Rotary Curved Blades',
+          'Weight': '400 kg',
+        },
+        features: ['Easy Small-Plot Puddling', 'Low Hourly Fuel', 'Operator Provided if Requested', 'Trailer Compatible'],
+        isAvailable: true,
+        imageUrl: 'https://images.unsplash.com/photo-1589883661923-6476cb0ae9f2?auto=format&fit=crop&w=800&q=80',
+        rating: 4.7,
+        reviewCount: 31,
+        createdAt: '2026-01-20T00:00:00Z',
+      },
+      {
+        id: 'cmd-6',
+        title: 'AgroKing Multi-Crop High Speed Thresher',
+        category: 'thresher',
+        ownerId: 'owner-6',
+        ownerName: 'Jagabandhu Meher',
+        ownerPhone: '+91 94390 65112',
+        village: 'Bamaloi',
+        block: 'Rengali',
+        district: 'Sambalpur',
+        ratePerHour: 300,
+        minHours: 2,
+        description: 'PTO-driven heavy thresher for threshing paddy sheaves, wheat, and pulses directly on the farm threshing floor. High output of 12-15 bags per hour.',
+        specifications: {
+          'Capacity': '12 to 15 Quintals / Hour',
+          'Compatible Tractor': '30 HP and above',
+          'Blower': 'Double Cyclone Cleaner',
+          'Crop Suitability': 'Paddy, Mustard, Moong, Biri',
+        },
+        features: ['Double Cleaning Fan', 'Clean Grain Discharge', 'Safety Feeder Chute', 'Fast On-Site Setup'],
+        isAvailable: true,
+        imageUrl: 'https://images.unsplash.com/photo-1595974482597-4b8da8879bc5?auto=format&fit=crop&w=800&q=80',
+        rating: 4.8,
+        reviewCount: 22,
+        createdAt: '2026-01-22T00:00:00Z',
+      },
+      {
+        id: 'cmd-7',
+        title: 'Modular Hermetic Grain Storage Silo (10 Ton)',
+        category: 'storage_silo',
+        ownerId: 'owner-7',
+        ownerName: 'Kisan Cooperative Godown',
+        ownerPhone: '+91 98611 99014',
+        village: 'Rengali',
+        block: 'Rengali',
+        district: 'Sambalpur',
+        ratePerHour: 40,
+        minHours: 24,
+        description: 'Moisture-controlled hermetic storage bay for freshly harvested paddy. Rent capacity by the hour/day to protect grain from unseasonal rain while waiting for mandi procurement.',
+        specifications: {
+          'Storage Volume': '10 Metric Tonnes',
+          'Material': 'Galvanized Corrugated Steel',
+          'Protection': 'Moisture, Rodent & Insect Proof',
+          'Loading': 'Electric Auger Conveyor Included',
+        },
+        features: ['Weatherproof Storage', 'Insured Facility', 'Auger Unloading Available', 'Flexible Days/Hours'],
+        isAvailable: true,
+        imageUrl: 'https://images.unsplash.com/photo-1530836369250-ef72a3f5cda8?auto=format&fit=crop&w=800&q=80',
+        rating: 4.9,
+        reviewCount: 16,
+        createdAt: '2026-01-25T00:00:00Z',
+      },
+      {
+        id: 'cmd-8',
+        title: 'Heavy Duty 16-Disc Hydraulic Harrow',
+        category: 'implements',
+        ownerId: 'owner-8',
+        ownerName: 'Sanatan Naik',
+        ownerPhone: '+91 97784 31102',
+        village: 'Lapanga',
+        block: 'Rengali',
+        district: 'Sambalpur',
+        ratePerHour: 180,
+        minHours: 2,
+        description: '16 high-carbon notched boron discs for breaking hard summer soil clods, mixing stubble, and seedbed preparation. Fast hydraulic transport wheels.',
+        specifications: {
+          'Disc Count': '16 Discs (8 Front Notched + 8 Rear Plain)',
+          'Tractor Required': '40-55 HP',
+          'Working Width': '6.5 Feet',
+          'Weight': '480 kg',
+        },
+        features: ['Heavy Cast Iron Spools', 'Quick Hydraulic Hitching', 'Deep Clod Shattering'],
+        isAvailable: true,
+        imageUrl: 'https://images.unsplash.com/photo-1523348837708-15d4a09cfac2?auto=format&fit=crop&w=800&q=80',
+        rating: 4.6,
+        reviewCount: 19,
+        createdAt: '2026-01-28T00:00:00Z',
+      },
+    ];
+
+    for (const c of initialCommodities) {
+      this.commodities.set(c.id, c);
+    }
+
+    // 7. Seed Sample Hourly Rentals
+    const initialRentals: HourlyRental[] = [
+      {
+        id: 'rent-101',
+        commodityId: 'cmd-1',
+        commodityTitle: 'Mahindra 575 DI 45HP Tractor + Rotary Tiller',
+        commodityCategory: 'tractor',
+        imageUrl: 'https://images.unsplash.com/photo-1592982537447-7440770cbfc9?auto=format&fit=crop&w=800&q=80',
+        ratePerHour: 450,
+        renterId: 'farmer-101',
+        renterName: 'Suresh Bhoi',
+        renterPhone: '+91 98615 44102',
+        renterVillage: 'Bamaloi',
+        ownerId: 'owner-1',
+        ownerName: 'Ramesh Patel',
+        ownerPhone: '+91 98610 23412',
+        bookingDate: '2026-10-31',
+        startTime: '08:00 AM',
+        durationHours: 4,
+        totalAmount: 1800,
+        status: 'active',
+        notes: 'Plowing north field near canal canal bund.',
+        createdAt: '2026-10-30T06:00:00Z',
+      },
+      {
+        id: 'rent-102',
+        commodityId: 'cmd-2',
+        commodityTitle: 'Kirloskar 7.5 HP Diesel High-Discharge Water Pump',
+        commodityCategory: 'water_pump',
+        imageUrl: 'https://images.unsplash.com/photo-1589923188900-85dae523342b?auto=format&fit=crop&w=800&q=80',
+        ratePerHour: 150,
+        renterId: 'farmer-102',
+        renterName: 'Dileswar Munda',
+        renterPhone: '+91 94378 12390',
+        renterVillage: 'Rengali',
+        ownerId: 'owner-2',
+        ownerName: 'Bijay Pradhan',
+        ownerPhone: '+91 97782 45890',
+        bookingDate: '2026-10-29',
+        startTime: '06:30 AM',
+        durationHours: 6,
+        totalAmount: 900,
+        status: 'completed',
+        notes: 'Vegetable nursery irrigation completed.',
+        createdAt: '2026-10-29T06:00:00Z',
+      },
+      {
+        id: 'rent-103',
+        commodityId: 'cmd-4',
+        commodityTitle: 'DJI Agras T40 Precision Agricultural Drone',
+        category: 'drone' as any,
+        commodityCategory: 'drone',
+        imageUrl: 'https://images.unsplash.com/photo-1527977966376-1c8408f9f108?auto=format&fit=crop&w=800&q=80',
+        ratePerHour: 600,
+        renterId: 'farmer-103',
+        renterName: 'Kalia Bag',
+        renterPhone: '+91 97780 99812',
+        renterVillage: 'Katarbaga',
+        ownerId: 'owner-4',
+        ownerName: 'Amit Kerketta',
+        ownerPhone: '+91 98612 77410',
+        bookingDate: '2026-11-01',
+        startTime: '07:00 AM',
+        durationHours: 2,
+        totalAmount: 1200,
+        status: 'pending',
+        notes: 'Nano-urea foliar spray on 15 acres of rabi paddy.',
+        createdAt: '2026-10-30T05:30:00Z',
+      },
+    ];
+
+    for (const r of initialRentals) {
+      this.rentals.set(r.id, r);
+    }
   }
 
   // --- Village Queries ---
@@ -479,6 +774,91 @@ class DemoStore {
       }
     }
     return undefined;
+  }
+
+  // --- Farmer Commodities & Hourly Rentals ---
+  getCommodities(params?: { category?: string; village?: string; maxRate?: number; search?: string }): Commodity[] {
+    let list = Array.from(this.commodities.values());
+    if (params?.category && params.category !== 'all') {
+      list = list.filter(c => c.category === params.category);
+    }
+    if (params?.village && params.village !== 'all') {
+      list = list.filter(c => c.village.toLowerCase() === params.village!.toLowerCase());
+    }
+    if (params?.maxRate) {
+      list = list.filter(c => c.ratePerHour <= Number(params.maxRate));
+    }
+    if (params?.search) {
+      const q = params.search.toLowerCase();
+      list = list.filter(c =>
+        c.title.toLowerCase().includes(q) ||
+        c.description.toLowerCase().includes(q) ||
+        c.village.toLowerCase().includes(q) ||
+        c.ownerName.toLowerCase().includes(q)
+      );
+    }
+    return list;
+  }
+
+  getCommodityById(id: string): Commodity | undefined {
+    return this.commodities.get(id);
+  }
+
+  createCommodity(data: Omit<Commodity, 'id' | 'createdAt' | 'rating' | 'reviewCount'>): Commodity {
+    const id = `cmd-${Date.now()}`;
+    const commodity: Commodity = {
+      ...data,
+      id,
+      rating: 5.0,
+      reviewCount: 1,
+      createdAt: new Date().toISOString(),
+    };
+    this.commodities.set(id, commodity);
+    return commodity;
+  }
+
+  updateCommodity(id: string, updates: Partial<Commodity>): Commodity | undefined {
+    const existing = this.commodities.get(id);
+    if (!existing) return undefined;
+    const updated = { ...existing, ...updates };
+    this.commodities.set(id, updated);
+    return updated;
+  }
+
+  deleteCommodity(id: string): boolean {
+    return this.commodities.delete(id);
+  }
+
+  getRentals(params?: { renterId?: string; ownerId?: string }): HourlyRental[] {
+    let list = Array.from(this.rentals.values());
+    if (params?.renterId) {
+      list = list.filter(r => r.renterId === params.renterId);
+    }
+    if (params?.ownerId) {
+      list = list.filter(r => r.ownerId === params.ownerId);
+    }
+    // Sort newest first
+    return list.sort((a, b) => new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime());
+  }
+
+  createRental(data: Omit<HourlyRental, 'id' | 'createdAt' | 'status'>): HourlyRental {
+    const id = `rent-${Date.now()}`;
+    const rental: HourlyRental = {
+      ...data,
+      id,
+      status: 'pending',
+      createdAt: new Date().toISOString(),
+    };
+    this.rentals.set(id, rental);
+    return rental;
+  }
+
+  updateRentalStatus(id: string, status: HourlyRental['status']): HourlyRental | undefined {
+    const existing = this.rentals.get(id);
+    if (!existing) return undefined;
+    existing.status = status;
+    this.rentals.set(id, existing);
+    return existing;
   }
 }
 

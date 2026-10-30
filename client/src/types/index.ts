@@ -101,6 +101,76 @@ export interface Recommendation {
   createdAt: string;
 }
 
+// --- Farmer Commodity & Equipment Sharing Types ---
+export type CommodityCategory =
+  | 'tractor'
+  | 'harvester'
+  | 'water_pump'
+  | 'tiller'
+  | 'drone'
+  | 'thresher'
+  | 'storage_silo'
+  | 'implements';
+
+export interface Commodity {
+  id: string;
+  title: string;
+  category: CommodityCategory;
+  ownerId: string;
+  ownerName: string;
+  ownerPhone: string;
+  village: string;
+  block: string;
+  district: string;
+  ratePerHour: number;
+  minHours: number;
+  description: string;
+  specifications: Record<string, string>;
+  features: string[];
+  isAvailable: boolean;
+  imageUrl: string;
+  rating: number;
+  reviewCount: number;
+  createdAt: string;
+}
+
+export type RentalStatus = 'pending' | 'approved' | 'active' | 'completed' | 'cancelled';
+
+export interface HourlyRental {
+  id: string;
+  commodityId: string;
+  commodityTitle: string;
+  commodityCategory: CommodityCategory;
+  imageUrl?: string;
+  ratePerHour: number;
+  renterId: string;
+  renterName: string;
+  renterPhone: string;
+  renterVillage: string;
+  ownerId: string;
+  ownerName: string;
+  ownerPhone: string;
+  bookingDate: string;
+  startTime: string;
+  durationHours: number;
+  totalAmount: number;
+  status: RentalStatus;
+  notes?: string;
+  createdAt: string;
+}
+
+export interface FarmerProfile {
+  id: string;
+  fullName: string;
+  phone: string;
+  village: string;
+  district: string;
+  role: 'farmer' | 'owner' | 'both';
+  landAcreage?: number;
+  isVerified: boolean;
+  avatarUrl?: string;
+}
+
 export interface BasicProbabilityCalculation {
   question: string;
   eventName: string;
