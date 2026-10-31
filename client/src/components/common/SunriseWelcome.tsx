@@ -203,33 +203,17 @@ export const SunriseWelcome: React.FC<SunriseWelcomeProps> = ({ onComplete }) =>
           willChange: 'transform, opacity',
         }}
       >
-        {/* 3D Beveled Emerald Tile */}
-        <div
-          className="w-20 h-20 sm:w-24 sm:h-24 rounded-3xl flex items-center justify-center font-extrabold text-white text-3xl sm:text-4xl mb-4 relative"
-          style={{
-            background: 'linear-gradient(135deg, #34d399 0%, #059669 45%, #064e3b 100%)',
-            boxShadow: '0 20px 40px rgba(0, 0, 0, 0.5), 0 0 50px rgba(254, 240, 138, 0.7), inset 0 2px 2px rgba(255, 255, 255, 0.6)',
-            border: '1.5px solid rgba(255, 255, 255, 0.3)',
-          }}
-        >
-          <span className="tracking-tight drop-shadow-md">GS</span>
-          <div className="absolute -bottom-1 w-12 h-1 bg-amber-400 rounded-full blur-[1px]" />
+        {/* Official GramSetu Logo Artwork */}
+        <div className="relative mb-3 flex items-center justify-center">
+          <img
+            src="/images/gramsetu-logo.png"
+            alt="GramSetu Logo"
+            className="w-auto h-32 sm:h-44 object-contain drop-shadow-[0_20px_40px_rgba(0,0,0,0.6)]"
+          />
         </div>
 
-        {/* Brand Name */}
-        <h1 className="text-3xl sm:text-5xl font-extrabold text-white tracking-tight drop-shadow-2xl flex items-center justify-center gap-2">
-          <span className="bg-gradient-to-r from-amber-100 via-white to-amber-200 bg-clip-text text-transparent">
-            GRAM SETU
-          </span>
-        </h1>
-
-        {/* Tagline */}
-        <p className="text-xs sm:text-sm text-amber-100 font-semibold tracking-wide mt-2 max-w-md drop-shadow">
-          Connecting What Villages Have with What Villages Need
-        </p>
-
         {/* Golden Dawn Status Pill */}
-        <div className="mt-4 inline-flex items-center gap-2 px-3.5 py-1 rounded-full bg-black/40 backdrop-blur-md border border-amber-300/40 text-amber-300 text-[11px] font-mono font-bold tracking-wider shadow-lg">
+        <div className="mt-2 inline-flex items-center gap-2 px-3.5 py-1 rounded-full bg-black/40 backdrop-blur-md border border-amber-300/40 text-amber-300 text-[11px] font-mono font-bold tracking-wider shadow-lg">
           <span className="w-2 h-2 rounded-full bg-amber-400 animate-ping" />
           <span>A NEW DAWN FOR RURAL SHARING</span>
         </div>

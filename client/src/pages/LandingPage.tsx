@@ -71,21 +71,17 @@ export const LandingPage: React.FC = () => {
       {/* Navigation Header: Earthy Glass with Elevated Contrast */}
       <header className="border-b border-stone-200/80 bg-[#faf8f5]/90 backdrop-blur-md sticky top-0 z-40 transition-colors shadow-xs">
         <div className="max-w-[1440px] mx-auto px-6 h-20 flex items-center justify-between">
-          <div className="flex items-center gap-3.5">
-            <div className="w-10 h-10 rounded-2xl bg-gradient-to-br from-emerald-600 via-emerald-700 to-[#072a1d] text-white flex items-center justify-center font-bold text-lg shadow-sm border border-emerald-400/40">
-              GS
-            </div>
-            <div>
-              <div className="flex items-center gap-2">
-                <span className="font-extrabold text-xl tracking-tight text-[#082e1e]">GRAM SETU</span>
-                <span className="text-[10px] font-mono font-bold uppercase tracking-wider bg-amber-100/80 text-amber-900 px-2.5 py-0.5 rounded-full border border-amber-300/60">
-                  Village Sharing
-                </span>
-              </div>
-              <p className="text-[11px] text-stone-600 font-medium hidden sm:block">
-                Connecting What Villages Have with What Villages Need
-              </p>
-            </div>
+          <div className="flex items-center gap-3">
+            <Link to="/" className="flex items-center gap-3 group">
+              <img
+                src="/images/gramsetu-logo.png"
+                alt="GramSetu - Connecting What Villages Have with What Villages Need"
+                className="h-14 w-auto object-contain transition-transform group-hover:scale-105"
+              />
+            </Link>
+            <span className="text-[10px] font-mono font-bold uppercase tracking-wider bg-amber-100/80 text-amber-900 px-2.5 py-0.5 rounded-full border border-amber-300/60 hidden sm:inline-block">
+              Village Sharing
+            </span>
           </div>
 
           <div className="hidden lg:flex items-center gap-8 text-xs font-bold uppercase tracking-wider text-stone-700">
@@ -595,12 +591,13 @@ export const LandingPage: React.FC = () => {
       <footer className="bg-[#051c14] text-stone-300 text-xs py-14 border-t border-emerald-900/60">
         <div className="max-w-[1440px] mx-auto px-6 grid grid-cols-1 md:grid-cols-4 gap-8">
           <div className="space-y-3">
-            <div className="flex items-center gap-2.5 text-white font-bold text-base">
-              <div className="w-8 h-8 rounded-xl bg-gradient-to-br from-emerald-500 to-emerald-700 text-white flex items-center justify-center font-bold text-xs shadow-glow-emerald">
-                GS
-              </div>
-              <span>GRAM SETU</span>
-            </div>
+            <Link to="/" className="inline-block">
+              <img
+                src="/images/gramsetu-logo.png"
+                alt="GramSetu Logo"
+                className="h-16 w-auto object-contain bg-white/95 rounded-xl p-1.5 shadow-md"
+              />
+            </Link>
             <p className="text-stone-400 text-xs leading-relaxed">
               Connecting What Villages Have with What Villages Need through peer-to-peer hourly asset and equipment sharing across village clusters.
             </p>

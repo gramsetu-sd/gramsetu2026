@@ -14,6 +14,7 @@ import {
   CheckCircle2,
   AlertTriangle,
   Info,
+  LogIn,
 } from 'lucide-react';
 
 interface HeaderProps {
@@ -201,68 +202,84 @@ export const Header: React.FC<HeaderProps> = ({ onToggleSidebar, pageTitle = 'Da
             )}
           </div>
 
-          {/* User Profile Dropdown */}
-          <div className="relative">
-            <button
-              onClick={() => {
-                setProfileOpen(!profileOpen);
-                setNotificationsOpen(false);
-              }}
-              className="flex items-center gap-2 p-1 rounded-xl hover:bg-stone-100/70 transition focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-emerald-500"
-            >
-              <div className="w-8 h-8 rounded-full bg-gradient-to-br from-emerald-600 to-emerald-800 text-white font-bold flex items-center justify-center text-xs shadow-xs border border-emerald-400/30">
-                {user?.fullName?.charAt(0) || 'U'}
-              </div>
-              <ChevronDown className="w-3.5 h-3.5 text-stone-500 hidden sm:block" />
-            </button>
-
-            {profileOpen && (
-              <div className="absolute right-0 mt-2 w-64 surface border border-emerald-900/10 rounded-2xl shadow-float py-2 z-50 text-xs animate-fade-up">
-                <div className="px-4 py-2.5 border-b border-stone-100">
-                  <p className="font-bold text-stone-900 truncate">{user?.fullName}</p>
-                  <p className="text-stone-500 truncate text-[11px] font-mono">{user?.email}</p>
-                  <div className="mt-1.5 flex items-center gap-1.5">
-                    <span className="text-[10px] uppercase font-semibold tracking-wider text-emerald-800 bg-emerald-50 px-2 py-0.5 rounded-full border border-emerald-200/50">
-                      Role: {role}
-                    </span>
-                  </div>
+          {/* User Profile or Sign In Button */}
+          {user ? (
+            <div className="relative">
+              <button
+                onClick={() => {
+                  setProfileOpen(!profileOpen);
+                  setNotificationsOpen(false);
+                }}
+                className="flex items-center gap-2 p-1 rounded-xl hover:bg-stone-100/70 transition focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-emerald-500"
+              >
+                <div className="w-8 h-8 rounded-full bg-gradient-to-br from-emerald-600 to-emerald-800 text-white font-bold flex items-center justify-center text-xs shadow-xs border border-emerald-400/30">
+                  {user?.fullName?.charAt(0) || 'U'}
                 </div>
+                <ChevronDown className="w-3.5 h-3.5 text-stone-500 hidden sm:block" />
+              </button>
 
-                <Link
-                  to="/settings"
-                  onClick={() => setProfileOpen(false)}
-                  className="flex items-center gap-2.5 px-4 py-2 text-stone-700 hover:bg-emerald-50 hover:text-emerald-900 transition"
-                >
-                  <User className="w-4 h-4 text-stone-400" />
-                  <span>Profile & Preferences</span>
-                </Link>
+              {profileOpen && (
+                <div className="absolute right-0 mt-2 w-64 surface border border-emerald-900/10 rounded-2xl shadow-float py-2 z-50 text-xs animate-fade-up">
+                  <div className="px-4 py-2.5 border-b border-stone-100">
+                    <p className="font-bold text-stone-900 truncate">{user?.fullName}</p>
+                    <p className="text-stone-500 truncate text-[11px] font-mono">{user?.email}</p>
+                    <div className="mt-1.5 flex items-center gap-1.5">
+                      <span className="text-[10px] uppercase font-semibold tracking-wider text-emerald-800 bg-emerald-50 px-2 py-0.5 rounded-full border border-emerald-200/50">
+                        Role: {role}
+                      </span>
+                      {user.village && (
+                        <span className="text-[10px] font-semibold text-stone-500 bg-stone-100 px-2 py-0.5 rounded-full">
+                          📍 {user.village}
+                        </span>
+                      )}
+                    </div>
+                  </div>
 
-                {role === 'administrator' && (
                   <Link
-                    to="/admin"
+                    to="/settings"
                     onClick={() => setProfileOpen(false)}
-                    className="flex items-center gap-2.5 px-4 py-2 text-purple-700 hover:bg-purple-50 transition"
+                    className="flex items-center gap-2.5 px-4 py-2 text-stone-700 hover:bg-emerald-50 hover:text-emerald-900 transition"
                   >
-                    <ShieldAlert className="w-4 h-4 text-purple-500" />
-                    <span>Administration Panel</span>
+                    <User className="w-4 h-4 text-stone-400" />
+                    <span>Profile & Preferences</span>
                   </Link>
-                )}
 
-                <div className="border-t border-stone-100 my-1"></div>
+                  {role === 'administrator' && (
+                    <Link
+                      to="/admin"
+                      onClick={() => setProfileOpen(false)}
+                      className="flex items-center gap-2.5 px-4 py-2 text-purple-700 hover:bg-purple-50 transition"
+                    >
+                      <ShieldAlert className="w-4 h-4 text-purple-500" />
+                      <span>Administration Panel</span>
+                    </Link>
+                  )}
 
-                <button
-                  onClick={() => {
-                    setProfileOpen(false);
-                    logout();
-                  }}
-                  className="w-full flex items-center gap-2.5 px-4 py-2 text-rose-600 hover:bg-rose-50 text-left transition font-medium"
-                >
-                  <LogOut className="w-4 h-4" />
-                  <span>Switch Role / Logout</span>
-                </button>
-              </div>
-            )}
-          </div>
+                  <div className="border-t border-stone-100 my-1"></div>
+
+                  <button
+                    onClick={async () => {
+                      setProfileOpen(false);
+                      await logout();
+                      navigate('/login');
+                    }}
+                    className="w-full flex items-center gap-2.5 px-4 py-2 text-rose-600 hover:bg-rose-50 text-left transition font-medium"
+                  >
+                    <LogOut className="w-4 h-4" />
+                    <span>Sign Out</span>
+                  </button>
+                </div>
+              )}
+            </div>
+          ) : (
+            <Link
+              to="/login"
+              className="btn-primary py-2 px-3.5 text-xs font-bold flex items-center gap-1.5 shadow-xs"
+            >
+              <LogIn className="w-3.5 h-3.5" />
+              <span>Sign In</span>
+            </Link>
+          )}
         </div>
       </div>
     </header>

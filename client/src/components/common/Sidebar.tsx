@@ -24,6 +24,8 @@ import {
   Clock,
   Calendar,
   ShoppingBag,
+  LogIn,
+  LogOut,
 } from 'lucide-react';
 
 interface SidebarItem {
@@ -118,18 +120,13 @@ export const Sidebar: React.FC<SidebarProps> = ({ isOpen, onClose }) => {
         />
 
         {/* Brand Header */}
-        <div className="h-18 px-4 flex items-center justify-between border-b border-white/10 relative z-10">
+        <div className="h-20 px-4 flex items-center justify-between border-b border-white/10 relative z-10">
           <Link to="/" className="flex items-center gap-3 group">
-            {/* 3D Beveled Emerald Tile */}
-            <div
-              className="w-10 h-10 rounded-xl flex items-center justify-center font-extrabold text-white text-base shadow-glow-emerald shrink-0 transition-transform group-hover:scale-105"
-              style={{
-                background: 'linear-gradient(135deg, #3CC391 0%, #12805A 100%)',
-                boxShadow: '0 4px 12px rgba(26, 163, 115, 0.4), inset 0 1px 0 rgba(255, 255, 255, 0.4)',
-              }}
-            >
-              GS
-            </div>
+            <img
+              src="/images/gramsetu-logo.png"
+              alt="GramSetu Logo"
+              className="h-12 w-auto object-contain bg-white/95 rounded-xl p-1 shadow-md transition-transform group-hover:scale-105"
+            />
             {!collapsed && (
               <div className="min-w-0">
                 <div className="font-extrabold text-sm tracking-tight text-white flex items-center gap-1">
@@ -231,30 +228,57 @@ export const Sidebar: React.FC<SidebarProps> = ({ isOpen, onClose }) => {
           ))}
         </nav>
 
-        {/* Footer User Profile Card */}
+        {/* Footer User Profile Card / Sign In */}
         <div className="p-3 border-t border-white/10 bg-black/20 relative z-10">
-          {!collapsed ? (
-            <div className="flex items-center justify-between gap-2 p-1.5 rounded-xl bg-white/5 border border-white/5">
-              <div className="flex items-center gap-2 min-w-0">
-                <div className="w-7 h-7 rounded-full bg-emerald-700 text-white font-bold text-xs flex items-center justify-center shrink-0">
-                  {user?.fullName.charAt(0) || 'U'}
-                </div>
-                <div className="min-w-0">
-                  <p className="text-[11px] font-bold text-white truncate leading-tight">
-                    {user?.fullName || 'Active Officer'}
-                  </p>
-                  <p className="text-[10px] text-emerald-300/80 capitalize truncate">
-                    {role}
-                  </p>
-                </div>
+          {user ? (
+            !collapsed ? (
+              <div className="flex items-center justify-between gap-2 p-1.5 rounded-xl bg-white/5 border border-white/5">
+                <Link to="/settings" className="flex items-center gap-2 min-w-0 flex-1 hover:opacity-90">
+                  <div className="w-7 h-7 rounded-full bg-emerald-700 text-white font-bold text-xs flex items-center justify-center shrink-0">
+                    {user?.fullName?.charAt(0) || 'U'}
+                  </div>
+                  <div className="min-w-0">
+                    <p className="text-[11px] font-bold text-white truncate leading-tight">
+                      {user?.fullName || 'Active Officer'}
+                    </p>
+                    <p className="text-[10px] text-emerald-300/80 capitalize truncate">
+                      {role}
+                    </p>
+                  </div>
+                </Link>
+                <Link
+                  to="/login"
+                  title="Switch User / Sign In"
+                  className="p-1 rounded-lg text-stone-400 hover:text-white hover:bg-white/10 transition"
+                >
+                  <LogIn className="w-3.5 h-3.5" />
+                </Link>
               </div>
-            </div>
+            ) : (
+              <Link to="/settings" className="flex justify-center" title={user.fullName}>
+                <div className="w-8 h-8 rounded-full bg-emerald-700 text-white font-bold text-xs flex items-center justify-center">
+                  {user?.fullName?.charAt(0) || 'U'}
+                </div>
+              </Link>
+            )
           ) : (
-            <div className="flex justify-center">
-              <div className="w-8 h-8 rounded-full bg-emerald-700 text-white font-bold text-xs flex items-center justify-center">
-                {user?.fullName.charAt(0) || 'U'}
-              </div>
-            </div>
+            !collapsed ? (
+              <Link
+                to="/login"
+                className="flex items-center justify-center gap-2 py-2 px-3 rounded-xl bg-emerald-600 hover:bg-emerald-500 text-white text-xs font-bold transition shadow-xs"
+              >
+                <LogIn className="w-4 h-4" />
+                <span>Sign In / Register</span>
+              </Link>
+            ) : (
+              <Link
+                to="/login"
+                title="Sign In / Register"
+                className="flex justify-center p-2 rounded-xl bg-emerald-600 text-white hover:bg-emerald-500"
+              >
+                <LogIn className="w-4 h-4" />
+              </Link>
+            )
           )}
 
           {!collapsed && (
